@@ -26,6 +26,7 @@ export default ts.config(
         },
       ],
       '@typescript-eslint/triple-slash-reference': 'off',
+      'no-console': 'warn',
     },
   },
   {
@@ -42,5 +43,5 @@ export default ts.config(
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },
-  }
+  },
 );
