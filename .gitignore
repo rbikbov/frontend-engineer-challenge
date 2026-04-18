@@ -1,11 +1,32 @@
-node_modules
-.nx/cache
-.nx/workspace-data
+# Build artifacts
 dist
 tmp
 out
 build
+out-tsc
+test-output
+.nx/cache
+.nx/workspace-data
+
+# Dependencies
+node_modules
+apps/main/node_modules
+
+# Environment
 .env
 .env.*
-.DS_Store
+!.env.example
+.env.local
+.env.*.local
+
+# Logs
 *.log
+.pnpm-debug.log*
+
+# Misc
+.DS_Store
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+
+# Next.js
+.next
