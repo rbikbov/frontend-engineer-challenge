@@ -1,0 +1,11 @@
+node_modules
+.nx/cache
+.nx/workspace-data
+dist
+tmp
+out
+build
+.env
+.env.*
+.DS_Store
+*.log

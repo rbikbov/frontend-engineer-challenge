@@ -1,0 +1,23 @@
+{
+  "name": "frontend-engineer-challenge",
+  "version": "1.0.0",
+  "description": "Искренне благодарим вас за время и внимание к этому челленджу и надеемся на долгосрочную совместную командную работу",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbikbov/frontend-engineer-challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbikbov/frontend-engineer-challenge/issues"
+  },
+  "homepage": "https://github.com/rbikbov/frontend-engineer-challenge#readme",
+  "devDependencies": {
+    "nx": "22.6.5"
+  }
+}
