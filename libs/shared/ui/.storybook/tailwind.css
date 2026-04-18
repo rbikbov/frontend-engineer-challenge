@@ -1,0 +1,2 @@
+/* Storybook использует общую тему из @workspace/ui */
+@import '../src/styles/theme.css';
