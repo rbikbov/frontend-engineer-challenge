@@ -7,6 +7,7 @@
     "dev": "nx dev main",
     "build": "nx build main",
     "lint": "eslint .",
+    "format": "prettier --write .",
     "test": "nx test",
     "e2e": "nx e2e main-e2e",
     "graph": "nx graph",
@@ -14,21 +15,12 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,jsx}": [
-      "eslint --fix"
+      "eslint --fix",
+      "prettier --write"
     ],
     "*.{json,css,md,html}": [
       "prettier --write"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rbikbov/frontend-engineer-challenge.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/rbikbov/frontend-engineer-challenge/issues"
   },
   "homepage": "https://github.com/rbikbov/frontend-engineer-challenge#readme",
   "devDependencies": {
@@ -66,6 +58,7 @@
     "@vitest/ui": "^4.1.4",
     "autoprefixer": "^10.5.0",
     "eslint-config-next": "^16.2.4",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
