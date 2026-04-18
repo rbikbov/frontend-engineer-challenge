@@ -30,3 +30,6 @@ vitest.config.*.timestamp*
 
 # Next.js
 .next
+
+
+storybook-static
