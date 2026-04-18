@@ -4,5 +4,9 @@
   "private": true,
   "dependencies": {
     "@workspace/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*"
   }
 }

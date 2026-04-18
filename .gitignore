@@ -4,13 +4,13 @@ tmp
 out
 build
 out-tsc
+*.tsbuildinfo
 test-output
 .nx/cache
 .nx/workspace-data
 
 # Dependencies
 node_modules
-apps/main/node_modules
 
 # Environment
 .env
