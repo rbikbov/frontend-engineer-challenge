@@ -4,5 +4,21 @@
   "trailingComma": "all",
   "printWidth": 80,
   "tabWidth": 2,
-  "semi": true
+  "semi": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "vitest",
+    "@testing-library/react",
+    "react",
+    "<THIRD_PARTY_MODULES>",
+    "^@/workspace",
+    "^@/app",
+    "^@/pages",
+    "^@/widgets",
+    "^@/features",
+    "^@/entities",
+    "^@/shared",
+    "^[./]"
+  ],
+  "importOrderSeparation": true
 }
