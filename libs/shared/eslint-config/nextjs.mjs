@@ -1,4 +1,5 @@
 import nextPlugin from '@next/eslint-plugin-next';
+
 import baseConfig from './base.mjs';
 
 /**
