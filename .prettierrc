@@ -23,5 +23,6 @@
     "^@/shared",
     "^[./]"
   ],
-  "importOrderSeparation": true
+  "importOrderSeparation": true,
+  "tailwindFunctions": ["cva", "cn", "clsx"]
 }

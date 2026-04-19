@@ -92,6 +92,7 @@
     "vitest": "^4.1.4"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
