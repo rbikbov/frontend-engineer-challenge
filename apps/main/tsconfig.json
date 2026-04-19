@@ -3,7 +3,12 @@
   "compilerOptions": {
     "paths": {
       "@workspace/ui": ["../../libs/shared/ui/src/index.ts"],
-      "@/*": ["./src/*"]
+      "@/app/*": ["./src/app/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/widgets/*": ["./src/widgets/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/entities/*": ["./src/entities/*"],
+      "@/shared/*": ["./src/shared/*"]
     },
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"

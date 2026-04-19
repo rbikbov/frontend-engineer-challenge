@@ -8,6 +8,7 @@ out-tsc
 test-output
 .nx/cache
 .nx/workspace-data
+project-graph.json
 
 # Dependencies
 node_modules

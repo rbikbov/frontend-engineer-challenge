@@ -8,7 +8,7 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
-  cacheDir: '../../node_modules/.vite/libs/ui',
+  cacheDir: '../../node_modules/.vite/libs/shared/ui',
   plugins: [
     tailwindcss(),
     react(),
