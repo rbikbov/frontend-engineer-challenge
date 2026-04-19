@@ -31,7 +31,8 @@
         "serveStaticTargetName": "serve-static",
         "typecheckTargetName": "typecheck",
         "buildDepsTargetName": "build-deps",
-        "watchDepsTargetName": "watch-deps"
+        "watchDepsTargetName": "watch-deps",
+        "lintTargetName": "lint"
       }
     },
     {
