@@ -1,12 +1,11 @@
 {
-  "name": "main",
+  "name": "dashboard",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@workspace/ui": "workspace:*"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }
 }

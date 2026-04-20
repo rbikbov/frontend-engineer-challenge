@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source '../../**/*.{ts,tsx}';
 
 /* ── Design Tokens ────────────────────────────────
  * Разделяем ЗНАЧЕНИЯ (CSS-переменные) и ТОКЕНЫ (Tailwind).

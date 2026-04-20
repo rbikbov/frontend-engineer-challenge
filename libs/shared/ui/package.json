@@ -5,14 +5,19 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "style": "./src/styles/theme.css",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "frontend-engineer-challenge": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./theme.css": "./src/styles/theme.css"
+    "./theme.css": {
+      "style": "./src/styles/theme.css",
+      "import": "./src/styles/theme.css",
+      "default": "./src/styles/theme.css"
+    },
+    "./src/styles/*": "./src/styles/*"
   }
 }
