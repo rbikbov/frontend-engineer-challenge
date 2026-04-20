@@ -1,0 +1,18 @@
+{
+  "name": "dashboard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/dashboard",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project dashboard --web",
+  "targets": {
+    "dev": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "dashboard:build",
+        "dev": true,
+        "port": 3001
+      }
+    }
+  }
+}
