@@ -5,10 +5,14 @@ import { createAuthApi } from '@workspace/api';
 import { COOKIE_KEYS } from '@workspace/constants';
 
 import { envConfig } from '@shared/config/env';
+import { logger } from '@shared/lib/logger';
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email } = await request.clone().json();
+    logger.info('[BFF] Login attempt', { email });
+
+    const { email: emailData, password } = await request.json();
 
     // Получаем IP клиента для проброса
     const clientIp = request.headers.get('x-forwarded-for') || '127.0.0.1';
@@ -47,7 +51,10 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    // TODO: сделать лучше обработку ошибок
+    logger.error('[BFF] Login error', {
+      message: (error as Error).message,
+      stack: (error as Error).stack,
+    });
     return NextResponse.json(
       { error: (error as Error).message || 'Ошибка авторизации' },
       { status: 401 },

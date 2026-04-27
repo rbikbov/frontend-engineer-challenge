@@ -13,6 +13,8 @@ import {
 } from '@workspace/api';
 import { AUTH_ERROR_MESSAGES, ROOT_FIELD } from '@workspace/constants';
 
+import { logger } from '@shared/lib/logger';
+
 interface UsePasswordSetFormProps {
   email: string | null;
   token: string | null;
@@ -39,7 +41,11 @@ export function usePasswordSetForm({
   });
 
   const onSubmit = (data: PasswordSetSchemaType) => {
+    logger.info('[Auth] Password reset attempt', { email });
     if (!email || !token) {
+      logger.warn(
+        '[Auth] Password reset attempted with missing email or token',
+      );
       form.setError('root', { message: AUTH_ERROR_MESSAGES.INVALID_LINK });
       return;
     }
@@ -51,8 +57,16 @@ export function usePasswordSetForm({
         newPassword: data.password,
       },
       {
-        onSuccess,
+        onSuccess: () => {
+          logger.info('[Auth] Password reset successful', { email });
+          onSuccess();
+        },
         onError: (error) => {
+          logger.error('[Auth] Password reset failed', {
+            email,
+            error: error.message,
+            type: error.constructor.name,
+          });
           if (error instanceof ApiError) {
             if (error.message.includes('истек')) {
               onFatalError(error.message);

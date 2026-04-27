@@ -13,6 +13,8 @@ import {
 } from '@workspace/api';
 import { AUTH_ERROR_MESSAGES, ROOT_FIELD } from '@workspace/constants';
 
+import { logger } from '@shared/lib/logger';
+
 interface UsePasswordRecoveryFormProps {
   onSuccess: ({ token, email }: { token: string; email: string }) => void;
 }
@@ -32,21 +34,21 @@ export function usePasswordRecoveryForm({
   });
 
   const onSubmit = (data: PasswordRecoverySchemaType) => {
+    logger.info('[Auth] Password recovery requested', { email: data.email });
     mutation.mutate(data.email, {
       onSuccess: (
         response: { success: boolean; token?: string; email?: string },
         variables: string,
       ) => {
         const email = variables;
-        /*
-        В текущей реализации всегда успех
-        if (response.success && response.token && email) {
-          onSuccess({ token: response.token, email });
-        }
-        */
+        logger.info('[Auth] Password recovery request successful', { email });
         onSuccess({ token: response.token || '', email });
       },
       onError: (error) => {
+        logger.error('[Auth] Password recovery request failed', {
+          error: error.message,
+          type: error.constructor.name,
+        });
         if (error instanceof ApiError) {
           Object.entries(error.fields).forEach(([field, message]) => {
             form.setError(

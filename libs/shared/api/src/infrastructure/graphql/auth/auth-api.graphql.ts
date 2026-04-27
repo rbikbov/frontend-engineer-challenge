@@ -148,7 +148,6 @@ export class GraphQLAuthApi implements AuthApi {
 
   private mapAuthPayload(raw: Record<string, unknown>): AuthPayload {
     return AuthPayloadSchema.parse({
-      user: this.mapUser(raw.user as Record<string, unknown>),
       accessToken: raw.accessToken,
       refreshToken: raw.refreshToken,
     });
@@ -186,11 +185,6 @@ export class GraphQLAuthApi implements AuthApi {
         __args: { email, password },
         accessToken: true,
         refreshToken: true,
-        user: {
-          id: true,
-          email: true,
-          status: true,
-        },
       },
     });
     return this.mapAuthPayload(response.login);

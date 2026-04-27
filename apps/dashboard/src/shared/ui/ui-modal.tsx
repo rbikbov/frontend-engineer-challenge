@@ -6,10 +6,9 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import clsx from 'clsx';
-
 import { useFocusTrap } from '@workspace/lib';
 import { CrossIcon } from '@workspace/ui/icons';
+import { cn } from '@workspace/ui/utils/cn';
 
 type UiModalProps = {
   className?: string;
@@ -62,7 +61,7 @@ export function UiModal({
         }
       }}
       onClick={handleClick}
-      className={clsx(
+      className={cn(
         'bg-primary/50 fixed inset-0 z-50 flex overflow-y-auto p-6',
         className,
       )}
@@ -72,7 +71,7 @@ export function UiModal({
         data-id="modal"
         role="dialog"
         aria-modal="true"
-        className={clsx(
+        className={cn(
           'bg-background rounded-modal m-auto p-8 shadow-md',
           'flex w-full max-w-[440px] flex-col',
         )}
@@ -100,7 +99,7 @@ UiModal.Header = function UiModalHeader({
   children: ReactNode;
 }) {
   return (
-    <div className={clsx(className, 'text-h2 text-primary text-center')}>
+    <div className={cn(className, 'text-h2 text-primary text-center')}>
       {children}
     </div>
   );
@@ -115,7 +114,7 @@ UiModal.Body = function UiModalBody({
 }) {
   return (
     <div
-      className={clsx(
+      className={cn(
         className,
         'text-foreground-secondary mt-5 text-center text-base',
       )}
@@ -133,7 +132,7 @@ UiModal.Footer = function UiModalFooter({
   children: ReactNode;
 }) {
   return (
-    <div className={clsx(className, 'mt-8 flex justify-between gap-4')}>
+    <div className={cn(className, 'mt-8 flex justify-between gap-4')}>
       {children}
     </div>
   );

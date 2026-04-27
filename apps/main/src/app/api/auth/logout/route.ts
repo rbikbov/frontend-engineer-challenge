@@ -3,8 +3,11 @@ import { NextResponse } from 'next/server';
 
 import { COOKIE_KEYS } from '@workspace/constants';
 
+import { logger } from '@shared/lib/logger';
+
 export async function POST() {
   try {
+    logger.info('[BFF] Logout attempt');
     const cookieStore = await cookies();
 
     cookieStore.delete(COOKIE_KEYS.ACCESS_TOKEN);
@@ -12,7 +15,9 @@ export async function POST() {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    // TODO: сделать лучше обработку ошибок
+    logger.error('[BFF] Logout error', {
+      message: (error as Error).message,
+    });
     return NextResponse.json(
       { message: (error as Error).message || 'Internal Server Error' },
       { status: 500 },
