@@ -18,6 +18,9 @@
 | **09** | [Multi-Zones](09-monorepo-optimization-and-multi-zones.md)   | Масштабирование через объединение Next.js приложений.   |
 | **10** | [Secure Auth](10-secure-auth-and-architecture-refinement.md) | Внедрение BFF, HttpOnly кук и инверсии зависимостей.    |
 
+| **11** | [Testing Strategy](11-testing-strategy-and-quality-assurance.md) | Пирамида тестов: Vitest, JSDOM, Playwright. |
+| **12** | [Observability](12-observability-and-logging.md) | Паттерны логирования и перехват ошибок. |
+
 ---
 
 ## Зачем это нужно?

@@ -7,7 +7,7 @@ import { cn } from '../../utils/cn';
 
 const buttonVariants = cva(
   // Base: layout + typography + border reset + focus/disabled
-  'focus-visible:ring-brand inline-flex cursor-pointer items-center justify-center border border-transparent text-sm leading-none font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed',
+  'focus-visible:ring-brand inline-flex cursor-pointer items-center justify-center border border-transparent text-sm leading-none font-medium whitespace-normal transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed',
   {
     variants: {
       // variant = только визуальная идентичность (цвет, фон, скругление)

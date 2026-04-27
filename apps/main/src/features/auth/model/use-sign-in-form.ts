@@ -18,6 +18,8 @@ import {
   QUERY_KEYS,
 } from '@workspace/constants';
 
+import { logger } from '@shared/lib';
+
 interface UseSignInFormProps {
   onSuccess: () => void;
 }
@@ -37,17 +39,18 @@ export function useSignInForm({ onSuccess }: UseSignInFormProps) {
   });
 
   const onSubmit = (data: SignInSchemaType) => {
+    logger.info('[Auth] Login submission started', { email: data.email });
     loginMutation.mutate(data, {
       onSuccess: async () => {
-        // 1. Инвалидируем сессию, чтобы React Query обновил данные пользователя
-        // В нашем случае BFF при логине уже мог вернуть пользователя,
-        // но мы следуем флоу "принудительного обновления" для надежности.
+        logger.info('[Auth] Login successful', { email: data.email });
         await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_ME] });
-
-        // 2. Вызываем колбек (редирект)
         onSuccess();
       },
       onError: (error) => {
+        logger.error('[Auth] Login failed', {
+          error: error.message,
+          type: error.constructor.name,
+        });
         if (error instanceof ApiError) {
           Object.entries(error.fields).forEach(([field, message]) => {
             form.setError(

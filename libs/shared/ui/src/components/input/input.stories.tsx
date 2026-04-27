@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
 
-import { EyeClosedIcon, EyeIcon, SearchIcon } from '../icons';
+import { EyeClosedIcon, EyeIcon, SearchIcon } from '../../icons';
 import { Input } from './input';
 
 const meta: Meta<typeof Input> = {

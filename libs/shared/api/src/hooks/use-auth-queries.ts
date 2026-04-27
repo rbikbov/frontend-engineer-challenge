@@ -31,7 +31,8 @@ const dynamicErrorMatchers: DynamicErrorInfo[] = [
   {
     pattern: /password must be at least (\d+) characters/i,
     field: 'password',
-    message: (min: string) => AUTH_ERROR_MESSAGES.PASSWORD_MIN_LENGTH(min),
+    message: (min: string | number) =>
+      AUTH_ERROR_MESSAGES.PASSWORD_MIN_LENGTH(min),
   },
 ];
 

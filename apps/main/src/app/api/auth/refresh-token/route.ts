@@ -5,6 +5,7 @@ import { createAuthApi } from '@workspace/api';
 import { COOKIE_KEYS } from '@workspace/constants';
 
 import { envConfig } from '@shared/config/env';
+import { logger } from '@shared/lib';
 
 export async function POST(request: Request) {
   try {
@@ -12,8 +13,11 @@ export async function POST(request: Request) {
     const refreshToken = cookieStore.get(COOKIE_KEYS.REFRESH_TOKEN)?.value;
 
     if (!refreshToken) {
+      logger.warn('[BFF] Refresh token missing in cookies');
       throw new Error('No refresh token');
     }
+    logger.info('[BFF] Token refresh attempt');
+
     const clientIp = request.headers.get('x-forwarded-for') || '127.0.0.1';
 
     const authApi = createAuthApi({
@@ -46,7 +50,10 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    // TODO: сделать лучше обработку ошибок
+    logger.error('[BFF] Token refresh error', {
+      message: (error as Error).message,
+      stack: (error as Error).stack,
+    });
     return NextResponse.json(
       { error: (error as Error).message || 'Ошибка обновления токенов' },
       { status: 401 },

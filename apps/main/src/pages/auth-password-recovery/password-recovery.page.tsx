@@ -56,12 +56,15 @@ export function PasswordRecoveryPage() {
           <Button
             variant="linkWrapper"
             size="text"
-            className="text-h1! leading-[1.2]!"
+            className="text-h1! block max-w-full whitespace-normal"
             asChild
           >
-            <AppLink href={AUTH_LINKS.SIGN_IN}>
-              <ChevronLeftIcon className="mr-2 inline" />
-              <span className="-mt-[2px]">Восстановление пароля</span>
+            <AppLink
+              href={AUTH_LINKS.SIGN_IN}
+              className="inline-block max-w-full wrap-break-word"
+            >
+              <ChevronLeftIcon className="mr-2 -mb-[2px] inline" />
+              <span className="align-middle">Восстановление пароля</span>
             </AppLink>
           </Button>
         }

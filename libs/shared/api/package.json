@@ -12,8 +12,7 @@
   "scripts": {
     "generate:graphql": "genql --schema src/infrastructure/graphql/schema.graphql --output ./src/infrastructure/graphql/generated",
     "generate:grpc:deprecated": "protoc -I src/infrastructure/grpc/proto --es_out=src/infrastructure/grpc/generated --es_opt=target=ts auth.proto",
-    "generate:msw": "protoc -I src/infrastructure/grpc/proto --es_out=src/infrastructure/grpc/generated --es_opt=target=ts auth.proto",
-    "generate": "pnpm run generate:graphql && pnpm run generate:msw",
+    "generate": "pnpm run generate:graphql",
     "lint": "eslint src"
   },
   "dependencies": {

@@ -43,9 +43,7 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
       />
 
       {errors.root && (
-        <p className="text-invalid text-caption transition-all">
-          {errors.root.message}
-        </p>
+        <p className="text-invalid text-caption">{errors.root.message}</p>
       )}
 
       <div className="pt-2">

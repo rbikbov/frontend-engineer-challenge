@@ -8,7 +8,7 @@
 
 Проект построен на трех фундаментальных решениях, которые подробно описаны в наших **Architecture Decision Records (ADR)**:
 
-1.  **[BFF & Secure Auth (ADR-002)](docs/adr/002-secure-auth-strategy.md)**: Полный отказ от хранения токенов в `localStorage`. Внедрен паттерн Backend-for-Frontend с использованием `HttpOnly` кук и пробросом IP клиента (`X-Forwarded-For`) для корректного Rate Limiting.
+1.  **[BFF & Secure Auth (ADR-002)](docs/adr/002-secure-auth-strategy.md)**: Полный отказ от хранения токенов в среде доступной клиенту. Внедрен паттерн Backend-for-Frontend с использованием `HttpOnly` кук и пробросом IP клиента (`X-Forwarded-For`) для корректного Rate Limiting. Проксируем только запросы связанные с токенами, вместо проксирования всех запросов.
 2.  **[Multi-Zones Scalability (ADR-001)](docs/adr/001-multi-zones-architecture.md)**: Использование Next.js Multi-Zones для разделения Auth-флоу и Dashboard на независимые приложения. Это позволяет командам работать автономно, сохраняя единый домен и общую дизайн-систему.
 3.  **[FSD & Dependency Inversion (ADR-003)](docs/adr/003-fsd-and-dependency-inversion.md)**: Строгое следование Feature-Slicing Methodology с использованием паттерна `deps` для инверсии зависимостей. Это гарантирует отсутствие циклических импортов и легкое тестирование компонентов.
 
@@ -74,8 +74,9 @@
 - **[07: Setup stylelint](.agents/07-setup-stylelint.md)** — про настройку стилей и зон.
 - **[08: Setup Prettier](.agents/08-setup-prettier.md)** — про настройку стилей и зон.
 - **[09: Monorepo Optimization and Multi-Zones](.agents/09-monorepo-optimization-and-multi-zones.md)** — про настройку стилей и зон.
-- **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)** — глубокий рефакторинг безопасности, внедрение BFF и инверсии зависимостей.
+- **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)** — реализация безопасной авторизации, внедрение BFF и инверсии зависимостей.
 - **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)** — описание уровней тестирования (Unit, Integration, E2E) и инструментов.
+- **[12: Observability & Logging](.agents/12-observability-and-logging.md)** — архитектура логирования и мониторинга.
 
 ---
 
