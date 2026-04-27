@@ -18,7 +18,12 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
   } = form;
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      aria-label="sign-in-form"
+      className="space-y-6"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Input
         label="Введите e-mail"
         placeholder="Введите e-mail"
