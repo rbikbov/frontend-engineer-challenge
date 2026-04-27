@@ -1,3 +1,4 @@
+import { MSWProvider } from '../shared/ui/providers/msw-provider';
 import './global.css';
 
 export const metadata = {
@@ -12,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MSWProvider>{children}</MSWProvider>
+      </body>
     </html>
   );
 }

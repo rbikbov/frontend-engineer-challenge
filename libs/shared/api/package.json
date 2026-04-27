@@ -16,6 +16,9 @@
     "lint": "eslint src"
   },
   "dependencies": {
+    "@mswjs/data": "^0.16.2",
+    "jose": "^6.2.2",
+    "msw": "^2.13.6",
     "@workspace/lib": "workspace:*",
     "@workspace/constants": "workspace:*",
     "@tanstack/react-query": "^5.62.7",
@@ -23,5 +26,10 @@
     "graphql-request": "^7.1.2",
     "react": "19",
     "zod": "^3.23.8"
+  },
+  "msw": {
+    "workerDirectory": [
+      "../../../public"
+    ]
   }
 }

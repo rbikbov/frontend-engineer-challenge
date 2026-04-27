@@ -9,6 +9,7 @@
     "@workspace/constants": "workspace:*",
     "@workspace/lib": "workspace:*",
     "@workspace/ui": "workspace:*",
+    "msw": "^2.13.6",
     "next": "15",
     "react": "19",
     "react-dom": "19",

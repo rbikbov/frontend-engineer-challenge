@@ -2,7 +2,7 @@
   "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "../../../dist/out-tsc/libs/shared/api",
-    "types": ["node"],
+    "types": ["node", "msw"],
     "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "bundler",

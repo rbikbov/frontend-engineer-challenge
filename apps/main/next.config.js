@@ -11,6 +11,7 @@ const nextConfig = {
   nx: {},
 
   transpilePackages: [
+    'msw',
     '@workspace/ui',
     '@workspace/api',
     '@workspace/lib',

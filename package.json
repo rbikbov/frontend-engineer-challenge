@@ -84,6 +84,8 @@
     "lint-staged": "^16.4.0",
     "next": "15.5.15",
     "nx": "22.6.5",
+    "openapi-msw": "^2.0.0",
+    "openapi-typescript": "^7.13.0",
     "postcss": "^8.5.10",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.2",
@@ -103,5 +105,10 @@
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
     "tailwindcss": "^4.2.2"
+  },
+  "msw": {
+    "workerDirectory": [
+      "apps/main/public"
+    ]
   }
 }
