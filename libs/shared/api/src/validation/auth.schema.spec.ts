@@ -2,7 +2,11 @@ import { describe, it, expect } from 'vitest';
 
 import { AUTH_ERROR_MESSAGES } from '@workspace/constants';
 
-import { SignInSchema, SignUpSchema } from './auth.schema';
+import {
+  SignInSchema,
+  SignUpSchema,
+  PasswordRecoverySchema,
+} from './auth.schema';
 
 describe('Auth Validation Schemas', () => {
   describe('SignInSchema', () => {
@@ -60,6 +64,18 @@ describe('Auth Validation Schemas', () => {
         );
         expect(hasMismatchError).toBe(true);
       }
+    });
+  });
+
+  describe('PasswordRecoverySchema', () => {
+    it('should validate correct email', () => {
+      const data = { email: 'recover@example.com' };
+      expect(PasswordRecoverySchema.safeParse(data).success).toBe(true);
+    });
+
+    it('should fail on invalid email', () => {
+      const data = { email: 'invalid' };
+      expect(PasswordRecoverySchema.safeParse(data).success).toBe(false);
     });
   });
 });
