@@ -75,6 +75,42 @@
 - **[08: Setup Prettier](.agents/08-setup-prettier.md)** — про настройку стилей и зон.
 - **[09: Monorepo Optimization and Multi-Zones](.agents/09-monorepo-optimization-and-multi-zones.md)** — про настройку стилей и зон.
 - **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)** — глубокий рефакторинг безопасности, внедрение BFF и инверсии зависимостей.
+- **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)** — описание уровней тестирования (Unit, Integration, E2E) и инструментов.
+
+---
+
+## Тестирование
+
+В проекте реализовано три уровня тестирования для обеспечения надежности критических сценариев.
+
+### 1. Unit-тесты (Логика и Схемы)
+
+Проверка валидации данных и бизнес-логики в `libs/shared/api`.
+
+```bash
+npx nx test api
+# или запуск напрямую через vitest
+npx vitest run -c libs/shared/api/vitest.config.ts
+```
+
+### 2. Integration-тесты (UI-компоненты)
+
+Проверка взаимодействия React-компонентов с формами и валидацией (JSDOM).
+
+```bash
+npx nx test main
+# или запуск конкретных тестов
+npx vitest run -c apps/main/vitest.config.ts
+```
+
+### 3. E2E-тесты (Браузерные сценарии)
+
+Полная проверка путей пользователя через Playwright.
+
+```bash
+# Для запуска требуется работающий dev-сервер
+npx nx e2e main-e2e
+```
 
 ---
 
