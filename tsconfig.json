@@ -7,10 +7,16 @@
       "path": "./libs/shared/ui"
     },
     {
-      "path": "./apps/main-e2e"
+      "path": "./libs/shared/api"
     },
     {
-      "path": "./apps/main"
+      "path": "./libs/shared/constants"
+    },
+    {
+      "path": "./libs/shared/lib"
+    },
+    {
+      "path": "./apps/main-e2e"
     }
   ]
 }

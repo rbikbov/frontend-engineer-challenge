@@ -1,0 +1,28 @@
+{
+  "name": "@workspace/api",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate:graphql": "genql --schema src/infrastructure/graphql/schema.graphql --output ./src/infrastructure/graphql/generated",
+    "generate:grpc:deprecated": "protoc -I src/infrastructure/grpc/proto --es_out=src/infrastructure/grpc/generated --es_opt=target=ts auth.proto",
+    "generate:msw": "protoc -I src/infrastructure/grpc/proto --es_out=src/infrastructure/grpc/generated --es_opt=target=ts auth.proto",
+    "generate": "pnpm run generate:graphql && pnpm run generate:msw",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@workspace/lib": "workspace:*",
+    "@workspace/constants": "workspace:*",
+    "@tanstack/react-query": "^5.62.7",
+    "graphql": "^16.13.2",
+    "graphql-request": "^7.1.2",
+    "react": "19",
+    "zod": "^4.3.6"
+  }
+}

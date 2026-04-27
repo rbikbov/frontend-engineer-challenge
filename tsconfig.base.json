@@ -2,7 +2,14 @@
   "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
     "paths": {
-      "@workspace/ui": ["./libs/shared/ui/src/index.ts"]
+      "@workspace/ui": ["./libs/shared/ui/src/index.ts"],
+      "@workspace/ui/components/*": ["./libs/shared/ui/src/components/*"],
+      "@workspace/ui/icons/*": ["./libs/shared/ui/src/icons/*"],
+      "@workspace/ui/utils/*": ["./libs/shared/ui/src/utils/*"],
+      "@workspace/ui/layouts/*": ["./libs/shared/ui/src/layouts/*"],
+      "@workspace/api": ["./libs/shared/api/src/index.ts"],
+      "@workspace/constants": ["./libs/shared/constants/src/index.ts"],
+      "@workspace/lib": ["./libs/shared/lib/src/index.ts"]
     },
     "skipLibCheck": true
   }

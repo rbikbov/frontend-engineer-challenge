@@ -3,9 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@workspace/ui": "workspace:*"
+    "@workspace/ui": "workspace:*",
+    "@workspace/api": "workspace:*",
+    "@workspace/lib": "workspace:*",
+    "@workspace/constants": "workspace:*",
+    "react": "19",
+    "react-dom": "19",
+    "next": "15",
+    "@tanstack/react-query": "^5.62.7"
   },
   "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }
 }

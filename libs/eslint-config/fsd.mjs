@@ -1,3 +1,4 @@
+import ts from 'typescript-eslint';
 import boundaries from 'eslint-plugin-boundaries';
 
 /**
@@ -9,25 +10,30 @@ import boundaries from 'eslint-plugin-boundaries';
  */
 export const fsdConfig = [
   {
+    ignores: ['node_modules/**', 'dist/**'],
+  },
+  {
     files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: ts.parser,
+    },
     plugins: {
       boundaries,
     },
     settings: {
+      'import/internal-regex': '^(@/|@workspace/)',
       'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
         },
       },
-      // Restrict analysis to the src directory to avoid node_modules overhead
-      'boundaries/include': ['src/**/*'],
       'boundaries/elements': [
-        { type: 'app', pattern: 'app' },
-        { type: 'pages', pattern: 'pages/*', capture: ['page'] },
-        { type: 'widgets', pattern: 'widgets/*', capture: ['widget'] },
-        { type: 'features', pattern: 'features/*', capture: ['feature'] },
-        { type: 'entities', pattern: 'entities/*', capture: ['entity'] },
-        { type: 'shared', pattern: 'shared/*', capture: ['segment'] },
+        { type: 'app', pattern: 'src/app/*' },
+        { type: 'pages', pattern: 'src/pages/*', capture: ['page'] },
+        { type: 'widgets', pattern: 'src/widgets/*', capture: ['widget'] },
+        { type: 'features', pattern: 'src/features/*', capture: ['feature'] },
+        { type: 'entities', pattern: 'src/entities/*', capture: ['entity'] },
+        { type: 'shared', pattern: ['src/shared/*'], capture: ['segment'] },
       ],
     },
     rules: {
@@ -39,7 +45,7 @@ export const fsdConfig = [
           rules: [
             // Shared ui/api: direct imports allowed
             {
-              target: [['shared', { segment: '(ui|api)' }]],
+              target: [['shared', { segment: '(ui|api|config)' }]],
               allow: '**',
             },
             // Shared constants/lib: strictly via index

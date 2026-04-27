@@ -14,15 +14,19 @@
     "@testing-library/react",
     "react",
     "<THIRD_PARTY_MODULES>",
-    "^@/workspace",
-    "^@/app",
-    "^@/pages",
-    "^@/widgets",
-    "^@/features",
-    "^@/entities",
-    "^@/shared",
+    "^@workspace",
+    "^@app",
+    "^@pages",
+    "^@widgets",
+    "^@features",
+    "^@entities",
+    "^@shared",
     "^[./]"
   ],
   "importOrderSeparation": true,
-  "tailwindFunctions": ["cva", "cn", "clsx"]
+  "tailwindFunctions": [
+    "cva",
+    "cn",
+    "clsx"
+  ]
 }
