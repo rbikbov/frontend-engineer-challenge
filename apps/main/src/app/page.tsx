@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, Logo } from '@workspace/ui';
-import Link from 'next/link';
+import { AUTH_LINKS, DASHBOARD_LINKS, ROOT_LINK } from '@workspace/constants';
+import { AppLink, Button, Logo } from '@workspace/ui/components';
 
 export default function Index() {
   return (
@@ -12,12 +12,14 @@ export default function Index() {
 
       {/* Top Navigation Bar */}
       <nav className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-8 py-6">
-        <Logo />
+        <AppLink href={ROOT_LINK}>
+          <Logo />
+        </AppLink>
       </nav>
 
       {/* Hero Content */}
       <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-20 pb-32 text-center">
-        <section className="border-stroke bg-surface/40 backdrop-blur-glass shadow-brand/5 mx-auto max-w-4xl rounded-[40px] border p-8 shadow-2xl sm:p-16">
+        <section className="border-stroke bg-surface/40 shadow-brand/5 mx-auto max-w-4xl rounded-[40px] border p-8 shadow-2xl sm:p-16">
           <div className="bg-brand/10 border-brand/20 text-brand mb-8 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold tracking-wider uppercase">
             <span className="relative flex h-2 w-2">
               <span className="bg-brand absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
@@ -28,7 +30,7 @@ export default function Index() {
 
           <h1 className="mb-8 text-5xl leading-[1.1] font-extrabold tracking-tight sm:text-7xl">
             Orbitto{' '}
-            <span className="from-brand to-brand-hover bg-gradient-to-r bg-clip-text text-transparent italic">
+            <span className="from-brand to-brand-hover bg-linear-to-r bg-clip-text text-transparent italic">
               Service
             </span>
           </h1>
@@ -42,14 +44,18 @@ export default function Index() {
             <Button
               variant="primary"
               className="h-14 w-full px-10 text-lg sm:w-auto"
+              asChild
             >
-              <Link href="/login">Get Started</Link>
+              <AppLink href={AUTH_LINKS.SIGN_IN}>Sign in</AppLink>
             </Button>
             <Button
               variant="secondaryMain"
               className="h-14 w-full px-10 text-lg sm:w-auto"
+              asChild
             >
-              <a href="/dashboard">View Dashboard</a>
+              <AppLink toOtherZone href={DASHBOARD_LINKS.ROOT}>
+                View Dashboard
+              </AppLink>
             </Button>
           </div>
         </section>

@@ -1,15 +1,14 @@
-import { Button } from '@workspace/ui';
+import { Button } from '@workspace/ui/components';
+
+import { UserBlock } from '@widgets/user-block';
 
 export default function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.css file.
-   */
   return (
     <div className="bg-background text-foreground selection:bg-brand/20 min-h-screen font-sans">
       <div className="mx-auto max-w-5xl px-6 py-16 sm:px-8">
         <div className="container mx-auto">
+          <UserBlock className="mb-12" />
+
           {/* Welcome Section */}
           <div id="welcome" className="mb-12">
             <h1 className="mb-4 flex flex-col items-baseline gap-2 text-4xl font-extrabold tracking-tight sm:flex-row sm:text-5xl">

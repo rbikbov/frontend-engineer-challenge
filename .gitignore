@@ -34,3 +34,5 @@ vitest.config.*.timestamp*
 
 
 storybook-static
+# Generated API clients
+generated

@@ -12,6 +12,8 @@
     "e2e": "nx e2e main-e2e",
     "storybook": "nx storybook @workspace/ui",
     "graph": "nx graph",
+    "generate": "nx run-many -t generate",
+    "postinstall": "npm run generate",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -30,6 +32,7 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
+    "@genql/cli": "^6.3.3",
     "@next/eslint-plugin-next": "^16.2.4",
     "@nx/devkit": "22.6.5",
     "@nx/eslint": "^22.6.5",
@@ -52,6 +55,7 @@
     "@swc/cli": "~0.8.0",
     "@swc/core": "^1.15.26",
     "@swc/helpers": "^0.5.21",
+    "@tanstack/react-query-devtools": "^5.99.2",
     "@testing-library/dom": "10.4.0",
     "@testing-library/react": "16.3.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
@@ -73,6 +77,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "graphql": "^16.13.2",
     "husky": "^9.1.7",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
@@ -95,13 +100,8 @@
     "vitest": "^4.1.4"
   },
   "dependencies": {
-    "@radix-ui/react-label": "^2.1.8",
-    "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/vite": "^4.2.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2"
   }
 }
