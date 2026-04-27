@@ -34,3 +34,25 @@ test.describe('Authentication Flow', () => {
     await expect(error).toBeVisible();
   });
 });
+
+test.describe('Registration Flow', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/auth/sign-up');
+  });
+
+  test('should show validation errors for empty fields', async ({ page }) => {
+    await page.click('button[type="submit"]');
+    const errors = page.locator('text=Поле обязательно');
+    await expect(errors).toHaveCount(3);
+  });
+
+  test('should show error if passwords do not match', async ({ page }) => {
+    await page.fill('input[name="email"]', 'newuser@example.com');
+    await page.fill('input[name="password"]', 'password123');
+    await page.fill('input[name="confirmPassword"]', 'mismatch');
+    await page.click('button[type="submit"]');
+
+    const error = page.locator('text=Пароли не совпадают');
+    await expect(error).toBeVisible();
+  });
+});
