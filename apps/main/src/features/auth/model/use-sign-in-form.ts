@@ -7,18 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   useBffLoginMutation,
-  ApiError,
-  NetworkError,
   SignInSchema,
   type SignInSchemaType,
+  extractErrorFields,
 } from '@workspace/api';
-import {
-  AUTH_ERROR_MESSAGES,
-  ROOT_FIELD,
-  QUERY_KEYS,
-} from '@workspace/constants';
+import { AUTH_ERROR_MESSAGES, QUERY_KEYS } from '@workspace/constants';
 
-import { logger } from '@shared/lib';
+import { logger, setFormErrors } from '@shared/lib';
 
 interface UseSignInFormProps {
   onSuccess: () => void;
@@ -51,21 +46,11 @@ export function useSignInForm({ onSuccess }: UseSignInFormProps) {
           error: error.message,
           type: error.constructor.name,
         });
-        if (error instanceof ApiError) {
-          Object.entries(error.fields).forEach(([field, message]) => {
-            form.setError(
-              field === ROOT_FIELD ? 'root' : (field as keyof SignInSchemaType),
-              { message },
-            );
-          });
-        } else {
-          form.setError('root', {
-            message:
-              error instanceof NetworkError
-                ? error.message
-                : AUTH_ERROR_MESSAGES.SIGN_IN_FAILED,
-          });
-        }
+        const fields = extractErrorFields(
+          error,
+          AUTH_ERROR_MESSAGES.SIGN_IN_FAILED,
+        );
+        setFormErrors(form, fields);
       },
     });
   };

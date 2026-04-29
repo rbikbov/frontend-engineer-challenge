@@ -16,6 +16,9 @@
       "path": "./libs/shared/lib"
     },
     {
+      "path": "./libs/shared/config"
+    },
+    {
       "path": "./apps/main"
     },
     {

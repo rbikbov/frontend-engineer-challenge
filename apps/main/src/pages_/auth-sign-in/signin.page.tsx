@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Suspense } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -11,7 +12,7 @@ import { AuthSplittedLayout } from '@workspace/ui/layouts/auth/splitted.layout';
 
 import { SignInForm, useSignInForm } from '@features/auth';
 
-export function SignInPage() {
+function SignInFormWithParams() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get('callbackUrl') || DASHBOARD_LINKS.ROOT;
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -23,6 +24,16 @@ export function SignInPage() {
     },
   });
 
+  return (
+    <SignInForm
+      form={form}
+      onSubmit={onSubmit}
+      loading={isLoading || isRedirecting}
+    />
+  );
+}
+
+export function SignInPage() {
   return (
     <AuthSplittedLayout>
       <AuthContentLayout
@@ -40,11 +51,15 @@ export function SignInPage() {
           </p>
         }
       >
-        <SignInForm
-          form={form}
-          onSubmit={onSubmit}
-          loading={isLoading || isRedirecting}
-        />
+        <Suspense
+          fallback={
+            <div className="text-foreground-secondary flex h-[200px] animate-pulse items-center justify-center text-sm">
+              Загрузка формы...
+            </div>
+          }
+        >
+          <SignInFormWithParams />
+        </Suspense>
       </AuthContentLayout>
     </AuthSplittedLayout>
   );

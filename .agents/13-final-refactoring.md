@@ -21,3 +21,14 @@
 
 - **`apps/main/next.config.js` & `apps/dashboard/next.config.js`**: Внедрение `@next/bundle-analyzer` для контроля чанков на этапе сборки.
 - **`package.json`**: Добавлен сводный скрипт `"analyze"`.
+
+### 4. Изоляция BFF и рефакторинг API-клиента
+
+- **`apps/main/src/pages/` -> `apps/main/src/pages_/`**: Устранение конфликтов роутинга FSD в среде Next.js.
+- **`middleware.ts`**: Настройка `matcher` на игнорирование статики и API.
+- **`apps/main/src/shared/config` -> `lib/shared/config`**: Перенос конфига в общую библиотеку.
+- **`libs/shared/api/*`**: Искоренение паттерна Singleton. Переход на инверсию зависимостей (IoC) и гибкие фабрики API-клиентов.
+- **`libs/shared/api/src/contract/auth.errors.ts`**: Выделение доменных ошибок авторизации в строгий контракт для унифицированного маппинга ошибок на клиенте.
+- **`libs/shared/api/.../auth-error-mapper.spec.ts`**: Покрытие тестами логики преобразования (маппинга) бэкенд-ошибок GraphQL в единые клиентские коды.
+- **`apps/main/src/app/api/auth/_core`**: Рефакторинг и вынесение переиспользуемых частей BFF.
+- **`apps/dashboard` & `apps/main`**: Адаптация хуков выхода (`use-sign-out`) и работы с формами (`use-*-form.ts`) под обновленные API-контракты и логику IoC.

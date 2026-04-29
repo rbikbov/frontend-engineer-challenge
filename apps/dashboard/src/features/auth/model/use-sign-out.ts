@@ -1,11 +1,11 @@
-import { useLogoutMutation } from '@workspace/api';
+import { useBffLogoutMutation } from '@workspace/api';
 
 interface UseSignOutProps {
   onSuccess?: () => void;
 }
 
 export function useSignOut({ onSuccess }: UseSignOutProps) {
-  const logoutMutation = useLogoutMutation({
+  const logoutMutation = useBffLogoutMutation({
     onSuccess,
   });
 

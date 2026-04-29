@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Suspense } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -15,7 +16,7 @@ import { PasswordSetForm, usePasswordSetForm } from '@features/auth';
 import { PasswordSetErrorPage } from './password-set-error.page';
 import { PasswordSetSuccessPage } from './password-set-success.page';
 
-export function PasswordSetPage() {
+function PasswordSetContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -69,5 +70,19 @@ export function PasswordSetPage() {
         <PasswordSetForm form={form} onSubmit={onSubmit} loading={isLoading} />
       </AuthContentLayout>
     </AuthCenteredLayout>
+  );
+}
+
+export function PasswordSetPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="text-foreground-secondary flex h-[200px] animate-pulse items-center justify-center text-sm">
+          Загрузка...
+        </div>
+      }
+    >
+      <PasswordSetContent />
+    </Suspense>
   );
 }

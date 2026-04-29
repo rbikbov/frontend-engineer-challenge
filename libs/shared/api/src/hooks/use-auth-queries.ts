@@ -4,197 +4,83 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  UseQueryOptions,
+  type UseQueryOptions,
 } from '@tanstack/react-query';
 
+import { BFF_LINKS, QUERY_KEYS, ROOT_FIELD } from '@workspace/constants';
+
+import { type User, type ResetRequestPayload } from '../contract/auth.dto';
 import {
-  BFF_LINKS,
-  AUTH_ERROR_MESSAGES,
-  ROOT_FIELD,
-  QUERY_KEYS,
-} from '@workspace/constants';
-import { isClient } from '@workspace/lib';
-
-import { User } from '../contract/auth.dto';
+  ApiError,
+  NetworkError,
+  ServiceUnavailableError,
+} from '../contract/auth.errors';
 import { useAuthApi } from '../providers/auth-api.provider';
+import {
+  isNetworkStatusError,
+  isServiceUnavailableError,
+} from '../utils/network-errors';
 
-interface ErrorInfo {
-  message: string | ((...args: (string | number)[]) => string);
-  field?: string;
-}
-
-interface DynamicErrorInfo extends ErrorInfo {
-  pattern: RegExp;
-}
-
-const dynamicErrorMatchers: DynamicErrorInfo[] = [
-  {
-    pattern: /password must be at least (\d+) characters/i,
-    field: 'password',
-    message: (min: string | number) =>
-      AUTH_ERROR_MESSAGES.PASSWORD_MIN_LENGTH(min),
-  },
-];
-
-const errorMap = new Map<string, ErrorInfo>([
-  // sign-up
-  [
-    'email already registered',
-    { message: AUTH_ERROR_MESSAGES.EMAIL_TAKEN, field: 'email' },
-  ],
-  [
-    'invalid email: invalid email format',
-    { message: AUTH_ERROR_MESSAGES.INVALID_EMAIL, field: 'email' },
-  ],
-  // sign-in
-  [
-    'invalid credentials',
-    { message: AUTH_ERROR_MESSAGES.INVALID_CREDENTIALS, field: 'password' },
-  ],
-  // в текущей реализации бекенда не используется
-  // // reset-password
-  // [
-  //   'user not found',
-  //   { message: AUTH_ERROR_MESSAGES.EMAIL_NOT_FOUND, field: 'email' },
-  // ],
-  // set-password
-  [
-    'password reset failed: reset token is expired or already used',
-    { message: AUTH_ERROR_MESSAGES.TOKEN_EXPIRED, field: ROOT_FIELD },
-  ],
-  // other
-  [
-    'too many reset attempts, please try again later',
-    { message: AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS },
-  ],
-]);
-
-export const isNetworkStatusError = (error: unknown): boolean => {
-  if (isClient() && !window.navigator.onLine) return true;
-  if (error && typeof error === 'object' && 'message' in error) {
-    const message = String(
-      (error as { message: unknown }).message,
-    ).toLowerCase();
-    return (
-      message.includes('failed to fetch') || message.includes('network error')
-    );
-  }
-  return false;
-};
-
-const getAllErrors = (error: {
-  errors?: { message: string }[];
-  message?: string;
-  error?: string;
-}): Record<string, string> => {
-  const fields: Record<string, string> = {};
-  const messages: string[] = [];
-  if (Array.isArray(error?.errors)) {
-    error.errors.forEach((err) => {
-      if (err.message) messages.push(err.message.toLowerCase());
-    });
-  } else if (error?.message) {
-    messages.push(error.message.toLowerCase());
-  } else if (error?.error) {
-    messages.push(error.error.toLowerCase());
-  }
-  messages.forEach((msg) => {
-    // 1. Сначала проверяем динамические паттерны (регулярки)
-    for (const matcher of dynamicErrorMatchers) {
-      const match = msg.match(matcher.pattern);
-      if (match) {
-        const field = matcher.field || ROOT_FIELD;
-        const message =
-          typeof matcher.message === 'function'
-            ? matcher.message(...match.slice(1))
-            : matcher.message;
-        fields[field] = message;
-        return; // Переходим к следующему сообщению
-      }
-    }
-
-    // 2. Затем проверяем статический маппинг
-    for (const [key, info] of errorMap.entries()) {
-      if (msg.includes(key)) {
-        const field = info.field || ROOT_FIELD;
-        const message =
-          typeof info.message === 'function'
-            ? (info.message as () => string)()
-            : info.message;
-        fields[field] = message as string;
-      }
-    }
-  });
-  return fields;
-};
-
-export class NetworkError extends Error {
-  constructor(public originalError: unknown) {
-    super(AUTH_ERROR_MESSAGES.NETWORK);
-    this.name = 'NetworkError';
-  }
-}
-
-export class ApiError extends Error {
-  public fields: Record<string, string> = {};
-  constructor(public originalError: unknown) {
-    const fields = getAllErrors(
-      originalError as { errors?: { message: string }[]; message?: string },
-    );
-    const firstMessage =
-      Object.values(fields)[0] || AUTH_ERROR_MESSAGES.DEFAULT;
-    super(firstMessage);
-    this.name = 'ApiError';
-    this.fields = fields;
-  }
-}
-
-const handleMutationError = (err: unknown) => {
+const handleBffError = (err: unknown) => {
+  if (isServiceUnavailableError(err)) throw new ServiceUnavailableError(err);
   if (isNetworkStatusError(err)) throw new NetworkError(err);
-  throw new ApiError(err);
+
+  const bffError = err as {
+    fields?: Record<string, string>;
+    message?: string;
+    error?: string;
+  };
+
+  if (bffError?.fields && Object.keys(bffError.fields).length > 0) {
+    throw new ApiError(bffError.fields, err);
+  }
+
+  const message = bffError?.message || bffError?.error || 'Unknown error';
+  throw new ApiError({ [ROOT_FIELD]: message }, err);
 };
 
-export const useLoginMutation = () => {
-  const api = useAuthApi();
-  return useMutation({
-    mutationFn: async (params: { email: string; password: string }) => {
-      try {
-        return await api.login(params.email, params.password);
-      } catch (err) {
-        return handleMutationError(err);
-      }
-    },
-  });
-};
+export type AuthMutationError =
+  | ApiError
+  | NetworkError
+  | ServiceUnavailableError;
 
 export const useBffLoginMutation = () => {
-  return useMutation({
+  return useMutation<
+    unknown,
+    AuthMutationError,
+    { email: string; password: string }
+  >({
     mutationFn: async (params: { email: string; password: string }) => {
-      const response = await fetch(BFF_LINKS.LOGIN, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params),
-      });
+      try {
+        const response = await fetch(BFF_LINKS.LOGIN, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(params),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new ApiError(errorData);
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          // Пробрасываем объект со статусом для надежной детекции в isNetworkStatusError
+          throw { ...errorData, status: response.status };
+        }
+
+        return await response.json();
+      } catch (err) {
+        throw handleBffError(err);
       }
-
-      return response.json();
     },
   });
 };
 
 export const useRegisterMutation = () => {
   const api = useAuthApi();
-  return useMutation({
+  return useMutation<
+    User,
+    AuthMutationError,
+    { email: string; password: string }
+  >({
     mutationFn: async (params: { email: string; password: string }) => {
-      try {
-        return await api.register(params.email, params.password);
-      } catch (err) {
-        return handleMutationError(err);
-      }
+      return await api.register(params.email, params.password);
     },
   });
 };
@@ -203,26 +89,30 @@ export const useMeQuery = (
   options?: Omit<UseQueryOptions<User>, 'queryKey' | 'queryFn'>,
 ) => {
   const api = useAuthApi();
-  return useQuery({
+  return useQuery<User, AuthMutationError | Error>({
     queryKey: [QUERY_KEYS.USER_ME],
     queryFn: () => api.me(),
     ...options,
   });
 };
 
-export const useLogoutMutation = ({
+export const useBffLogoutMutation = ({
   onSuccess,
 }: {
   onSuccess?: () => void;
 }) => {
-  const api = useAuthApi();
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (token?: string) => {
+  return useMutation<unknown, AuthMutationError, void>({
+    mutationFn: async () => {
       try {
-        return await api.logout(token || '');
+        const response = await fetch(BFF_LINKS.LOGOUT, { method: 'POST' });
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw { ...errorData, status: response.status };
+        }
+        return await response.json();
       } catch (err) {
-        return handleMutationError(err);
+        throw handleBffError(err);
       }
     },
     onSuccess: () => {
@@ -235,34 +125,30 @@ export const useLogoutMutation = ({
 
 export const useRequestPasswordResetMutation = () => {
   const api = useAuthApi();
-  return useMutation({
+  return useMutation<ResetRequestPayload, AuthMutationError, string>({
     mutationFn: async (email: string) => {
-      try {
-        return await api.requestPasswordReset(email);
-      } catch (err) {
-        return handleMutationError(err);
-      }
+      return await api.requestPasswordReset(email);
     },
   });
 };
 
 export const useResetPasswordMutation = () => {
   const api = useAuthApi();
-  return useMutation({
-    mutationFn: async ({
-      email,
-      token,
-      newPassword,
-    }: {
+  return useMutation<
+    boolean,
+    AuthMutationError,
+    {
       email: string;
       token: string;
       newPassword: string;
-    }) => {
-      try {
-        return await api.resetPassword(email, token, newPassword);
-      } catch (err) {
-        return handleMutationError(err);
-      }
+    }
+  >({
+    mutationFn: async (params) => {
+      return await api.resetPassword(
+        params.email,
+        params.token,
+        params.newPassword,
+      );
     },
   });
 };

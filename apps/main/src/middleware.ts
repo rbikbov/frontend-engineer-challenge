@@ -5,6 +5,9 @@ import { AUTH_LINKS, COOKIE_KEYS, DASHBOARD_LINKS } from '@workspace/constants';
 
 export default function middleware(request: NextRequest) {
   const accessToken = request.cookies.get(COOKIE_KEYS.ACCESS_TOKEN);
+  const refreshToken = request.cookies.get(COOKIE_KEYS.REFRESH_TOKEN);
+  const hasToken = Boolean(accessToken?.value || refreshToken?.value);
+
   const { pathname } = request.nextUrl;
 
   const isAuthPage = Object.values(AUTH_LINKS).some((path) =>
@@ -15,12 +18,12 @@ export default function middleware(request: NextRequest) {
   );
 
   // Если юзер авторизован и заходит на auth-страницы, перенаправляем в dashboard
-  if (isAuthPage && accessToken) {
+  if (isAuthPage && hasToken) {
     return NextResponse.redirect(new URL(DASHBOARD_LINKS.ROOT, request.url));
   }
 
   // Если не авторизован и ломится на закрытую зону
-  if (isDashboardPage && !accessToken) {
+  if (isDashboardPage && !hasToken) {
     const callbackUrl = encodeURIComponent(pathname);
     return NextResponse.redirect(
       new URL(`${AUTH_LINKS.SIGN_IN}?callbackUrl=${callbackUrl}`, request.url),

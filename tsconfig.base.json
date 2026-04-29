@@ -9,7 +9,8 @@
       "@workspace/ui/layouts/*": ["./libs/shared/ui/src/layouts/*"],
       "@workspace/api": ["./libs/shared/api/src/index.ts"],
       "@workspace/constants": ["./libs/shared/constants/src/index.ts"],
-      "@workspace/lib": ["./libs/shared/lib/src/index.ts"]
+      "@workspace/lib": ["./libs/shared/lib/src/index.ts"],
+      "@workspace/config/*": ["./libs/shared/config/src/*"]
     },
     "skipLibCheck": true
   }

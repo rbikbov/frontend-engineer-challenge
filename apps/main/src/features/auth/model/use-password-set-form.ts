@@ -7,13 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useResetPasswordMutation,
   ApiError,
-  NetworkError,
   PasswordSetSchema,
   type PasswordSetSchemaType,
+  extractErrorFields,
 } from '@workspace/api';
-import { AUTH_ERROR_MESSAGES, ROOT_FIELD } from '@workspace/constants';
+import { AUTH_ERROR_MESSAGES } from '@workspace/constants';
 
-import { logger } from '@shared/lib';
+import { logger, setFormErrors } from '@shared/lib';
 
 interface UsePasswordSetFormProps {
   email: string | null;
@@ -67,27 +67,17 @@ export function usePasswordSetForm({
             error: error.message,
             type: error.constructor.name,
           });
+          const fields = extractErrorFields(
+            error,
+            AUTH_ERROR_MESSAGES.GENERIC_ERROR,
+          );
+          setFormErrors(form, fields);
+
           if (error instanceof ApiError) {
             if (error.message.includes('истек')) {
               onFatalError(error.message);
               return;
             }
-
-            Object.entries(error.fields).forEach(([field, message]) => {
-              form.setError(
-                field === ROOT_FIELD
-                  ? 'root'
-                  : (field as keyof PasswordSetSchemaType),
-                { message },
-              );
-            });
-          } else {
-            form.setError('root', {
-              message:
-                error instanceof NetworkError
-                  ? error.message
-                  : AUTH_ERROR_MESSAGES.GENERIC_ERROR,
-            });
           }
         },
       },

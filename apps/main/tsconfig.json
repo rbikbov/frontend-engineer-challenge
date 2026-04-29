@@ -10,8 +10,9 @@
       "@workspace/api": ["../../libs/shared/api/src/index.ts"],
       "@workspace/constants": ["../../libs/shared/constants/src/index.ts"],
       "@workspace/lib": ["../../libs/shared/lib/src/index.ts"],
+      "@workspace/config/*": ["../../libs/shared/config/src/*"],
       "@app/*": ["./src/app/*"],
-      "@pages/*": ["./src/pages/*"],
+      "@pages/*": ["./src/pages_/*"],
       "@widgets/*": ["./src/widgets/*"],
       "@features/*": ["./src/features/*"],
       "@entities/*": ["./src/entities/*"],
@@ -42,16 +43,19 @@
   ],
   "references": [
     {
-      "path": "../../libs/shared/api"
+      "path": "../../libs/shared/config"
     },
     {
       "path": "../../libs/shared/ui"
     },
     {
+      "path": "../../libs/shared/lib"
+    },
+    {
       "path": "../../libs/shared/constants"
     },
     {
-      "path": "../../libs/shared/lib"
+      "path": "../../libs/shared/api"
     }
   ]
 }

@@ -6,7 +6,10 @@ export type ApiType = 'graphql' | 'msw';
 export interface AuthApiConfig {
   type: ApiType;
   endpoint: string;
-  options?: Record<string, unknown>;
+  options?: {
+    headers?: Record<string, string>;
+    onRefreshSession?: () => Promise<boolean>;
+  };
 }
 
 /**

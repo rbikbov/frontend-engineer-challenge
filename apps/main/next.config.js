@@ -15,6 +15,7 @@ const nextConfig = {
     '@workspace/api',
     '@workspace/lib',
     '@workspace/constants',
+    '@workspace/config',
   ],
 
   // https://nextjs.org/docs/pages/guides/multi-zones#how-to-route-requests-to-the-right-zone

@@ -1,6 +1,3 @@
-import { BFF_LINKS } from '@workspace/constants';
-import { isClient } from '@workspace/lib';
-
 import type { AuthApi } from '../../../contract/auth-api.interface';
 import {
   UserSchema,
@@ -12,8 +9,9 @@ import {
   type TokenPair,
   type ResetRequestPayload,
 } from '../../../contract/auth.dto';
+import type { AuthApiConfig } from '../../auth-api.factory';
 import { createClient, type Client } from '../generated';
-import { ClientOptions } from '../generated/runtime';
+import { handleGraphQLError } from './auth-error-mapper';
 
 type FetchURL = Parameters<typeof fetch>[0];
 type FetchOptions = Parameters<typeof fetch>[1];
@@ -31,31 +29,13 @@ type GraphQLResponse = {
 };
 export class GraphQLAuthApi implements AuthApi {
   readonly endpoint!: string;
-  // readonly #options: ClientOptions | undefined;
+  readonly #options?: AuthApiConfig['options'];
   readonly #client!: Client;
-  #refreshPromise: Promise<Response | void> | null = null;
+  #refreshPromise: Promise<boolean> | null = null;
 
-  static #instance: GraphQLAuthApi;
-
-  static getInstance(
-    endpoint: string,
-    options?: ClientOptions,
-  ): GraphQLAuthApi {
-    if (!this.#instance) {
-      this.#instance = new GraphQLAuthApi(endpoint, options);
-    }
-    return this.#instance;
-  }
-
-  constructor(endpoint: string, options?: ClientOptions) {
-    if (GraphQLAuthApi.#instance) {
-      return GraphQLAuthApi.#instance;
-    }
-
-    GraphQLAuthApi.#instance = this;
-
+  constructor(endpoint: string, options?: AuthApiConfig['options']) {
     this.endpoint = endpoint;
-    // this.#options = options;
+    this.#options = options;
     this.#client = createClient({
       url: endpoint,
       fetch: async (url: FetchURL, options: FetchOptions) => {
@@ -88,19 +68,20 @@ export class GraphQLAuthApi implements AuthApi {
           // Если мы уже в процессе рефреша — ждем его
           if (this.#refreshPromise) {
             await this.#refreshPromise;
-          } else {
-            // Иначе — запускаем рефреш
-            this.#refreshPromise = this.#bffRefreshToken();
+          } else if (this.#options?.onRefreshSession) {
+            // Иначе — запускаем рефреш через внедренный коллбек
+            this.#refreshPromise = this.#options.onRefreshSession();
             try {
-              const refreshResult = await this.#refreshPromise;
-              if (!refreshResult || !refreshResult.ok) {
-                // Если рефреш не удался — выходим
-                await this.logout();
+              const isRefreshed = await this.#refreshPromise;
+              if (!isRefreshed) {
+                // Если рефреш не удался — выходим (куки уже зачищены BFF-ом)
                 throw new Error('Session expired');
               }
             } finally {
               this.#refreshPromise = null;
             }
+          } else {
+            throw new Error('Session expired');
           }
 
           // Повторяем запрос только ОДИН раз
@@ -112,26 +93,6 @@ export class GraphQLAuthApi implements AuthApi {
 
         return result;
       },
-    });
-  }
-
-  async #bffRefreshToken() {
-    if (!isClient())
-      throw new Error('The method must be called from the client side'); // TODO: AppError
-
-    return fetch(`${window.location.origin}${BFF_LINKS.REFRESH}`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-  }
-
-  async #bffLogout() {
-    if (!isClient())
-      throw new Error('The method must be called from the client side'); // TODO: AppError
-
-    return fetch(`${window.location.origin}${BFF_LINKS.LOGOUT}`, {
-      method: 'POST',
-      credentials: 'include',
     });
   }
 
@@ -166,49 +127,65 @@ export class GraphQLAuthApi implements AuthApi {
     });
   }
 
+  private async execute<T>(operation: () => Promise<T>): Promise<T> {
+    try {
+      return await operation();
+    } catch (err) {
+      throw handleGraphQLError(err);
+    }
+  }
+
   async register(email: string, password: string): Promise<User> {
-    const response = await this.#client.mutation({
-      register: {
-        __args: { email, password },
-        id: true,
-        email: true,
-        status: true,
-      },
+    return this.execute(async () => {
+      const response = await this.#client.mutation({
+        register: {
+          __args: { email, password },
+          id: true,
+          email: true,
+          status: true,
+        },
+      });
+      return this.mapUser(response.register);
     });
-    return this.mapUser(response.register);
   }
 
   async login(email: string, password: string): Promise<AuthPayload> {
-    const response = await this.#client.mutation({
-      login: {
-        __args: { email, password },
-        accessToken: true,
-        refreshToken: true,
-      },
+    return this.execute(async () => {
+      const response = await this.#client.mutation({
+        login: {
+          __args: { email, password },
+          accessToken: true,
+          refreshToken: true,
+        },
+      });
+      return this.mapAuthPayload(response.login);
     });
-    return this.mapAuthPayload(response.login);
   }
 
   async refreshToken(token: string): Promise<TokenPair> {
-    const response = await this.#client.mutation({
-      refreshToken: {
-        __args: { refreshToken: token },
-        accessToken: true,
-        refreshToken: true,
-      },
+    return this.execute(async () => {
+      const response = await this.#client.mutation({
+        refreshToken: {
+          __args: { refreshToken: token },
+          accessToken: true,
+          refreshToken: true,
+        },
+      });
+      return this.mapTokenPair(response.refreshToken);
     });
-    return this.mapTokenPair(response.refreshToken);
   }
 
   async requestPasswordReset(email: string): Promise<ResetRequestPayload> {
-    const response = await this.#client.mutation({
-      requestPasswordReset: {
-        __args: { email },
-        success: true,
-        token: true,
-      },
+    return this.execute(async () => {
+      const response = await this.#client.mutation({
+        requestPasswordReset: {
+          __args: { email },
+          success: true,
+          token: true,
+        },
+      });
+      return this.mapResetRequest(response.requestPasswordReset);
     });
-    return this.mapResetRequest(response.requestPasswordReset);
   }
 
   async resetPassword(
@@ -216,17 +193,18 @@ export class GraphQLAuthApi implements AuthApi {
     token: string,
     newPassword: string,
   ): Promise<boolean> {
-    const response = await this.#client.mutation({
-      resetPassword: {
-        __args: { email, token, newPassword },
-      },
+    return this.execute(async () => {
+      const response = await this.#client.mutation({
+        resetPassword: {
+          __args: { email, token, newPassword },
+        },
+      });
+      return response.resetPassword;
     });
-    return response.resetPassword;
   }
 
   async logout(token?: string): Promise<boolean> {
-    try {
-      // 1. Уведомляем бекенд (если есть токен или куки позволят)
+    return this.execute(async () => {
       await this.#client.mutation({
         logout: {
           __args: {
@@ -234,23 +212,19 @@ export class GraphQLAuthApi implements AuthApi {
           },
         },
       });
-    } catch (e) {
-      console.error('Backend logout failed, continuing with local cleanup', e);
-    } finally {
-      // 2. Очищаем куки в BFF в любом случае
-      await this.#bffLogout();
-    }
-
-    return true;
+      return true;
+    });
   }
 
   async me(): Promise<User> {
-    const response = await this.#client.query({
-      me: {
-        id: true,
-        email: true,
-      },
+    return this.execute(async () => {
+      const response = await this.#client.query({
+        me: {
+          id: true,
+          email: true,
+        },
+      });
+      return this.mapUser(response.me);
     });
-    return this.mapUser(response.me);
   }
 }

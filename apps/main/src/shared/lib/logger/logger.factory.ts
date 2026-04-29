@@ -1,4 +1,4 @@
-import { envConfig } from '@shared/config/env';
+import { envConfig } from '@workspace/config/env';
 
 import { ConsoleLogger } from './console.logger';
 import type { Logger, LoggerConfig } from './contract';

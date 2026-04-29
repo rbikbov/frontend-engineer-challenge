@@ -10,7 +10,13 @@ const nextConfig = {
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
 
-  transpilePackages: ['@workspace/ui'],
+  transpilePackages: [
+    '@workspace/ui',
+    '@workspace/api',
+    '@workspace/lib',
+    '@workspace/constants',
+    '@workspace/config',
+  ],
 
   basePath: '/dashboard',
   // https://nextjs.org/docs/pages/guides/multi-zones#how-to-define-a-zone
