@@ -30,14 +30,19 @@
 ```text
 ├── apps/
 │   ├── main/           # Зона 1: Auth flow, Landing (BFF Gatekeeper)
-│   └── dashboard/      # Зона 2: Внутренняя панель (User protected area)
+│   ├── dashboard/      # Зона 2: Внутренняя панель (User protected area)
+│   └── main-e2e/       # сквозные тесты (Playwright)
 ├── libs/
-│   ├── shared/
-│   │   ├── ui/         # Дизайн-система (Tailwind v4, Headless UI)
-│   │   └── api/        # Контракты, SDK и логика аутентификации
-├── docs/
-│   └── adr/            # Architecture Decision Records
+│   ├── shared/         # Переиспользуемые слои (FSD Style)
+│   │   ├── ui/         # UI-kit и дизайн-система (Tailwind v4)
+│   │   ├── api/        # API-клиенты, SDK и логика аутентификации
+│   │   ├── constants/  # Общие константы
+│   │   └── lib/        # Общие хелперы и утилиты
+│   ├── eslint-config/  # Шаринг правил линтинга
+│   └── typescript-config/ # Базовые настройки TS
+├── docs/adr/           # Architecture Decision Records (ADR)
 └── .agents/            # Логи разработки (Инженерный путь)
+
 ```
 
 ---
@@ -77,6 +82,7 @@
 - **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)** — реализация безопасной авторизации, внедрение BFF и инверсии зависимостей.
 - **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)** — описание уровней тестирования (Unit, Integration, E2E) и инструментов.
 - **[12: Observability & Logging](.agents/12-observability-and-logging.md)** — архитектура логирования и мониторинга.
+- **[13: Final Refactoring](.agents/13-final-refactoring.md)** — финальный рефакторинг.
 
 ---
 

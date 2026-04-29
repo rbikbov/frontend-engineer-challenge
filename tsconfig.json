@@ -16,6 +16,12 @@
       "path": "./libs/shared/lib"
     },
     {
+      "path": "./apps/main"
+    },
+    {
+      "path": "./apps/dashboard"
+    },
+    {
       "path": "./apps/main-e2e"
     }
   ]
