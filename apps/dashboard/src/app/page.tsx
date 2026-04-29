@@ -1,3 +1,4 @@
+import { envConfig } from '@workspace/config/env';
 import { Button } from '@workspace/ui/components';
 
 import { UserBlock } from '@widgets/user-block';
@@ -21,7 +22,10 @@ export default function Index() {
 
           <div className="mb-10">
             <Button variant="tertiarySecondary" asChild>
-              <a href="/" className="inline-flex items-center gap-2">
+              <a
+                href={envConfig.NEXT_PUBLIC_APP_URL}
+                className="inline-flex items-center gap-2"
+              >
                 &lsaquo; Back to main
               </a>
             </Button>

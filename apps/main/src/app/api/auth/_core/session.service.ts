@@ -10,7 +10,7 @@ export const setSessionCookies = async (
   refreshToken: string,
 ) => {
   const cookieStore = await cookies();
-  const secure = envConfig.NEXT_PUBLIC_ENV === 'production';
+  const secure = envConfig.NODE_ENV === 'production';
   const sameSite = 'strict';
   const path = '/';
 

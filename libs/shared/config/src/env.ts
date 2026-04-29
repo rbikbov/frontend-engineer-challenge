@@ -59,7 +59,7 @@ const parseEnv = () => {
   return parsed.data;
 };
 
-export const envConfig = parseEnv();
+export const envConfig = parseEnv() as EnvConfig;
 
 // Типизация для использования в коде
 export type EnvConfig = z.infer<typeof mergedSchema>;
