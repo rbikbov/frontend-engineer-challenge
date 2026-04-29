@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nx run-many -t dev",
-    "build": "nx run-many -t build",
+    "build": "nx run-many -t build --skip-nx-cache",
     "lint": "nx run-many -t lint",
     "format": "prettier --write .",
     "test": "nx run-many -t test",
-    "typecheck": "nx run-many -t typecheck",
+    "typecheck": "nx run-many -t typecheck --skip-nx-cache",
     "e2e": "nx run main-e2e:e2e",
     "analyze": "ANALYZE=true nx run-many -t build --skip-nx-cache",
     "storybook": "nx run @workspace/ui:storybook",
