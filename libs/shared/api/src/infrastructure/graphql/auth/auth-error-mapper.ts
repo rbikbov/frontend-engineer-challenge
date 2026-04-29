@@ -38,6 +38,34 @@ const errorMap = new Map<string, ErrorInfo>([
     { message: AUTH_ERROR_MESSAGES.INVALID_EMAIL, field: 'email' },
   ],
   [
+    'invalid password: password must contain at least one special character',
+    {
+      message: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_SPECIAL_CHAR,
+      field: 'password',
+    },
+  ],
+  [
+    'invalid password: password must contain at least one lowercase letter',
+    {
+      message: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_LOWERCASE,
+      field: 'password',
+    },
+  ],
+  [
+    'invalid password: password must contain at least one uppercase letter',
+    {
+      message: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_UPPERCASE,
+      field: 'password',
+    },
+  ],
+  [
+    'invalid password: password must contain at least one digit',
+    {
+      message: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_DIGIT,
+      field: 'password',
+    },
+  ],
+  [
     'invalid credentials',
     { message: AUTH_ERROR_MESSAGES.INVALID_CREDENTIALS, field: 'password' },
   ],
@@ -95,6 +123,11 @@ const parseGraphQLErrors = (error: {
       }
     }
   });
+
+  if (Object.keys(fields).length === 0) {
+    fields[ROOT_FIELD] = AUTH_ERROR_MESSAGES.GENERIC_ERROR;
+  }
+
   return fields;
 };
 

@@ -74,4 +74,53 @@ describe('auth-error-mapper', () => {
       });
     }
   });
+
+  it('should map password complexity requirement errors', () => {
+    const testCases = [
+      {
+        msg: 'invalid password: password must contain at least one special character',
+        field: 'password',
+        expectedMsg: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_SPECIAL_CHAR,
+      },
+      {
+        msg: 'invalid password: password must contain at least one lowercase letter',
+        field: 'password',
+        expectedMsg: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_LOWERCASE,
+      },
+      {
+        msg: 'invalid password: password must contain at least one uppercase letter',
+        field: 'password',
+        expectedMsg: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_UPPERCASE,
+      },
+      {
+        msg: 'invalid password: password must contain at least one digit',
+        field: 'password',
+        expectedMsg: AUTH_ERROR_MESSAGES.PASSWORD_SHOULD_CONTAIN_DIGIT,
+      },
+    ];
+
+    testCases.forEach(({ msg, field, expectedMsg }) => {
+      try {
+        handleGraphQLError({ message: msg });
+      } catch (err) {
+        expect((err as ApiError).fields).toEqual({
+          [field]: expectedMsg,
+        });
+      }
+    });
+  });
+
+  it('should fallback to GENERIC_ERROR for unknown errors on ROOT_FIELD', () => {
+    const error = {
+      message: 'some completely unknown backend exception occurred here',
+    };
+
+    try {
+      handleGraphQLError(error);
+    } catch (err) {
+      expect((err as ApiError).fields).toEqual({
+        [ROOT_FIELD]: AUTH_ERROR_MESSAGES.GENERIC_ERROR,
+      });
+    }
+  });
 });

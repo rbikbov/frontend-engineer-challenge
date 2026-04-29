@@ -14,6 +14,13 @@ export const AUTH_ERROR_MESSAGES = {
   PASSWORD_MIN_LENGTH: (min: number | string): string =>
     `Введённый пароль менее ${min} ${pluralize(Number(min), 'символа', 'символов', 'символов')} в длину`,
   PASSWORDS_NOT_MATCH: 'Пароли не совпадают',
+  PASSWORD_SHOULD_CONTAIN_LOWERCASE:
+    'Пароль должен содержать хотя бы одну строчную букву',
+  PASSWORD_SHOULD_CONTAIN_UPPERCASE:
+    'Пароль должен содержать хотя бы одну заглавную букву',
+  PASSWORD_SHOULD_CONTAIN_DIGIT: 'Пароль должен содержать хотя бы одну цифру',
+  PASSWORD_SHOULD_CONTAIN_SPECIAL_CHAR:
+    'Пароль должен содержать хотя бы один спецсимвол',
 
   // Auth Responses
   INVALID_CREDENTIALS: 'Введены неверные данные',
