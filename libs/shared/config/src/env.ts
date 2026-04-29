@@ -8,7 +8,8 @@ import { isServer } from '@workspace/lib';
  */
 const serverSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
-  DASHBOARD_DOMAIN: z.string().url(),
+  INTERNAL_DASHBOARD_URL: z.string().url(),
+  PORT: z.string().optional(),
 });
 
 /**
@@ -19,6 +20,7 @@ const clientSchema = z.object({
   NEXT_PUBLIC_AUTH_BACKEND_TYPE: z.enum(['graphql', 'msw']),
   NEXT_PUBLIC_AUTH_BACKEND_URL: z.string().url(),
   NEXT_PUBLIC_ENV: z.enum(['development', 'production']),
+  NEXT_PUBLIC_APP_URL: z.string().url().optional(),
 });
 
 /**
@@ -27,10 +29,12 @@ const clientSchema = z.object({
  */
 const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
-  DASHBOARD_DOMAIN: process.env.DASHBOARD_DOMAIN,
+  INTERNAL_DASHBOARD_URL: process.env.INTERNAL_DASHBOARD_URL,
+  PORT: process.env.PORT,
   NEXT_PUBLIC_AUTH_BACKEND_TYPE: process.env.NEXT_PUBLIC_AUTH_BACKEND_TYPE,
   NEXT_PUBLIC_AUTH_BACKEND_URL: process.env.NEXT_PUBLIC_AUTH_BACKEND_URL,
   NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 };
 
 // Валидируем всё вместе

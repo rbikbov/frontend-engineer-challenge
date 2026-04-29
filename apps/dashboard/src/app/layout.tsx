@@ -12,6 +12,10 @@ const inter = Inter({
 export const metadata = {
   title: 'Orbitto | Личный кабинет',
   description: 'Панель управления инженера Orbitto.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
