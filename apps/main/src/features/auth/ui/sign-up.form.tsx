@@ -31,6 +31,7 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
         error={errors.email?.message}
+        disabled={loading}
       />
 
       <InputPassword
@@ -39,6 +40,7 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="new-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
+        disabled={loading}
       />
 
       <InputPassword
@@ -47,6 +49,7 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="new-password"
         {...register(FIELD_NAMES.CONFIRM_PASSWORD)}
         error={errors.confirmPassword?.message}
+        disabled={loading}
       />
 
       {errors.root && (

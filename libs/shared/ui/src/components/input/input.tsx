@@ -95,7 +95,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setHasValue(e.target.value.length > 0);
+      setHasValue((e.target as HTMLInputElement).value.length > 0);
       onChange?.(e);
     };
 

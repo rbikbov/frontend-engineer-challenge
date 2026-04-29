@@ -20,6 +20,7 @@
 
 | **11** | [Testing Strategy](11-testing-strategy-and-quality-assurance.md) | Пирамида тестов: Vitest, JSDOM, Playwright. |
 | **12** | [Observability](12-observability-and-logging.md) | Паттерны логирования и перехват ошибок. |
+| **13** | [Final Refactoring](13-final-refactoring.md) | Финальный рефакторинг. |
 
 ---
 

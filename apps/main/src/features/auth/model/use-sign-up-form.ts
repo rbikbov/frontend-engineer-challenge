@@ -25,7 +25,7 @@ export function useSignUpForm({ onSuccess }: UseSignUpFormProps) {
   const form = useForm<SignUpSchemaType>({
     resolver: zodResolver(SignUpSchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     defaultValues: {
       email: '',
       password: '',

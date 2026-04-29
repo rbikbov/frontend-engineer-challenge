@@ -27,7 +27,7 @@ export function usePasswordRecoveryForm({
   const form = useForm<PasswordRecoverySchemaType>({
     resolver: zodResolver(PasswordRecoverySchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     defaultValues: {
       email: '',
     },

@@ -31,5 +31,12 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [`${DASHBOARD_LINKS.prefix}/:path*`, `${AUTH_LINKS.prefix}/:path*`],
+  /*
+   * Матчит все пути, кроме:
+   * 1. api (роуты бэкенда/BFF)
+   * 2. _next/static (скрипты и стили)
+   * 3. _next/image (картинки Next.js)
+   * 4. favicon.ico
+   */
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

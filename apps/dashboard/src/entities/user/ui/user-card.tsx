@@ -34,7 +34,7 @@ export function UserCard({
         {isLoading ? (
           <p className="text-disabled">Loading user data...</p>
         ) : error ? (
-          <p className="text-destructive">Error: {error.message}</p>
+          <p className="text-invalid">Error: {error.message}</p>
         ) : user ? (
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm">

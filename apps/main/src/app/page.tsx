@@ -30,7 +30,7 @@ export default function Index() {
 
           <h1 className="mb-8 text-5xl leading-[1.1] font-extrabold tracking-tight sm:text-7xl">
             Orbitto{' '}
-            <span className="from-brand to-brand-hover bg-linear-to-r bg-clip-text text-transparent italic">
+            <span className="from-brand to-brand-hover bg-linear-to-r bg-clip-text text-transparent">
               Service
             </span>
           </h1>

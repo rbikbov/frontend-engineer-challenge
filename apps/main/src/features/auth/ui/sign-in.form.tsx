@@ -31,6 +31,7 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
         error={errors.email?.message}
+        disabled={loading}
         hasError={!!errors.password?.message}
       />
 
@@ -40,6 +41,7 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
         autoComplete="current-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
+        disabled={loading}
       />
 
       {errors.root && (

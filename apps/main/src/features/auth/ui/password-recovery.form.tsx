@@ -35,6 +35,7 @@ export function PasswordRecoveryForm({
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
         error={errors.email?.message || errors.root?.message}
+        disabled={loading}
       />
 
       <div className="pt-2">

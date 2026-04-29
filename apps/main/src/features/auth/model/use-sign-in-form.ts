@@ -31,7 +31,7 @@ export function useSignInForm({ onSuccess }: UseSignInFormProps) {
   const form = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     defaultValues: {
       email: '',
       password: '',

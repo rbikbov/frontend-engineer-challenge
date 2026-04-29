@@ -29,6 +29,7 @@ export function PasswordSetForm({
         autoComplete="new-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
+        disabled={loading}
       />
 
       <InputPassword
@@ -37,6 +38,7 @@ export function PasswordSetForm({
         autoComplete="new-password"
         {...register(FIELD_NAMES.CONFIRM_PASSWORD)}
         error={errors.confirmPassword?.message}
+        disabled={loading}
       />
 
       {errors.root && (

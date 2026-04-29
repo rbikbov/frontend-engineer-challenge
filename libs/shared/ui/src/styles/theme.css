@@ -73,7 +73,7 @@
   --radius-modal: var(--radius-modal);
 
   /* Typography */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter, 'Inter'), ui-sans-serif, system-ui, sans-serif;
 
   /* Typography Tokens from Figma */
   --text-h1: 2rem;

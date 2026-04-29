@@ -33,7 +33,7 @@ export function usePasswordSetForm({
   const form = useForm<PasswordSetSchemaType>({
     resolver: zodResolver(PasswordSetSchema),
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     defaultValues: {
       password: '',
       confirmPassword: '',
