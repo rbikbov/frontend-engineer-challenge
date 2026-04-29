@@ -2,7 +2,7 @@
 
 **Статус:** Accepted  
 **Дата:** 2026-04-25  
-**Автор:** Antigravity
+**Автор:** Antigravity/rbikbov
 
 ## 1. Контекст
 
@@ -20,9 +20,10 @@
 
 ## 3. Технические детали и механизмы
 
-- **Proxy-роуты**: Реализованы `/api/auth/login`, `/api/auth/me`, `/api/auth/logout`.
+- **Proxy-роуты**: Реализованы `/api/auth/login`, `/api/auth/logout`, `/api/auth/refresh`.
 - **IP Forwarding**: Каждый запрос от BFF к GraphQL бекенду включает заголовок `X-Forwarded-For` с IP-адресом оригинального клиента.
-- **Refresh Logic**: Инкапсулирована внутри `GraphQLAuthApi` (shared lib), которая умеет автоматически обновлять токены через BFF при получении 401 ошибки.
+- **Refresh Logic**: Инкапсулирована внутри `GraphQLAuthApi` с использованием паттерна Inversion of Control. Клиент автоматически приостанавливает запросы при 401 ошибке и вызывает внедренный фронтендом коллбек `onRefreshSession`, который безопасно дергает BFF.
+- **Atomic Logout**: Процесс логаута полностью управляется BFF, что гарантирует синхронное удаление сессии на бекенде и локальных кук (исключая состояния гонки).
 
 ```mermaid
 sequenceDiagram
@@ -33,13 +34,18 @@ sequenceDiagram
     B->>BFF: POST /api/auth/login
     BFF->>BE: login(email, pass) + X-Forwarded-For
     BE-->>BFF: JWT Tokens
-    BFF-->>B: Set-Cookie: access_token (HttpOnly)
+    BFF-->>B: Set-Cookie: access_token, refresh_token (HttpOnly)
 
-    B->>BFF: GET /api/auth/me
-    Note right of B: Браузер сам прикрепляет куку
-    BFF->>BE: query me { ... } + Header: Bearer <token>
-    BE-->>BFF: User Data
-    BFF-->>B: User Data JSON
+    B->>BFF: POST /api/auth/refresh-token
+    BFF->>BE: refreshToken(refreshTokenFromCookie)
+    BE-->>BFF: JWT Tokens
+    BFF-->>B: Set-Cookie: access_token, refresh_token (HttpOnly)
+
+    B->>BFF: POST /api/auth/logout
+    BFF->>BE: logout(refreshTokenFromCookie)
+    BE-->>BFF: Success / Error
+    Note right of BFF: Если бекенд не доступен, куки все равно очищаются
+    BFF-->>B: Delete-Cookie: access_token, refresh_token
 ```
 
 ## 4. Рассмотренные альтернативы
@@ -53,7 +59,7 @@ sequenceDiagram
 ### 4.2. Прямое общение с бекендом через CORS
 
 - **Плюсы:** Меньше задержка на проксирование.
-- **Минусы:** Бекенд должен поддерживать сложные правила CORS и уметь работать с куками. Сложно пробрасывать IP для Rate Limit.
+- **Минусы:** Бекенд должен уметь работать с куками.
 - **Решение:** Отклонено в пользу архитектурной гибкости BFF.
 
 ## 5. Последствия и риски
@@ -73,3 +79,4 @@ sequenceDiagram
 
 - **2026-04-25**: Создание документа (Antigravity)
 - **2026-04-25**: Добавлена деталь про SameSite: Strict и X-Forwarded-For.
+- **2026-04-28**: Правки неточностей.
