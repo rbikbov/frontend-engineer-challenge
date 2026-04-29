@@ -16,3 +16,8 @@
 - **`package.json`**: Добавлен коренной скрипт `"typecheck": "nx run-many -t typecheck"`.
 - **`tsconfig.json` / `libs/shared/*/tsconfig.json`**: Настройка путей (`paths`) и Project References для строгой сквозной проверки типов во всем монорепозитории.
 - **`nx.json`**: Описание таски `typecheck` и кеширования в графе Nx.
+
+### 3. Оптимизация и Анализ бандла
+
+- **`apps/main/next.config.js` & `apps/dashboard/next.config.js`**: Внедрение `@next/bundle-analyzer` для контроля чанков на этапе сборки.
+- **`package.json`**: Добавлен сводный скрипт `"analyze"`.

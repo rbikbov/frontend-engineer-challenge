@@ -119,6 +119,20 @@ npx vitest run -c apps/main/vitest.config.ts
 npx nx e2e main-e2e
 ```
 
+## 📊 Оптимизация и анализ бандла
+
+Для контроля размера и качества сборки подключен инструмент `@next/bundle-analyzer`.
+
+Запуск детального анализа размера чанков:
+
+```bash
+pnpm run analyze
+```
+
+Интерактивные отчеты для клиентского и серверного кода будут сгенерированы в папке `.next/analyze/`.
+
+---
+
 ---
 
 **Ссылка на оригинальный челендж**: [README_challenge.md](README_challenge.md)  
