@@ -7,11 +7,10 @@
   "// targets": "to see all targets run: nx show project main --web",
   "targets": {
     "dev": {
-      "executor": "@nx/next:server",
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "main:build",
-        "dev": true,
-        "port": 3000
+        "command": "PORT=${MAIN_APP_PORT:-3000} npx next dev",
+        "cwd": "apps/main"
       }
     }
   }

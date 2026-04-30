@@ -5,3 +5,11 @@
 dist
 out
 *.log
+.env
+.env.local
+.vercel
+.agent
+.gemini
+.vscode
+.idea
+.pnpm-debug.log

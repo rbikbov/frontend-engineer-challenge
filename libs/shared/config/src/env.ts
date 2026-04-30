@@ -9,7 +9,6 @@ import { isServer } from '@workspace/lib';
 const serverSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
   INTERNAL_DASHBOARD_URL: z.string().url(),
-  PORT: z.string().optional(),
 });
 
 /**
@@ -30,7 +29,6 @@ const clientSchema = z.object({
 const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
   INTERNAL_DASHBOARD_URL: process.env.INTERNAL_DASHBOARD_URL,
-  PORT: process.env.PORT,
   NEXT_PUBLIC_AUTH_BACKEND_TYPE: process.env.NEXT_PUBLIC_AUTH_BACKEND_TYPE,
   NEXT_PUBLIC_AUTH_BACKEND_URL: process.env.NEXT_PUBLIC_AUTH_BACKEND_URL,
   NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV,

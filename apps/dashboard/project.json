@@ -7,11 +7,10 @@
   "// targets": "to see all targets run: nx show project dashboard --web",
   "targets": {
     "dev": {
-      "executor": "@nx/next:server",
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "dashboard:build",
-        "dev": true,
-        "port": 3001
+        "command": "PORT=${DASHBOARD_APP_PORT:-3001} npx next dev",
+        "cwd": "apps/dashboard"
       }
     }
   }
