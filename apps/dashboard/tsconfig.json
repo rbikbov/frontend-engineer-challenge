@@ -39,22 +39,5 @@
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     ".next"
-  ],
-  "references": [
-    {
-      "path": "../../libs/shared/config"
-    },
-    {
-      "path": "../../libs/shared/constants"
-    },
-    {
-      "path": "../../libs/shared/lib"
-    },
-    {
-      "path": "../../libs/shared/api"
-    },
-    {
-      "path": "../../libs/shared/ui"
-    }
   ]
 }

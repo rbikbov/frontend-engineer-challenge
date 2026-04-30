@@ -1,31 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
-  "compileOnSave": false,
   "files": [],
-  "references": [
-    {
-      "path": "./libs/shared/ui"
-    },
-    {
-      "path": "./libs/shared/api"
-    },
-    {
-      "path": "./libs/shared/constants"
-    },
-    {
-      "path": "./libs/shared/lib"
-    },
-    {
-      "path": "./libs/shared/config"
-    },
-    {
-      "path": "./apps/main"
-    },
-    {
-      "path": "./apps/dashboard"
-    },
-    {
-      "path": "./apps/main-e2e"
-    }
-  ]
+  "include": [],
+  "references": []
 }
