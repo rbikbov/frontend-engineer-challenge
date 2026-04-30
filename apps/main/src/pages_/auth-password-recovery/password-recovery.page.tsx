@@ -14,8 +14,9 @@ import {
 
 import { PasswordRecoveryForm, usePasswordRecoveryForm } from '@features/auth';
 
-// Фейковая реализация замены письма.
-// В реальном приложении этого не было, но было задание - сделать восстановление пароля.
+// [DEV ONLY] Заглушка для демонстрации флоу восстановления пароля.
+// Бэкенд не поддерживает отправку писем, поэтому токен возвращается напрямую в ответе.
+// В production этот блок заменяется реальной отправкой письма через SMTP.
 const devConfirmationBuilder = async (token: string, email: string) => {
   if (token && email) {
     const link = new URL(AUTH_LINKS.PASSWORD_SET, window.location.origin);
@@ -23,12 +24,14 @@ const devConfirmationBuilder = async (token: string, email: string) => {
     link.searchParams.append('token', token);
     if (
       confirm(
-        `Фейковая реализация замены письма. Нажмите ОК, чтобы скопировать ссылку в буфер обмена:\n${link}`,
+        `[DEV] Письмо не отправлено — бэкенд не реализован.\n\nНажмите ОК, чтобы скопировать ссылку на сброс пароля в буфер обмена, затем откройте её в браузере:\n\n${link}`,
       )
     ) {
       try {
         await navigator.clipboard.writeText(String(link));
-        alert('Фейковая ссылка на восстановление пароля скопирована!');
+        alert(
+          'Ссылка скопирована! Вставьте её в адресную строку браузера, чтобы задать новый пароль.',
+        );
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Ошибка при копировании в буфер обмена:', error);
