@@ -19,14 +19,20 @@ const meta: Meta<typeof Input> = {
 export default meta;
 type Story = StoryObj<typeof Input>;
 
+const defaultArgs = {
+  className: 'w-[240px]',
+};
+
 export const Default: Story = {
   args: {
+    ...defaultArgs,
     placeholder: 'Placeholder',
   },
 };
 
 export const WithLabel: Story = {
   args: {
+    ...defaultArgs,
     label: 'Title',
     placeholder: 'Placeholder',
   },
@@ -34,6 +40,7 @@ export const WithLabel: Story = {
 
 export const WithValue: Story = {
   args: {
+    ...defaultArgs,
     label: 'Title',
     defaultValue: 'Text',
   },
@@ -41,6 +48,7 @@ export const WithValue: Story = {
 
 export const Error: Story = {
   args: {
+    ...defaultArgs,
     label: 'Title',
     defaultValue: 'Text',
     error: 'Текст ошибки',
@@ -49,6 +57,7 @@ export const Error: Story = {
 
 export const WithSearchIcon: Story = {
   args: {
+    ...defaultArgs,
     placeholder: 'Search...',
     leftElement: <SearchIcon className="text-foreground-secondary size-5" />,
   },
@@ -63,6 +72,7 @@ export const PasswordToggle: Story = {
     return (
       <Input
         {...args}
+        {...defaultArgs}
         type={show ? 'text' : 'password'}
         label="Password"
         defaultValue="password123"
@@ -90,6 +100,7 @@ export const PasswordToggle: Story = {
 
 export const Disabled: Story = {
   args: {
+    ...defaultArgs,
     label: 'Title',
     placeholder: 'Placeholder',
     disabled: true,
