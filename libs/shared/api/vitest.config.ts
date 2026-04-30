@@ -10,10 +10,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@workspace/constants': path.resolve(
-        __dirname,
-        '../constants/src/index.ts',
+        './libs/shared/constants/src/index.ts',
       ),
-      '@workspace/lib': path.resolve(__dirname, '../lib/src/index.ts'),
+      '@workspace/lib': path.resolve('./libs/shared/lib/src/index.ts'),
     },
   },
 });

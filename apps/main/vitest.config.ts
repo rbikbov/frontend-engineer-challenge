@@ -9,30 +9,23 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: [path.resolve(__dirname, './src/test-setup.ts')],
+    setupFiles: [path.resolve('./apps/main/src/test-setup.ts')],
     include: ['src/**/*.spec.{ts,tsx}'],
   },
   resolve: {
     alias: {
-      '@workspace/ui': path.resolve(
-        __dirname,
-        '../../libs/shared/ui/src/index.ts',
-      ),
-      '@workspace/api': path.resolve(
-        __dirname,
-        '../../libs/shared/api/src/index.ts',
-      ),
-      '@workspace/lib': path.resolve(
-        __dirname,
-        '../../libs/shared/lib/src/index.ts',
-      ),
+      '@workspace/ui': path.resolve('./libs/shared/ui/src/index.ts'),
+      '@workspace/api': path.resolve('./libs/shared/api/src/index.ts'),
+      '@workspace/lib': path.resolve('./libs/shared/lib/src/index.ts'),
       '@workspace/constants': path.resolve(
-        __dirname,
-        '../../libs/shared/constants/src/index.ts',
+        './libs/shared/constants/src/index.ts',
       ),
-      '@shared': path.resolve(__dirname, './src/shared'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@widgets': path.resolve(__dirname, './src/widgets'),
+      '@app': path.resolve('./apps/main/src/app'),
+      '@pages': path.resolve('./apps/main/src/pages_'),
+      '@widgets': path.resolve('./apps/main/src/widgets'),
+      '@features': path.resolve('./apps/main/src/features'),
+      '@entities': path.resolve('./apps/main/src/entities'),
+      '@shared': path.resolve('./apps/main/src/shared'),
     },
   },
 });
