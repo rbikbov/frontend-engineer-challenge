@@ -65,7 +65,13 @@ export function useFocusTrap<T extends HTMLElement>(
       clearTimeout(timer);
       window.removeEventListener('keydown', handleKeyDown);
       if (previousFocusRef.current) {
-        previousFocusRef.current.focus();
+        const elementToFocus = previousFocusRef.current;
+        // Используем setTimeout, чтобы фокус вернулся после завершения текущего цикла событий.
+        // Это предотвращает ситуацию, когда событие (например, Enter), закрывшее модалку,
+        // срабатывает повторно на восстанавливаемом элементе (т.н. "event bleeding").
+        setTimeout(() => {
+          elementToFocus.focus();
+        }, 0);
       }
     };
   }, [enabled, onClose, ref]);
