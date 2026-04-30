@@ -8,7 +8,6 @@ import { useSearchParams } from 'next/navigation';
 import { AUTH_LINKS, DASHBOARD_LINKS } from '@workspace/constants';
 import { AppLink } from '@workspace/ui/components';
 import { AuthContentLayout } from '@workspace/ui/layouts/auth';
-import { AuthSplittedLayout } from '@workspace/ui/layouts/auth/splitted.layout';
 
 import { SignInForm, useSignInForm } from '@features/auth';
 
@@ -35,7 +34,7 @@ function SignInFormWithParams() {
 
 export function SignInPage() {
   return (
-    <AuthSplittedLayout>
+    <>
       <AuthContentLayout
         title="Войти в систему"
         contentClassName="max-w-[400px]"
@@ -61,6 +60,6 @@ export function SignInPage() {
           <SignInFormWithParams />
         </Suspense>
       </AuthContentLayout>
-    </AuthSplittedLayout>
+    </>
   );
 }

@@ -7,10 +7,7 @@ import { useRouter } from 'next/navigation';
 import { AUTH_LINKS } from '@workspace/constants';
 import { Button, AppLink } from '@workspace/ui/components';
 import { ChevronLeftIcon } from '@workspace/ui/icons';
-import {
-  AuthContentLayout,
-  AuthCenteredLayout,
-} from '@workspace/ui/layouts/auth';
+import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
 import { PasswordRecoveryForm, usePasswordRecoveryForm } from '@features/auth';
 
@@ -51,7 +48,7 @@ export function PasswordRecoveryPage() {
   });
 
   return (
-    <AuthCenteredLayout>
+    <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
         title=""
@@ -79,6 +76,6 @@ export function PasswordRecoveryPage() {
           loading={isLoading}
         />
       </AuthContentLayout>
-    </AuthCenteredLayout>
+    </>
   );
 }

@@ -4,10 +4,7 @@ import React from 'react';
 
 import { AUTH_LINKS } from '@workspace/constants';
 import { Button, AppLink } from '@workspace/ui/components';
-import {
-  AuthContentLayout,
-  AuthCenteredLayout,
-} from '@workspace/ui/layouts/auth';
+import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
 interface PasswordSetErrorPageProps {
   onRetryClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -17,7 +14,7 @@ export function PasswordSetErrorPage({
   onRetryClick,
 }: PasswordSetErrorPageProps) {
   return (
-    <AuthCenteredLayout>
+    <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
         title="Пароль не был восстановлен"
@@ -38,6 +35,6 @@ export function PasswordSetErrorPage({
           </Button>
         </div>
       </AuthContentLayout>
-    </AuthCenteredLayout>
+    </>
   );
 }

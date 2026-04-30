@@ -6,10 +6,7 @@ import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { AUTH_LINKS } from '@workspace/constants';
-import {
-  AuthContentLayout,
-  AuthCenteredLayout,
-} from '@workspace/ui/layouts/auth';
+import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
 import { PasswordSetForm, usePasswordSetForm } from '@features/auth';
 
@@ -61,7 +58,7 @@ function PasswordSetContent() {
   }
 
   return (
-    <AuthCenteredLayout>
+    <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
         title="Задайте пароль"
@@ -69,7 +66,7 @@ function PasswordSetContent() {
       >
         <PasswordSetForm form={form} onSubmit={onSubmit} loading={isLoading} />
       </AuthContentLayout>
-    </AuthCenteredLayout>
+    </>
   );
 }
 

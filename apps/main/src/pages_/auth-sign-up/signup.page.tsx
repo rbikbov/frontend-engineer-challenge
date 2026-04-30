@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { AUTH_LINKS } from '@workspace/constants';
 import { AppLink } from '@workspace/ui/components';
 import { AuthContentLayout } from '@workspace/ui/layouts/auth';
-import { AuthSplittedLayout } from '@workspace/ui/layouts/auth/splitted.layout';
 
 import { SignUpForm, useSignUpForm } from '@features/auth';
 
@@ -21,7 +20,7 @@ export function SignUpPage() {
   });
 
   return (
-    <AuthSplittedLayout>
+    <>
       <AuthContentLayout
         title="Регистрация в системе"
         contentClassName="max-w-[400px]"
@@ -39,6 +38,6 @@ export function SignUpPage() {
       >
         <SignUpForm form={form} onSubmit={onSubmit} loading={isLoading} />
       </AuthContentLayout>
-    </AuthSplittedLayout>
+    </>
   );
 }

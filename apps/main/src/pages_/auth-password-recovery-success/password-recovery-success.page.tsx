@@ -4,14 +4,11 @@ import React from 'react';
 
 import { AUTH_LINKS } from '@workspace/constants';
 import { Button, AppLink } from '@workspace/ui/components';
-import {
-  AuthContentLayout,
-  AuthCenteredLayout,
-} from '@workspace/ui/layouts/auth';
+import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
 export function PasswordRecoverySuccessPage() {
   return (
-    <AuthCenteredLayout>
+    <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
         title="Проверьте свою почту"
@@ -23,6 +20,6 @@ export function PasswordRecoverySuccessPage() {
           </Button>
         </div>
       </AuthContentLayout>
-    </AuthCenteredLayout>
+    </>
   );
 }

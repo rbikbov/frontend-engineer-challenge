@@ -32,8 +32,6 @@ export const EllipsesIllustration = ({
 
   return (
     <svg
-      width="512"
-      height="480"
       viewBox="0 0 512 480"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -365,3 +363,4 @@ export const EllipsesIllustration = ({
     </svg>
   );
 };
+EllipsesIllustration.displayName = 'EllipsesIllustration';
