@@ -82,7 +82,7 @@ npx vitest run -c apps/main/vitest.config.ts
 > **Примечание**: E2E тесты намеренно работают с реальным бекендом через BFF. Это гарантирует корректную проверку интеграции: установку HttpOnly кук, обработку реальных контрактов API и работу сети. В production-среде для CI/CD предполагается использование тестовой базы данных или эфемерного окружения для предотвращения мутации данных.
 
 ```bash
-# Для запуска требуется работающий dev-сервер
+# Запуск всех E2E тестов (автоматически поднимет сервер на :3000)
 npx nx e2e main-e2e
 ```
 
@@ -194,6 +194,8 @@ pnpm run analyze
 - **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)** — описание уровней тестирования (Unit, Integration, E2E) и инструментов.
 - **[12: Observability & Logging](.agents/12-observability-and-logging.md)** — архитектура логирования и мониторинга.
 - **[13: Final Refactoring](.agents/13-final-refactoring.md)** — финальный рефакторинг.
+- **[14: Readme Recovery](.agents/14-readme-recovery-after-rebase-and-rewrite.md)** — Восстановление README после rebase и рефакторинг README.
+- **[15: E2E Stabilization](.agents/15-e2e-stabilization.md)** — Стабилизация E2E тестов.
 
 ---
 

@@ -51,6 +51,7 @@ export interface InputProps
   rightElement?: React.ReactNode;
   asChild?: boolean;
   wrapperClassName?: string;
+  errorTestId?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -72,6 +73,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       id,
       variant,
       size,
+      errorTestId = 'input-error',
       ...props
     },
     ref,
@@ -165,7 +167,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error && (
-          <p className="text-invalid text-caption transition-all">{error}</p>
+          <p className="text-invalid text-caption" data-testid={errorTestId}>
+            {error}
+          </p>
         )}
       </div>
     );

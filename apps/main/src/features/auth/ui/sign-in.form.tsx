@@ -31,7 +31,10 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
         error={errors.email?.message}
+        errorTestId="email-error"
         disabled={loading}
+        // Специально проверяем ошибку обоих полей (email внутри логики самого input),
+        // чтобы при неверных данных подсвечивать оба поля
         hasError={!!errors.password?.message}
       />
 
@@ -41,11 +44,17 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
         autoComplete="current-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
+        errorTestId="password-error"
         disabled={loading}
       />
 
       {errors.root && (
-        <p className="text-invalid text-caption">{errors.root.message}</p>
+        <p
+          className="text-invalid text-caption"
+          data-testid="error-message-root"
+        >
+          {errors.root.message}
+        </p>
       )}
 
       <div className="pt-2">

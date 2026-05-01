@@ -3,24 +3,34 @@ import { test, expect } from '@playwright/test';
 test.describe('Authentication Flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/sign-in');
+    await page.waitForLoadState('networkidle');
+    // Даем время на гидратацию, особенно важно для WebKit
+    await expect(
+      page.getByRole('form', { name: 'sign-in-form' }),
+    ).toBeVisible();
+    if (test.info().project.name === 'webkit') {
+      await page.waitForTimeout(2500);
+    }
   });
 
   test('should show validation errors for empty fields', async ({ page }) => {
     await page.click('button[type="submit"]');
 
-    const emailError = page.locator('text=Поле обязательно').first();
-    const passwordError = page.locator('text=Поле обязательно').last();
-
-    await expect(emailError).toBeVisible();
-    await expect(passwordError).toBeVisible();
+    await expect(page.getByTestId('email-error')).toHaveText(
+      'Поле обязательно',
+    );
+    await expect(page.getByTestId('password-error')).toHaveText(
+      'Поле обязательно',
+    );
   });
 
   test('should show error for invalid email format', async ({ page }) => {
     await page.fill('input[name="email"]', 'invalid-email');
     await page.click('button[type="submit"]');
 
-    const error = page.locator('text=Недопустимый адрес почты');
+    const error = page.getByTestId('email-error');
     await expect(error).toBeVisible();
+    await expect(error).toHaveText('Недопустимый адрес почты');
   });
 
   test('should show error for non-existent user', async ({ page }) => {
@@ -28,22 +38,39 @@ test.describe('Authentication Flow', () => {
     await page.fill('input[name="password"]', 'wrongpassword');
     await page.click('button[type="submit"]');
 
-    // Ожидаем общее сообщение об ошибке (оно может прийти от API)
-    // В нашем SignInForm мы выводим общую ошибку через form.setError('root', ...)
-    const error = page.locator('text=Введены неверные данные');
-    await expect(error).toBeVisible();
+    const error = page
+      .getByTestId('error-message-root')
+      .or(page.locator('p:has-text("Введены неверные данные")'));
+    await expect(error).toBeVisible({ timeout: 10000 });
+    await expect(error).toHaveText('Введены неверные данные');
   });
 });
 
 test.describe('Registration Flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/sign-up');
+    await page.waitForLoadState('networkidle');
+    // Даем время на гидратацию
+    await expect(
+      page.getByRole('form', { name: 'sign-up-form' }),
+    ).toBeVisible();
+    if (test.info().project.name === 'webkit') {
+      await page.waitForTimeout(1000);
+    }
   });
 
   test('should show validation errors for empty fields', async ({ page }) => {
     await page.click('button[type="submit"]');
-    const errors = page.locator('text=Поле обязательно');
-    await expect(errors).toHaveCount(3);
+
+    await expect(page.getByTestId('email-error')).toHaveText(
+      'Поле обязательно',
+    );
+    await expect(page.getByTestId('password-error')).toHaveText(
+      'Поле обязательно',
+    );
+    await expect(page.getByTestId('confirm-password-error')).toHaveText(
+      'Поле обязательно',
+    );
   });
 
   test('should show error if passwords do not match', async ({ page }) => {
@@ -52,7 +79,8 @@ test.describe('Registration Flow', () => {
     await page.fill('input[name="confirmPassword"]', 'mismatch');
     await page.click('button[type="submit"]');
 
-    const error = page.locator('text=Пароли не совпадают');
+    const error = page.getByTestId('confirm-password-error');
     await expect(error).toBeVisible();
+    await expect(error).toHaveText('Пароли не совпадают');
   });
 });

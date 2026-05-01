@@ -31,6 +31,8 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
         error={errors.email?.message}
+        errorTestId="email-error"
+        hasError={!!errors.email?.message}
         disabled={loading}
       />
 
@@ -40,6 +42,8 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="new-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
+        errorTestId="password-error"
+        hasError={!!errors.password?.message}
         disabled={loading}
       />
 
@@ -49,11 +53,18 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
         autoComplete="new-password"
         {...register(FIELD_NAMES.CONFIRM_PASSWORD)}
         error={errors.confirmPassword?.message}
+        errorTestId="confirm-password-error"
+        hasError={!!errors.confirmPassword?.message}
         disabled={loading}
       />
 
       {errors.root && (
-        <p className="text-invalid text-caption">{errors.root.message}</p>
+        <p
+          className="text-invalid text-caption"
+          data-testid="error-message-root"
+        >
+          {errors.root.message}
+        </p>
       )}
 
       <div className="pt-2">
