@@ -10,7 +10,16 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx next dev -p ${MAIN_APP_PORT:-3000}",
-        "cwd": "apps/main"
+        "cwd": "apps/main",
+        "readyWhen": "Ready in"
+      }
+    },
+    "dev-e2e": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "main:build",
+        "dev": true,
+        "port": 3000
       }
     },
     "build": {

@@ -22,6 +22,7 @@
 | **13** | [Final Refactoring](13-final-refactoring.md)                      | Финальный рефакторинг.                                   |
 | **14** | [Readme Recovery](14-readme-recovery-after-rebase-and-rewrite.md) | Восстановление README после rebase и рефакторинг README. |
 | **15** | [E2E Stabilization](15-e2e-stabilization.md)                      | Стабилизация E2E тестов.                                 |
+| **16** | [Code Review Fixes](16-code-review-fixes.md)                      | Исправление ошибок код ревью.                            |
 
 ---
 

@@ -10,7 +10,16 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx next dev -p ${DASHBOARD_APP_PORT:-3001}",
-        "cwd": "apps/dashboard"
+        "cwd": "apps/dashboard",
+        "readyWhen": "Ready in"
+      }
+    },
+    "dev-e2e": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "dashboard:build",
+        "dev": true,
+        "port": 3001
       }
     },
     "build": {
