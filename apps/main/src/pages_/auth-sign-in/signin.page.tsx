@@ -5,7 +5,9 @@ import { Suspense } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
+import { envConfig } from '@workspace/config/env';
 import { AUTH_LINKS, DASHBOARD_LINKS } from '@workspace/constants';
+import { isSafeUrl } from '@workspace/lib';
 import { AppLink } from '@workspace/ui/components';
 import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
@@ -13,7 +15,13 @@ import { SignInForm, useSignInForm } from '@features/auth';
 
 function SignInFormWithParams() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams?.get('callbackUrl') || DASHBOARD_LINKS.ROOT;
+  const rawCallbackUrl =
+    searchParams?.get('callbackUrl') || DASHBOARD_LINKS.ROOT;
+
+  const callbackUrl = isSafeUrl(rawCallbackUrl, envConfig.NEXT_PUBLIC_APP_URL)
+    ? rawCallbackUrl
+    : DASHBOARD_LINKS.ROOT;
+
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const { form, onSubmit, isLoading } = useSignInForm({
