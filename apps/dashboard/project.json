@@ -9,7 +9,21 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "PORT=${DASHBOARD_APP_PORT:-3001} npx next dev",
+        "command": "npx next dev -p ${DASHBOARD_APP_PORT:-3001}",
+        "cwd": "apps/dashboard"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx next build",
+        "cwd": "apps/dashboard"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx next start -p ${DASHBOARD_APP_PORT:-3001}",
         "cwd": "apps/dashboard"
       }
     }

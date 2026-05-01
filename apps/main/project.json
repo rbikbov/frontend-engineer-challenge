@@ -9,7 +9,21 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "PORT=${MAIN_APP_PORT:-3000} npx next dev",
+        "command": "npx next dev -p ${MAIN_APP_PORT:-3000}",
+        "cwd": "apps/main"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx next build",
+        "cwd": "apps/main"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx next start -p ${MAIN_APP_PORT:-3000}",
         "cwd": "apps/main"
       }
     }
