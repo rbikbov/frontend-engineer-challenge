@@ -25,3 +25,14 @@ export class ApiError extends Error {
     this.name = 'ApiError';
   }
 }
+
+export class RateLimitError extends Error {
+  constructor(
+    message: string,
+    public retryAfter?: number,
+    public originalError: unknown = null,
+  ) {
+    super(message);
+    this.name = 'RateLimitError';
+  }
+}

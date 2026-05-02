@@ -7,12 +7,18 @@ import {
   type UseQueryOptions,
 } from '@tanstack/react-query';
 
-import { BFF_LINKS, QUERY_KEYS, ROOT_FIELD } from '@workspace/constants';
+import {
+  AUTH_ERROR_MESSAGES,
+  BFF_LINKS,
+  QUERY_KEYS,
+  ROOT_FIELD,
+} from '@workspace/constants';
 
 import { type User, type ResetRequestPayload } from '../contract/auth.dto';
 import {
   ApiError,
   NetworkError,
+  RateLimitError,
   ServiceUnavailableError,
 } from '../contract/auth.errors';
 import { useAuthApi } from '../providers/auth-api.provider';
@@ -26,10 +32,22 @@ const handleBffError = (err: unknown) => {
   if (isNetworkStatusError(err)) throw new NetworkError(err);
 
   const bffError = err as {
+    status?: number;
     fields?: Record<string, string>;
     message?: string;
     error?: string;
+    retryAfter?: number;
   };
+
+  if (bffError?.status === 429) {
+    throw new RateLimitError(
+      bffError.message ||
+        bffError.error ||
+        AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS,
+      bffError.retryAfter,
+      err,
+    );
+  }
 
   if (bffError?.fields && Object.keys(bffError.fields).length > 0) {
     throw new ApiError(bffError.fields, err);
@@ -41,6 +59,7 @@ const handleBffError = (err: unknown) => {
 
 export type AuthMutationError =
   | ApiError
+  | RateLimitError
   | NetworkError
   | ServiceUnavailableError;
 

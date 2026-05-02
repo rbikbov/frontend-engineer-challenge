@@ -44,6 +44,22 @@
 
 ---
 
+## 🚀 Архитектурные улучшения (Beyond Requirements)
+
+Дополнительные улучшения, расширяющие надежность транспортного уровня:
+
+### 1. Расширенная трансляция ошибок (ADR-004)
+
+- **Rate Limit Detection**: Внедрен класс `RateLimitError` с поддержкой парсинга времени блокировки (`Retry-After`).
+- **Семантизация статусов**: Все бизнес-ошибки переведены с 401 на корректный **400 Bad Request**.
+- **Безопасность**: Добавлен проброс `User-Agent` для аудита сессий.
+
+### 2. Формализация решений
+
+- Создан **ADR-004**, фиксирующий стратегию обработки ошибок как стандарт проекта.
+
+---
+
 ## 📦 Изменения в коде
 
 - `apps/main/src/features/auth/ui/signin.page.tsx` (Open Redirect fix)
@@ -51,3 +67,10 @@
 - `apps/main/src/app/api/auth/_core/create-auth-client.ts` (Headers propagation)
 - `libs/shared/api/src/contract/auth-api.interface.ts` (Logout & Refresh params made required)
 - `libs/shared/api/src/infrastructure/graphql/auth/auth-api.graphql.ts` (Logout & Refresh params made required)
+- `docs/adr/004-unified-error-handling-and-bff-translation.md` (ADR)
+- `libs/shared/api/src/contract/auth.errors.ts` (Add RateLimitError class)
+- `libs/shared/api/src/infrastructure/graphql/auth/auth-error-mapper.ts` (RateLimitError mapping)
+- `apps/main/src/app/api/auth/_core/error-response.ts` (BFF rate-limit handling)
+- `libs/shared/api/src/contract/auth-api.interface.ts` (Add RateLimitError to throws)
+- `libs/shared/api/src/hooks/use-auth-queries.ts` (Add RateLimitError to queries and mutations error types)
+- `libs/shared/api/src/utils/error.ts` (Add RateLimitError extraction as ROOT_FIELD)

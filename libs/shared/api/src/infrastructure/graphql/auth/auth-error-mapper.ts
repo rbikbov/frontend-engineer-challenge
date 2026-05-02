@@ -3,6 +3,7 @@ import { AUTH_ERROR_MESSAGES, ROOT_FIELD } from '@workspace/constants';
 import {
   ApiError,
   NetworkError,
+  RateLimitError,
   ServiceUnavailableError,
 } from '../../../contract/auth.errors';
 import {
@@ -17,6 +18,7 @@ interface ErrorInfo {
 
 interface DynamicErrorInfo extends ErrorInfo {
   pattern: RegExp;
+  isRateLimit?: boolean;
 }
 
 const dynamicErrorMatchers: DynamicErrorInfo[] = [
@@ -25,6 +27,13 @@ const dynamicErrorMatchers: DynamicErrorInfo[] = [
     field: 'password',
     message: (min: string | number) =>
       AUTH_ERROR_MESSAGES.PASSWORD_MIN_LENGTH(min),
+  },
+  {
+    // Ищем "too many attempts" и опционально число секунд (например, "...in 30 seconds")
+    pattern: /too many (?:.+ )?attempts(?:.*in (\d+) seconds)?/i,
+    field: ROOT_FIELD,
+    message: AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS,
+    isRateLimit: true,
   },
 ];
 
@@ -77,18 +86,23 @@ const errorMap = new Map<string, ErrorInfo>([
     'invalid reset request',
     { message: AUTH_ERROR_MESSAGES.INVALID_LINK, field: ROOT_FIELD },
   ],
-  [
-    'too many reset attempts, please try again later',
-    { message: AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS },
-  ],
 ]);
+
+interface ParsedErrors {
+  fields: Record<string, string>;
+  isRateLimit: boolean;
+  retryAfter?: number;
+}
 
 const parseGraphQLErrors = (error: {
   errors?: { message: string }[];
   message?: string;
   error?: string;
-}): Record<string, string> => {
+}): ParsedErrors => {
   const fields: Record<string, string> = {};
+  let isRateLimit = false;
+  let retryAfter: number | undefined;
+
   const messages: string[] = [];
   if (Array.isArray(error?.errors)) {
     error.errors.forEach((err) => {
@@ -99,6 +113,7 @@ const parseGraphQLErrors = (error: {
   } else if (error?.error) {
     messages.push(error.error.toLowerCase());
   }
+
   messages.forEach((msg) => {
     for (const matcher of dynamicErrorMatchers) {
       const match = msg.match(matcher.pattern);
@@ -109,6 +124,14 @@ const parseGraphQLErrors = (error: {
             ? matcher.message(...match.slice(1))
             : matcher.message;
         fields[field] = message;
+
+        if (matcher.isRateLimit) {
+          isRateLimit = true;
+          // Если в регулярке была захвачена группа с числом (секунды)
+          if (match[1]) {
+            retryAfter = parseInt(match[1], 10);
+          }
+        }
         return;
       }
     }
@@ -128,15 +151,35 @@ const parseGraphQLErrors = (error: {
     fields[ROOT_FIELD] = AUTH_ERROR_MESSAGES.GENERIC_ERROR;
   }
 
-  return fields;
+  return { fields, isRateLimit, retryAfter };
 };
 
 export const handleGraphQLError = (err: unknown) => {
   if (isServiceUnavailableError(err)) throw new ServiceUnavailableError(err);
   if (isNetworkStatusError(err)) throw new NetworkError(err);
 
-  const fields = parseGraphQLErrors(
+  // Если ошибка содержит статус 429 (от Nginx или WAF), бросаем RateLimitError сразу
+  if (err && typeof err === 'object' && 'status' in err) {
+    if ((err as { status: number }).status === 429) {
+      throw new RateLimitError(
+        AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS,
+        undefined,
+        err,
+      );
+    }
+  }
+
+  const { fields, isRateLimit, retryAfter } = parseGraphQLErrors(
     err as { errors?: { message: string }[]; message?: string },
   );
+
+  if (isRateLimit) {
+    throw new RateLimitError(
+      fields[ROOT_FIELD] || AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS,
+      retryAfter,
+      err,
+    );
+  }
+
   throw new ApiError(fields, err);
 };

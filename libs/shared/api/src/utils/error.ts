@@ -3,6 +3,7 @@ import { ROOT_FIELD } from '@workspace/constants';
 import {
   ApiError,
   NetworkError,
+  RateLimitError,
   ServiceUnavailableError,
 } from '../contract/auth.errors';
 
@@ -15,6 +16,7 @@ export const extractErrorFields = (
   }
 
   if (
+    error instanceof RateLimitError ||
     error instanceof NetworkError ||
     error instanceof ServiceUnavailableError
   ) {
