@@ -14,21 +14,12 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@workspace/ui': path.resolve(
-        __dirname,
-        '../../libs/shared/ui/src/index.ts',
-      ),
-      '@workspace/api': path.resolve(
-        __dirname,
-        '../../libs/shared/api/src/index.ts',
-      ),
-      '@workspace/lib': path.resolve(
-        __dirname,
-        '../../libs/shared/lib/src/index.ts',
-      ),
+      '@workspace/ui': path.resolve(__dirname, '../../libs/shared/ui/src'),
+      '@workspace/api': path.resolve(__dirname, '../../libs/shared/api/src'),
+      '@workspace/lib': path.resolve(__dirname, '../../libs/shared/lib/src'),
       '@workspace/constants': path.resolve(
         __dirname,
-        '../../libs/shared/constants/src/index.ts',
+        '../../libs/shared/constants/src',
       ),
       '@shared': path.resolve(__dirname, './src/shared'),
       '@features': path.resolve(__dirname, './src/features'),

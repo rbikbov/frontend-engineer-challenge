@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useMeQuery } from '@workspace/api';
-import { Button } from '@workspace/ui';
+import { Button } from '@workspace/ui/components';
 
 import { useSignOut } from '@features/auth';
 

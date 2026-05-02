@@ -2,7 +2,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { SignUpSchemaType } from '@workspace/api';
 import { FIELD_NAMES, LEGAL_LINKS } from '@workspace/constants';
-import { InputPassword, Button, Input } from '@workspace/ui';
+import { InputPassword, Button, Input } from '@workspace/ui/components';
 
 interface SignUpFormProps {
   form: UseFormReturn<SignUpSchemaType>;

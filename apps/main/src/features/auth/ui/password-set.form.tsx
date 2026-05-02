@@ -2,7 +2,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { PasswordSetSchemaType } from '@workspace/api';
 import { FIELD_NAMES } from '@workspace/constants';
-import { Button, InputPassword } from '@workspace/ui';
+import { Button, InputPassword } from '@workspace/ui/components';
 
 interface PasswordSetFormProps {
   form: UseFormReturn<PasswordSetSchemaType>;

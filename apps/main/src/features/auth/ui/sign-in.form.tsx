@@ -2,7 +2,12 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { SignInSchemaType } from '@workspace/api';
 import { AUTH_LINKS, FIELD_NAMES } from '@workspace/constants';
-import { AppLink, InputPassword, Button, Input } from '@workspace/ui';
+import {
+  AppLink,
+  InputPassword,
+  Button,
+  Input,
+} from '@workspace/ui/components';
 
 interface SignInFormProps {
   form: UseFormReturn<SignInSchemaType>;

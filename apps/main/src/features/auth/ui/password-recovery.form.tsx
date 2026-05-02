@@ -2,7 +2,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { PasswordRecoverySchemaType } from '@workspace/api';
 import { FIELD_NAMES } from '@workspace/constants';
-import { Button, Input } from '@workspace/ui';
+import { Button, Input } from '@workspace/ui/components';
 
 interface PasswordRecoveryFormProps {
   form: UseFormReturn<PasswordRecoverySchemaType>;
