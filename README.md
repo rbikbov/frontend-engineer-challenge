@@ -56,15 +56,16 @@ npx nx test api
 npx vitest run -c libs/shared/api/vitest.config.ts
 ```
 
-#### Integration-тесты (UI-компоненты)
+#### Integration-тесты (UI-компоненты и страницы)
 
-Проверка взаимодействия React-компонентов с формами и валидацией (JSDOM).
+Проверка взаимодействия React-компонентов с формами, валидацией и состоянием страниц (JSDOM).
 
 **Что покрыто:**
 
 - `sign-in.form.spec.tsx` — рендеринг формы входа, отработка состояний `loading`.
 - `sign-up.form.spec.tsx` — проверка сабмита данных и отображения клиентских ошибок.
 - `password-recovery.form.spec.tsx` — восстановление доступа по email.
+- `password-set.page.spec.tsx` — **Security-логика**: извлечение токена, немедленная очистка URL (защита истории браузера) и переключение состояний Success/Error.
 
 ```bash
 npx nx test main
