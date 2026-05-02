@@ -3,7 +3,6 @@
 import {
   useMutation,
   useQuery,
-  useQueryClient,
   type UseQueryOptions,
 } from '@tanstack/react-query';
 
@@ -120,7 +119,7 @@ export const useBffLogoutMutation = ({
 }: {
   onSuccess?: () => void;
 }) => {
-  const queryClient = useQueryClient();
+  const api = useAuthApi();
   return useMutation<unknown, AuthMutationError, void>({
     mutationFn: async () => {
       try {
@@ -134,10 +133,16 @@ export const useBffLogoutMutation = ({
         throw handleBffError(err);
       }
     },
+    onMutate: async () => {
+      // Блокируем интерцептор рефреша ПЕРЕД запросом, но кеш пока не трогаем
+      api.setLoggingOut?.(true);
+    },
     onSuccess: () => {
-      queryClient.setQueryData([QUERY_KEYS.USER_ME], null);
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_ME] });
       onSuccess?.();
+    },
+    onError: () => {
+      // Если запрос упал, возвращаем возможность рефреша
+      api.setLoggingOut?.(false);
     },
   });
 };

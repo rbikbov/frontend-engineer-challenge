@@ -35,4 +35,9 @@ export interface AuthApi {
 
   /** @throws {ApiError | RateLimitError | NetworkError | ServiceUnavailableError} */
   me(): Promise<User>;
+
+  /**
+   * Устанавливает состояние процесса выхода из системы.
+   */
+  setLoggingOut(isLoggingOut: boolean): void;
 }

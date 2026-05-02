@@ -32,6 +32,7 @@ export class GraphQLAuthApi implements AuthApi {
   readonly #options?: AuthApiConfig['options'];
   readonly #client!: Client;
   #refreshPromise: Promise<boolean> | null = null;
+  #isLoggingOut = false;
 
   constructor(endpoint: string, options?: AuthApiConfig['options']) {
     this.endpoint = endpoint;
@@ -72,8 +73,9 @@ export class GraphQLAuthApi implements AuthApi {
           // Если мы уже в процессе рефреша — ждем его
           if (this.#refreshPromise) {
             await this.#refreshPromise;
-          } else if (this.#options?.onRefreshSession) {
-            // Иначе — запускаем рефреш через внедренный коллбек
+          } else if (this.#options?.onRefreshSession && !this.#isLoggingOut) {
+            // Иначе — запускаем рефреш через внедренный коллбек,
+            // если только мы не находимся в процессе выхода из системы.
             this.#refreshPromise = this.#options.onRefreshSession();
             try {
               const isRefreshed = await this.#refreshPromise;
@@ -226,5 +228,9 @@ export class GraphQLAuthApi implements AuthApi {
       });
       return this.mapUser(response.me);
     });
+  }
+
+  setLoggingOut(isLoggingOut: boolean): void {
+    this.#isLoggingOut = isLoggingOut;
   }
 }
