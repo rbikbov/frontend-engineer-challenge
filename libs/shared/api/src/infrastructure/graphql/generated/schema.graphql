@@ -27,8 +27,13 @@ type Query {
 type Mutation {
   register(email: String!, password: String!): User!
   login(email: String!, password: String!): AuthPayload!
-  refreshToken(refreshToken: String): TokenPair!
+  refreshToken(refreshToken: String!): TokenPair!
   requestPasswordReset(email: String!): ResetRequestPayload!
   resetPassword(email: String!, token: String!, newPassword: String!): Boolean!
-  logout(refreshToken: String): Boolean!
+
+  """
+  Log out the user by revoking the provided refresh token.
+  Returns true even if the token is invalid or already revoked to ensure an idempotent and smooth UI logout flow.
+  """
+  logout(refreshToken: String!): Boolean!
 }

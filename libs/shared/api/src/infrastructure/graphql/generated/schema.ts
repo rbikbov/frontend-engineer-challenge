@@ -46,6 +46,10 @@ export interface Mutation {
     refreshToken: TokenPair
     requestPasswordReset: ResetRequestPayload
     resetPassword: Scalars['Boolean']
+    /**
+     * Log out the user by revoking the provided refresh token.
+     * Returns true even if the token is invalid or already revoked to ensure an idempotent and smooth UI logout flow.
+     */
     logout: Scalars['Boolean']
     __typename: 'Mutation'
 }
@@ -89,10 +93,14 @@ export interface QueryGenqlSelection{
 export interface MutationGenqlSelection{
     register?: (UserGenqlSelection & { __args: {email: Scalars['String'], password: Scalars['String']} })
     login?: (AuthPayloadGenqlSelection & { __args: {email: Scalars['String'], password: Scalars['String']} })
-    refreshToken?: (TokenPairGenqlSelection & { __args?: {refreshToken?: (Scalars['String'] | null)} })
+    refreshToken?: (TokenPairGenqlSelection & { __args: {refreshToken: Scalars['String']} })
     requestPasswordReset?: (ResetRequestPayloadGenqlSelection & { __args: {email: Scalars['String']} })
     resetPassword?: { __args: {email: Scalars['String'], token: Scalars['String'], newPassword: Scalars['String']} }
-    logout?: { __args: {refreshToken?: (Scalars['String'] | null)} } | boolean | number
+    /**
+     * Log out the user by revoking the provided refresh token.
+     * Returns true even if the token is invalid or already revoked to ensure an idempotent and smooth UI logout flow.
+     */
+    logout?: { __args: {refreshToken: Scalars['String']} }
     __typename?: boolean | number
     __scalar?: boolean | number
 }

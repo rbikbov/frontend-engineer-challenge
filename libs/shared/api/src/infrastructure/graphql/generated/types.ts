@@ -97,7 +97,8 @@ export default {
                 4,
                 {
                     "refreshToken": [
-                        2
+                        2,
+                        "String!"
                     ]
                 }
             ],
@@ -131,7 +132,8 @@ export default {
                 6,
                 {
                     "refreshToken": [
-                        2
+                        2,
+                        "String!"
                     ]
                 }
             ],

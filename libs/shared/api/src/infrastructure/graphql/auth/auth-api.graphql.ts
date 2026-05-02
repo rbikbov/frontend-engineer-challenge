@@ -207,12 +207,12 @@ export class GraphQLAuthApi implements AuthApi {
     });
   }
 
-  async logout(token?: string): Promise<boolean> {
+  async logout(token: string): Promise<boolean> {
     return this.execute(async () => {
       await this.#client.mutation({
         logout: {
           __args: {
-            refreshToken: token || '',
+            refreshToken: token,
           },
         },
       });

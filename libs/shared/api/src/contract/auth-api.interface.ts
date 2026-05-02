@@ -21,7 +21,7 @@ export interface AuthApi {
   login(email: string, password: string): Promise<AuthPayload>;
 
   /** @throws {NetworkError | ServiceUnavailableError} */
-  logout(token?: string): Promise<boolean>;
+  logout(token: string): Promise<boolean>;
 
   /** @throws {ApiError | NetworkError | ServiceUnavailableError} */
   refreshToken(token: string): Promise<TokenPair>;

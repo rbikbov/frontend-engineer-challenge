@@ -34,6 +34,14 @@
 - Исправлен баг в методе `executeRequest` класса `GraphQLAuthApi`: теперь заголовки `X-Forwarded-For` и `Cookie` корректно прокидываются до бэкенда.
 - Настроена экстракция IP из цепочки прокси в контроллерах BFF.
 
+### 4. Реальный механизм Logout
+
+**Проблема:** Мутация `logout` была заглушкой, сессия оставалась живой в базе данных.  
+**Решение:**
+
+- Бэкенд доработан для физического отзыва (revocation) сессии в Postgres.
+- **Явные контракты**: В мутациях `logout` и `refresh` аргументы (токены) стали обязательными. Это осознанное решение: BFF (как владелец HttpOnly кук) берет на себя ответственность за извлечение секрета и его явную передачу в GraphQL-слой. Это делает взаимодействие прозрачным для отладки и исключает зависимость от «неявного» чтения кук бэкендом.
+
 ---
 
 ## 📦 Изменения в коде
@@ -41,3 +49,5 @@
 - `apps/main/src/features/auth/ui/signin.page.tsx` (Open Redirect fix)
 - `libs/shared/lib/src/utils/url.ts` (isSafeUrl)
 - `apps/main/src/app/api/auth/_core/create-auth-client.ts` (Headers propagation)
+- `libs/shared/api/src/contract/auth-api.interface.ts` (Logout & Refresh params made required)
+- `libs/shared/api/src/infrastructure/graphql/auth/auth-api.graphql.ts` (Logout & Refresh params made required)
