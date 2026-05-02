@@ -26,9 +26,18 @@
 - Создана утилита `isSafeUrl` в `@workspace/lib`, разрешающая только внутренние пути или доверенный домен.
 - Внедрена обязательная очистка URL перед редиректом в `signin.page.tsx`.
 
+### 3. Проброс Client IP (X-Forwarded-For)
+
+**Проблема:** Заявленный проброс IP не работал: заголовки терялись при мердже в GraphQL-клиенте, из-за чего бэкенд не видел реальный IP для Rate Limiting.  
+**Решение:**
+
+- Исправлен баг в методе `executeRequest` класса `GraphQLAuthApi`: теперь заголовки `X-Forwarded-For` и `Cookie` корректно прокидываются до бэкенда.
+- Настроена экстракция IP из цепочки прокси в контроллерах BFF.
+
 ---
 
 ## 📦 Изменения в коде
 
 - `apps/main/src/features/auth/ui/signin.page.tsx` (Open Redirect fix)
 - `libs/shared/lib/src/utils/url.ts` (isSafeUrl)
+- `apps/main/src/app/api/auth/_core/create-auth-client.ts` (Headers propagation)

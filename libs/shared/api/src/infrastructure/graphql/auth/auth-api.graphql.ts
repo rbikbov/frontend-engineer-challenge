@@ -43,6 +43,10 @@ export class GraphQLAuthApi implements AuthApi {
           const { __isRetry, ...nativeOptions } = opts || {};
           return fetch(url, {
             ...nativeOptions,
+            headers: {
+              ...this.#options?.headers,
+              ...nativeOptions.headers,
+            },
             credentials: 'include',
           });
         };
