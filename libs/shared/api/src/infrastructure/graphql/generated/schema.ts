@@ -95,7 +95,7 @@ export interface MutationGenqlSelection{
     login?: (AuthPayloadGenqlSelection & { __args: {email: Scalars['String'], password: Scalars['String']} })
     refreshToken?: (TokenPairGenqlSelection & { __args: {refreshToken: Scalars['String']} })
     requestPasswordReset?: (ResetRequestPayloadGenqlSelection & { __args: {email: Scalars['String']} })
-    resetPassword?: { __args: {email: Scalars['String'], token: Scalars['String'], newPassword: Scalars['String']} }
+    resetPassword?: { __args: {token: Scalars['String'], newPassword: Scalars['String']} }
     /**
      * Log out the user by revoking the provided refresh token.
      * Returns true even if the token is invalid or already revoked to ensure an idempotent and smooth UI logout flow.

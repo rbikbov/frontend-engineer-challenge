@@ -16,14 +16,12 @@ import { AUTH_ERROR_MESSAGES } from '@workspace/constants';
 import { logger, setFormErrors } from '@shared/lib';
 
 interface UsePasswordSetFormProps {
-  email: string | null;
   token: string | null;
   onSuccess: () => void;
   onFatalError: (message: string) => void;
 }
 
 export function usePasswordSetForm({
-  email,
   token,
   onSuccess,
   onFatalError,
@@ -41,29 +39,25 @@ export function usePasswordSetForm({
   });
 
   const onSubmit = (data: PasswordSetSchemaType) => {
-    logger.info('[Auth] Password reset attempt', { email });
-    if (!email || !token) {
-      logger.warn(
-        '[Auth] Password reset attempted with missing email or token',
-      );
+    logger.info('[Auth] Password reset attempt', { token });
+    if (!token) {
+      logger.warn('[Auth] Password reset attempted with missing token');
       form.setError('root', { message: AUTH_ERROR_MESSAGES.INVALID_LINK });
       return;
     }
 
     mutation.mutate(
       {
-        email,
         token,
         newPassword: data.password,
       },
       {
         onSuccess: () => {
-          logger.info('[Auth] Password reset successful', { email });
+          logger.info('[Auth] Password reset successful', { token });
           onSuccess();
         },
         onError: (error) => {
           logger.error('[Auth] Password reset failed', {
-            email,
             error: error.message,
             type: error.constructor.name,
           });

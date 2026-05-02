@@ -14,10 +14,9 @@ import { PasswordRecoveryForm, usePasswordRecoveryForm } from '@features/auth';
 // [DEV ONLY] Заглушка для демонстрации флоу восстановления пароля.
 // Бэкенд не поддерживает отправку писем, поэтому токен возвращается напрямую в ответе.
 // В production этот блок заменяется реальной отправкой письма через SMTP.
-const devConfirmationBuilder = async (token: string, email: string) => {
-  if (token && email) {
+const devConfirmationBuilder = async (token: string) => {
+  if (token) {
     const link = new URL(AUTH_LINKS.PASSWORD_SET, window.location.origin);
-    link.searchParams.append('email', email);
     link.searchParams.append('token', token);
     if (
       confirm(
@@ -41,8 +40,8 @@ export function PasswordRecoveryPage() {
   const router = useRouter();
 
   const { form, onSubmit, isLoading } = usePasswordRecoveryForm({
-    onSuccess: async ({ token, email }: { token: string; email: string }) => {
-      await devConfirmationBuilder(token, email);
+    onSuccess: async ({ token }: { token: string }) => {
+      await devConfirmationBuilder(token);
       router.push(AUTH_LINKS.PASSWORD_RECOVERY_SUCCESS);
     },
   });

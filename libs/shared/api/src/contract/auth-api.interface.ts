@@ -31,11 +31,7 @@ export interface AuthApi {
   requestPasswordReset(email: string): Promise<ResetRequestPayload>;
 
   /** @throws {ApiError | RateLimitError | NetworkError | ServiceUnavailableError} */
-  resetPassword(
-    email: string,
-    token: string,
-    newPassword: string,
-  ): Promise<boolean>; // TODO: email может быть и необязательным
+  resetPassword(token: string, newPassword: string): Promise<boolean>;
 
   /** @throws {ApiError | RateLimitError | NetworkError | ServiceUnavailableError} */
   me(): Promise<User>;

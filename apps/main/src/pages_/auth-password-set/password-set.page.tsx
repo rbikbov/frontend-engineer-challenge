@@ -17,19 +17,15 @@ function PasswordSetContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [resetData] = React.useState<{ email: string; token: string } | null>(
-    () => {
-      const email = searchParams?.get('email');
-      const token = searchParams?.get('token');
-      return email && token ? { email, token } : null;
-    },
-  );
+  const [resetData] = React.useState<{ token: string } | null>(() => {
+    const token = searchParams?.get('token');
+    return token ? { token } : null;
+  });
 
   const [showFatalView, setShowFatalView] = React.useState(false);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = React.useState(false);
 
   const { form, onSubmit, isLoading } = usePasswordSetForm({
-    email: resetData?.email || null,
     token: resetData?.token || null,
     onSuccess: () => {
       setIsSubmitSuccessful(true);

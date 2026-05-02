@@ -157,17 +157,12 @@ export const useResetPasswordMutation = () => {
     boolean,
     AuthMutationError,
     {
-      email: string;
       token: string;
       newPassword: string;
     }
   >({
     mutationFn: async (params) => {
-      return await api.resetPassword(
-        params.email,
-        params.token,
-        params.newPassword,
-      );
+      return await api.resetPassword(params.token, params.newPassword);
     },
   });
 };

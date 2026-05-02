@@ -192,15 +192,11 @@ export class GraphQLAuthApi implements AuthApi {
     });
   }
 
-  async resetPassword(
-    email: string,
-    token: string,
-    newPassword: string,
-  ): Promise<boolean> {
+  async resetPassword(token: string, newPassword: string): Promise<boolean> {
     return this.execute(async () => {
       const response = await this.#client.mutation({
         resetPassword: {
-          __args: { email, token, newPassword },
+          __args: { token, newPassword },
         },
       });
       return response.resetPassword;

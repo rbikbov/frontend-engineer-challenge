@@ -114,10 +114,6 @@ export default {
             "resetPassword": [
                 6,
                 {
-                    "email": [
-                        2,
-                        "String!"
-                    ],
                     "token": [
                         2,
                         "String!"
