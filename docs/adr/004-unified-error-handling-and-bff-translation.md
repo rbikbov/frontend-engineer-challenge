@@ -1,42 +1,42 @@
 # ADR-004: Unified Error Handling and BFF Translation Strategy
 
-**Статус:** Accepted  
-**Дата:** 2026-05-02  
-**Автор:** Antigravity
+**Status:** Accepted  
+**Date:** 2026-05-02  
+**Author:** Antigravity
 
-## 1. Контекст
+## 1. Context
 
-Проект использует GraphQL в качестве основного протокола взаимодействия с бэкендом. Основная проблема заключается в том, что GraphQL по своей специфике возвращает статус `200 OK` даже в случае наличия ошибок в массиве `errors`. Это приводит к ряду проблем:
+The project uses GraphQL as the main protocol for talking to the backend. The core problem is that GraphQL, by design, returns `200 OK` even when the `errors` array contains errors. This causes several issues:
 
-- Стандартные HTTP-инструменты мониторинга и логирования не видят ошибок.
-- Браузерные интерцепторы и библиотеки (например, TanStack Query) не могут автоматически обрабатывать ошибки на основе статус-кодов.
-- Клиентский код вынужден в каждом месте вручную парсить массив `errors` и пытаться отличить ошибку валидации от падения сервера.
+- Standard HTTP monitoring and logging tools do not see the errors.
+- Browser interceptors and libraries (e.g. TanStack Query) cannot handle errors automatically based on status codes.
+- Client code has to parse the `errors` array manually everywhere and try to tell a validation error from a server failure.
 
-**Ограничения:**
+**Constraints:**
 
-- Бэкенд может менять формулировки ошибок (например, "too many reset attempts" vs "too many login attempts").
-- Необходимо поддерживать стандарты безопасности (Rate Limiting) и предоставлять пользователю информацию о времени блокировки.
+- The backend may change the wording of errors (e.g. "too many reset attempts" vs "too many login attempts").
+- Security standards (rate limiting) must be supported, and the user should be told how long the block lasts.
 
-## 2. Принятое решение
+## 2. Decision
 
-Реализовать **Единую систему маппинга и трансляции ошибок в слое BFF**.
+Implement a **unified error mapping and translation system in the BFF layer**.
 
-BFF выступает в роли «семантического моста», который:
+The BFF acts as a "semantic bridge" that:
 
-1. Выполняет GraphQL-запросы к бэкенду.
-2. Анализирует массив `errors` с помощью гибких регулярных выражений (Error Mapper).
-3. Приводит специфичные для протокола ошибки к доменным классам (`ApiError`, `RateLimitError` и т.д.).
-4. Транслирует эти классы в семантически корректные HTTP-ответы (400, 429, 502) для фронтенда.
+1. Executes GraphQL requests against the backend.
+2. Analyzes the `errors` array using flexible regular expressions (Error Mapper).
+3. Converts protocol-specific errors into domain classes (`ApiError`, `RateLimitError`, etc.).
+4. Translates these classes into semantically correct HTTP responses (400, 429, 502) for the frontend.
 
-## 3. Технические детали и механизмы
+## 3. Technical details and mechanisms
 
-### Классификация ошибок:
+### Error classification:
 
-- **`ApiError`**: Ошибки бизнес-логики и валидации (неверный пароль, занятый email). Транслируется в **HTTP 400 Bad Request**.
-- **`RateLimitError`**: Превышение лимита запросов. Транслируется в **HTTP 429 Too Many Requests**.
-- **`NetworkError` / `ServiceUnavailableError`**: Проблемы со связью или падение бэкенда. Транслируются в **HTTP 502 Bad Gateway**.
+- **`ApiError`**: business logic and validation errors (wrong password, email already taken). Translated to **HTTP 400 Bad Request**.
+- **`RateLimitError`**: request limit exceeded. Translated to **HTTP 429 Too Many Requests**.
+- **`NetworkError` / `ServiceUnavailableError`**: connectivity problems or the backend being down. Translated to **HTTP 502 Bad Gateway**.
 
-### Механизм трансляции (BFF):
+### Translation mechanism (BFF):
 
 ```mermaid
 sequenceDiagram
@@ -51,40 +51,40 @@ sequenceDiagram
     BFF-->>Client: 429 Too Many Requests { retryAfter: 30 } + Header Retry-After: 30
 ```
 
-### Ключевые особенности:
+### Key features:
 
-- **Regex-based Mapping**: Маппер поддерживает захват групп (например, количество секунд ожидания), что позволяет извлекать динамические данные из текстовых сообщений бэкенда.
-- **Retry-After Support**: Реализована поддержка стандартного заголовка `Retry-After` для ошибок типа 429.
+- **Regex-based mapping**: the mapper supports capture groups (e.g. the number of seconds to wait), so dynamic data can be extracted from the backend's text messages.
+- **Retry-After support**: the standard `Retry-After` header is supported for 429 errors.
 
-## 4. Рассмотренные альтернативы
+## 4. Alternatives considered
 
-### 4.1. Обработка ошибок напрямую на клиенте
+### 4.1. Handling errors directly on the client
 
-- **Плюсы:** Меньше логики на стороне BFF.
-- **Минусы:** Дублирование логики парсинга в каждой фиче, невозможность использования стандартных HTTP-статусов в Network Tab, сложность централизованного обновления паттернов ошибок.
-- **Решение:** Отклонено.
+- **Pros:** less logic in the BFF.
+- **Cons:** parsing logic duplicated in every feature, standard HTTP statuses cannot be used in the Network tab, error patterns are hard to update in one place.
+- **Decision:** rejected.
 
-### 4.2. Использование универсального 500 статуса
+### 4.2. Using a generic 500 status
 
-- **Плюсы:** Максимальная простота реализации.
-- **Минусы:** Плохой UX (невозможно подсветить конкретные поля формы), затрудненная отладка.
-- **Решение:** Отклонено.
+- **Pros:** the simplest possible implementation.
+- **Cons:** poor UX (specific form fields cannot be highlighted), harder debugging.
+- **Decision:** rejected.
 
-## 5. Последствия и риски
+## 5. Consequences and risks
 
-### Положительные (Pros)
+### Positive (Pros)
 
-- Чистый клиентский код: компоненты работают с типизированными ошибками и стандартными статусами.
-- Прозрачный мониторинг: Sentry и другие инструменты корректно группируют ошибки по HTTP-статусам.
-- Гибкость: при изменении текстов на бэкенде достаточно поправить один регуляр в маппере.
+- Clean client code: components work with typed errors and standard statuses.
+- Transparent monitoring: Sentry and other tools group errors correctly by HTTP status.
+- Flexibility: if the backend changes its error texts, a single regex in the mapper needs updating.
 
-### Отрицательные / Риски (Cons/Risks)
+### Negative / Risks (Cons/Risks)
 
-- Усложнение BFF: слой API-роутов становится более нагруженным логикой.
-- Риск «промаха» регулярки: если бэкенд пришлет совершенно новый текст ошибки, он может упасть в `GENERIC_ERROR`.
-- **Митигация:** Написание Unit-тестов на `auth-error-mapper` для покрытия всех известных паттернов ответов бэкенда.
+- A more complex BFF: the API route layer carries more logic.
+- Risk of a regex "miss": if the backend sends a completely new error text, it may end up as `GENERIC_ERROR`.
+- **Mitigation:** unit tests for `auth-error-mapper` that cover all known backend response patterns.
 
-## 6. История ревизий (Revision History)
+## 6. Revision History
 
-- **2026-05-02**: Первоначальная версия документа (Antigravity).
-- **2026-05-02**: Статус изменен на Accepted.
+- **2026-05-02**: Initial version of the document (Antigravity).
+- **2026-05-02**: Status changed to Accepted.

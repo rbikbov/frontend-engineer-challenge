@@ -1,127 +1,121 @@
 # Advanced Frontend Engineer Challenge
 
-Искренне благодарим вас за время и внимание к этому челленджу и надеемся на долгосрочную совместную командную работу
+> Original assignment by [ATLS Academy](https://github.com/atls-academy), translated from Russian.
 
-Подписывайтесь на канал с новыми челленджами: [@atls_challenges](https://t.me/atls_challenges)
+This repository is an engineering challenge for frontend candidates.
 
-Не забудьте сперва поставить Star. Спасибо!
+The task is narrow in product scope and broad in engineering decisions: the goal is to see not just the layout, but the ability to design a client side for a real backend.
 
-Этот репозиторий — инженерный челлендж для кандидатов на frontend позиции
+## Context
 
-Задача узкая по продукту и широкая по инженерным решениям: нам важно увидеть не только верстку, а умение проектировать клиентскую часть под реальный backend
+Take any fork of the [backend/fullstack challenge](https://github.com/atls-academy/engineer-challenge) and build a frontend for it covering 3 scenarios:
 
-## Контекст
+1. Sign up
+2. Sign in
+3. Password recovery
 
-Вам нужно взять любой понравившийся fork [backend/fullstack-челленджа](https://github.com/atls-academy/engineer-challenge) и реализовать под него frontend для 3 сценариев:
+The design stays the same: [Orbitto Service Figma file](https://www.figma.com/design/31KetUbya482vMSGgyiNIf/Orbitto-%7C-Service--Copy-?node-id=102-12806&t=TMlkJ3c3j3vJF5fb-4)
 
-1. Регистрация
-2. Авторизация
-3. Восстановление пароля
+## What matters
 
-Дизайн остается тем же: [Figma-файл Orbitto Service](https://www.figma.com/design/31KetUbya482vMSGgyiNIf/Orbitto-%7C-Service--Copy-?node-id=102-12806&t=TMlkJ3c3j3vJF5fb-4)
-Файл доступен для создания копии в ваш workspace, но права на редактирование исходного файла не выдаются
-Запросы на доступ к редактированию исходного файла не рассматриваются
+The solution should demonstrate engineering maturity:
 
-## Что важно
+- UI decomposition and component reuse
+- State management and asynchronous scenarios
+- Working with backend contracts (errors, edge cases, unstable responses)
+- Accessibility (a11y), UX states and performance
+- Well-reasoned trade-offs
 
-Решение должно демонстрировать инженерную зрелость:
+`Just building the layout` is not the target level for this challenge.
 
-- Декомпозиция интерфейса и переиспользуемость компонентов
-- Управление состоянием и асинхронными сценариями
-- Работа с контрактами backend (ошибки, edge-cases, нестабильные ответы)
-- Доступность (a11y), UX-состояния и производительность
-- Осознанная аргументация trade-offs
+## Mandatory requirements
 
-`Просто сверстать макет` не считается целевым уровнем решения для этого челленджа
+1. UI and UX
 
-## Обязательные требования
+- Implement all screens and states of the auth flow according to the design
+- Handle loading/error/empty/success states
+- Make it responsive for at least desktop and mobile
 
-1. UI и UX
+2. Backend integration
 
-- Реализуйте все экраны и состояния auth-флоу по дизайну
-- Обработайте loading/error/empty/success-состояния
-- Обеспечьте адаптивность минимум для desktop и mobile
+- Connect to the chosen fork and its contracts
+- Handle real service responses, including failure scenarios
+- Document your assumptions about the contracts in the README
 
-2. Интеграция с backend
+3. Frontend architecture
 
-- Подключитесь к выбранному fork и его контрактам
-- Обработайте реальные ответы сервиса, включая неуспешные сценарии
-- Зафиксируйте в README предположения по контрактам
+- Show the structure of layers/modules and their responsibilities
+- Avoid an `everything in one components/ and services/` project layout
+- Describe the key engineering decisions in the README
 
-3. Архитектура frontend
+4. Quality and reliability
 
-- Покажите структуру слоев/модулей и границы ответственности
-- Избегайте проекта в формате `все в одном components/ и services/`
-- Опишите ключевые инженерные решения в README
+- Add tests for critical user scenarios (unit/integration/e2e, your choice)
+- Add basic protection against common UX issues (duplicate submissions, race conditions, stale requests)
 
-4. Качество и надежность
+5. Technology choices
 
-- Добавьте тесты критичных пользовательских сценариев (unit/integration/e2e — на ваш выбор)
-- Добавьте базовую защиту от типичных UX-проблем (повторные отправки, race conditions, устаревшие запросы)
+- You choose the framework and the stack
+- There are no stack restrictions: React, Vue, Angular, Svelte, WASM or anything else
+- The README must explain the choice and the alternatives you considered
 
-5. Технологические решения
+## Constraints and anti-patterns
 
-- Фреймворк и стек выбираете самостоятельно
-- Ограничений по стеку нет: React, Vue, Angular, Svelte, WASM и любые другие варианты
-- В README обязательно объясните выбор и альтернативы, которые рассматривали
+The following are considered weak solutions:
 
-## Ограничения и анти-паттерны
+- A visual clone without engineering structure
+- Ignoring failed responses and backend errors
+- Local hacks without explaining the trade-offs and consequences
+- Full lock-in to a specific framework without justification
 
-Следующие подходы считаются слабым решением:
+## Deliverables
 
-- Визуальный клон без инженерной структуры
-- Игнорирование неуспешных ответов и ошибок backend
-- Локальные хаки без объяснения trade-offs и последствий
-- Полная завязка на конкретный фреймворк без аргументации
+1. Frontend source code in your fork
+2. An updated README in your fork with:
 
-## Что нужно сдать
+- how to run the project
+- an explicit link to the chosen backend fork
+- how the frontend architecture works
+- which trade-offs were made
+- what you would do next for a production version
+- a link to a demo or a screencast of the main scenarios (if any)
 
-1. Исходный код frontend в вашем fork
-2. Обновленный README в вашем fork с:
+3. A test suite and instructions for running it
 
-- как запустить проект
-- явной ссылкой на выбранный backend fork
-- как устроена архитектура frontend
-- какие trade-offs были приняты
-- что бы вы сделали следующим шагом в production-версии
-- ссылкой на демо или скринкаст основных сценариев (если есть)
+## How to proceed
 
-3. Набор тестов и инструкции по запуску
+1. Choose the backend fork you want to work with
+2. Fork this repository
+3. Build the frontend for the chosen backend
+4. Describe the result in the README
+5. Submit:
 
-## Формат выполнения
+- a link to your frontend fork
+- a link to a `moodboard`
+- a link to an `anti-moodboard`
 
-1. Выберите backend fork, с которым хотите работать
-2. Сделайте fork этого репозитория
-3. Реализуйте frontend-решение под выбранный backend
-4. Оформите результат в README
-5. Отправьте в отклике:
+## Use of AI
 
-- ссылку на ваш frontend fork
-- ссылку на `moodboard`
-- ссылку на `anti-moodboard`
+- AI tools are allowed in this challenge
+- If you use AI, add an `.agents` folder to your fork to show how you approached the solution
 
-## Использование ИИ
+## Evaluation criteria
 
-- Использование ИИ-инструментов в рамках челленджа разрешено
-- Если используете ИИ, добавьте в ваш fork папку `.agents`, чтобы было видно, как вы строили процесс решения
+1. Quality of the frontend architecture and code maintainability
+2. Correctness of the auth flow and backend integration
+3. Quality of UX states, error handling and responsiveness
+4. Testability and reliability of the key scenarios
+5. Clarity of the engineering reasoning in the README
 
-## Критерии оценки
+## Bonus signals
 
-1. Качество архитектуры frontend и управляемость кода
-2. Корректность auth-флоу и интеграции с backend
-3. Качество UX-состояний, обработки ошибок и адаптивности
-4. Тестируемость и надежность ключевых сценариев
-5. Ясность инженерной аргументации в README
+- A well-thought-out mini design system or UI kit layer within the solution
+- A contract typing strategy (e.g. codegen/typed clients)
+- Basic frontend observability (telemetry/error tracking), with reasoning where appropriate
+- Micro-frontends, where appropriate and justified
+- FSD, with reasoning about layer boundaries and composition
+- SOLID principles in the client-side architecture
 
-## Бонусные сигналы
+## Important
 
-- Продуманная мини-дизайн-система или слой UI-kit внутри решения
-- Стратегия типизации контрактов (например, codegen/typed clients)
-- Базовая наблюдаемость фронта (telemetry/error tracking) с аргументацией, где это уместно
-- Использование микрофронтов, если это уместно и инженерно оправдано
-- Использование FSD с аргументацией границ и композиции слоев
-- Следование SOLID в архитектуре клиентской части
-
-## Важно
-
-Нас интересует не идеальный пиксель-перфект любой ценой, а качество инженерного мышления и способность строить устойчивый frontend под реальный backend
+What matters is not pixel-perfect output at any cost, but the quality of engineering thinking and the ability to build a robust frontend for a real backend.

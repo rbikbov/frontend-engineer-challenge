@@ -1,73 +1,73 @@
-# ADR-001: Выбор Next.js Multi-Zones для масштабирования монорепозитория
+# ADR-001: Choosing Next.js Multi-Zones to scale the monorepo
 
-**Статус:** Accepted  
-**Дата:** 2026-04-25  
-**Автор:** Antigravity/rbikbov
+**Status:** Accepted  
+**Date:** 2026-04-25  
+**Author:** Antigravity/rbikbov
 
-## 1. Контекст
+## 1. Context
 
-Проект представляет собой монорепозиторий с несколькими независимыми приложениями (`main`, `dashboard`). Нам необходимо объединить их под единым доменом, обеспечив при этом независимость команд, циклов сборки и деплоя.
+The project is a monorepo with several independent apps (`main`, `dashboard`). They need to be served under a single domain while keeping teams, build cycles and deployments independent.
 
-**Ограничения:**
+**Constraints:**
 
-- Необходимо сохранить возможность использования общих библиотек (`libs/shared`).
-- Требуется минимизировать сложность локальной разработки (исключить поднятие локальных прокси-серверов типа Nginx).
-- Нужно обеспечить работоспособность Auth-флоу (BFF) между приложениями.
+- The shared libraries (`libs/shared`) must remain usable.
+- Local development should stay simple (no local proxy servers such as Nginx).
+- The auth flow (BFF) must work across the apps.
 
-## 2. Принятое решение
+## 2. Decision
 
-Использовать архитектуру **Next.js Multi-Zones** с конфигурацией роутинга через `rewrites` в основном приложении (`main`). Все приложения остаются независимыми зонами, но для браузера выглядят как единый проект.
+Use the **Next.js Multi-Zones** architecture, with routing configured through `rewrites` in the main app (`main`). All apps remain independent zones, but to the browser they look like a single project.
 
-## 3. Технические детали и механизмы
+## 3. Technical details and mechanisms
 
-- **Маршрутизация**: Основное приложение (`apps/main`) выступает в роли "Proxy", перенаправляя запросы `domain.com/dashboard/:path*` (или `dashboard.domain.com`) на адрес второй зоны через `next.config.js`.
-- **Шаринг кода**: Использование `transpilePackages` для прозрачного импорта `libs/shared` без предварительной сборки.
-- **Стилизация**: Единая конфигурация Tailwind CSS v4 в `shared/ui`, которая сканирует контент всех зон для исключения дублирования стилей и обеспечения визуальной целостности.
+- **Routing**: the main app (`apps/main`) acts as a "proxy" and forwards `domain.com/dashboard/:path*` (or `dashboard.domain.com`) requests to the second zone via `next.config.js`.
+- **Code sharing**: `transpilePackages` lets `libs/shared` be imported transparently without a separate build step.
+- **Styling**: a single Tailwind CSS v4 configuration in `shared/ui` scans the content of all zones to avoid duplicate styles and keep the visuals consistent.
 
 ```mermaid
 graph TD
-    User((Пользователь)) --> MainApp[Main App :3000]
+    User((User)) --> MainApp[Main App :3000]
     MainApp -- /auth/* --> AuthPages[Auth Flow]
     MainApp -- /dashboard/* --> DashboardZone[Dashboard App :3001]
     DashboardZone -.-> SharedAPI[Shared API Lib]
     AuthPages -.-> SharedUI[Shared UI Lib]
 ```
 
-## 4. Рассмотренные альтернативы
+## 4. Alternatives considered
 
-### 4.1. Проксирование через Nginx
+### 4.1. Proxying through Nginx
 
-- **Плюсы:** Технологическая независимость (можно добавить приложение на Vue).
-- **Минусы:** Сложная локальная настройка, отсутствие интеграции с `next.config.js` и `rewrites`.
-- **Решение:** Отклонено (избыточная сложность для монорепозитория на одном фреймворке).
+- **Pros:** technology independence (a Vue app could be added).
+- **Cons:** complex local setup, no integration with `next.config.js` and `rewrites`.
+- **Decision:** rejected (too complex for a single-framework monorepo).
 
-### 4.2. Monolith (Все страницы в одном приложении)
+### 4.2. Monolith (all pages in one app)
 
-- **Плюсы:** SPA-переходы, простая структура.
-- **Минусы:** Раздутый бандл, невозможность независимого деплоя частей системы.
-- **Решение:** Отклонено (противоречит целям масштабируемости).
+- **Pros:** SPA navigation, simple structure.
+- **Cons:** bloated bundle, parts of the system cannot be deployed independently.
+- **Decision:** rejected (conflicts with the scalability goals).
 
 ### 4.3. Micro-frontends
 
-- **Плюсы:** Технологическая независимость (можно добавить приложение на Vue).
-- **Минусы:** Сложная настройка и интеграция между приложениями.
-- **Решение:** Отклонено (избыточная сложность для монорепозитория на одном фреймворке).
+- **Pros:** technology independence (a Vue app could be added).
+- **Cons:** complex setup and integration between the apps.
+- **Decision:** rejected (too complex for a single-framework monorepo).
 
-## 5. Последствия и риски
+## 5. Consequences and risks
 
-### Положительные (Pros)
+### Positive (Pros)
 
-- Единый конфиг роутинга (`next.config.js`) как Source of Truth.
-- Упрощенный деплой на Vercel/Netlify.
-- Изоляция бандлов: падение одной зоны не ломает фронтенд другой.
+- A single routing config (`next.config.js`) as the source of truth.
+- Simple deployment to Vercel/Netlify.
+- Bundle isolation: a failure in one zone does not break the frontend of another.
 
-### Отрицательные / Риски (Cons/Risks)
+### Negative / Risks (Cons/Risks)
 
-- **Hard Navigations**: Переходы между зонами требуют полной перезагрузки (использование `<a>` вместо `<Link>`).
-- **Митигация**: Использование общих стилей и кеширования ассетов, чтобы визуально переход был максимально быстрым.
+- **Hard navigations**: moving between zones requires a full page reload (`<a>` instead of `<Link>`).
+- **Mitigation**: shared styles and asset caching keep the transition visually as fast as possible.
 
-## 6. История ревизий
+## 6. Revision history
 
-- **2026-04-25**: Первоначальное описание архитектуры (Antigravity)
-- **2026-04-25**: Статус изменен на Accepted после обсуждения преимуществ перед Nginx.
-- **2026-04-28**: Добавлен пункт 4.3. Micro-frontends и уточняющие правки.
+- **2026-04-25**: Initial architecture description (Antigravity)
+- **2026-04-25**: Status changed to Accepted after discussing the advantages over Nginx.
+- **2026-04-28**: Added section 4.3 Micro-frontends and clarifications.

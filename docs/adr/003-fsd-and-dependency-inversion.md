@@ -1,28 +1,28 @@
-# ADR-003: Методология архитектуры (FSD) и инверсия зависимостей (deps)
+# ADR-003: Architecture methodology (FSD) and dependency inversion (deps)
 
-**Статус:** Accepted  
-**Дата:** 2026-04-25  
-**Автор:** Antigravity/rbikbov
+**Status:** Accepted  
+**Date:** 2026-04-25  
+**Author:** Antigravity/rbikbov
 
-## 1. Контекст
+## 1. Context
 
-При росте проекта классические структуры папок (`components/`, `services/`) превращаются в «клубок спагетти», где всё зависит от всего. Нам нужна расширяемая структура с четкими границами ответственности и отсутствием циклических зависимостей.
+As a project grows, classic folder structures (`components/`, `services/`) turn into "spaghetti" where everything depends on everything. We need an extensible structure with clear boundaries of responsibility and no circular dependencies.
 
-**Ограничения:**
+**Constraints:**
 
-- Нужно разделять бизнес-логику (Features) и визуальное представление (Entities).
-- Нижние слои не должны знать о существовании верхних.
-- Код должен быть легко тестируемым в изоляции (например, через Storybook).
+- Business logic (Features) has to be separated from the visual representation (Entities).
+- Lower layers must not know that upper layers exist.
+- Code must be easy to test in isolation (e.g. in Storybook).
 
-## 2. Принятое решение
+## 2. Decision
 
-Использовать методологию **Feature-Slicing Methodology (FSD)** для организации кода. Для связи между слоями снизу-вверх (когда сущности нужно выполнить действие из фичи) использовать паттерн **Dependency Inversion (DI)** через пропсы (`deps`).
+Organize the code with **Feature-Sliced Design (FSD)**. For bottom-up communication between layers (when an entity needs to trigger an action from a feature), use **Dependency Inversion (DI)** through props (`deps`).
 
-## 3. Технические детали и механизмы
+## 3. Technical details and mechanisms
 
-- **Слои**: Shared (базис), Entities (бизнес-сущности), Features (действия), Widgets (композиция), Pages (страницы), App (настройка).
-- **Public API**: Каждый модуль экспортирует только то, что необходимо, через `index.ts`. Глубокие импорты запрещены.
-- **Паттерн deps**: Компоненты уровня Entities принимают функции рендеринга или обработчики событий как опциональные зависимости. Реальная логика «внедряется» в них на уровне вышестоящих слоев.
+- **Layers**: Shared (foundation), Entities (business entities), Features (actions), Widgets (composition), Pages (pages), App (setup).
+- **Public API**: each module exports only what is needed through `index.ts`. Deep imports are forbidden.
+- **The deps pattern**: Entity-level components accept render functions or event handlers as optional dependencies. The actual logic is "injected" into them by the upper layers.
 
 ```mermaid
 graph TD
@@ -31,36 +31,36 @@ graph TD
     Feature -.-> |Inject into slots| Entity
 ```
 
-## 4. Рассмотренные альтернативы
+## 4. Alternatives considered
 
-### 4.1. Плоская структура (Components/Hooks)
+### 4.1. Flat structure (Components/Hooks)
 
-- **Плюсы:** Быстрый старт на маленьких проектах.
-- **Минусы:** Неуправляемый рост зависимостей, сложность рефакторинга.
-- **Решение:** Отклонено из-за долгосрочных рисков.
+- **Pros:** quick start on small projects.
+- **Cons:** uncontrolled growth of dependencies, hard to refactor.
+- **Decision:** rejected because of the long-term risks.
 
-### 4.2. Clean Architecture (с классами и контроллерами)
+### 4.2. Clean Architecture (with classes and controllers)
 
-- **Плюсы:** Максимальная независимость от фреймворка.
-- **Минусы:** Слишком много шаблонного кода для React-приложения.
-- **Решение:** Отклонено в пользу более «фронтенд-ориентированного» FSD.
+- **Pros:** maximum independence from the framework.
+- **Cons:** too much boilerplate for a React app.
+- **Decision:** rejected in favor of the more frontend-oriented FSD.
 
-## 5. Последствия и риски
+## 5. Consequences and risks
 
-### Положительные (Pros)
+### Positive (Pros)
 
-- Высокая предсказуемость кода: всегда понятно, где искать логику ("кричащесть" архитектуры).
-- Изоляция модулей: изменение одной фичи гарантированно не сломает другую.
-- Упрощенный онбординг новых разработчиков.
+- Highly predictable code: it is always clear where to look for logic ("screaming" architecture).
+- Module isolation: changing one feature does not break another.
+- Easier onboarding for new developers.
 
-### Отрицательные / Риски (Cons/Risks)
+### Negative / Risks (Cons/Risks)
 
-- Повышенный порог входа для тех, кто не знаком с FSD.
-- Разное понимание FSD разными людьми, как следствие, требуется документирование договорённостей и следование им.
-- Ощущение «избыточности» структуры на ранних этапах.
+- A steeper learning curve for those unfamiliar with FSD.
+- Different people interpret FSD differently, so the team's conventions have to be documented and followed.
+- The structure can feel "excessive" in the early stages.
 
-## 6. История ревизий
+## 6. Revision history
 
-- **2026-04-25**: Создание документа (Antigravity)
-- **2026-04-25**: Добавлен раздел про паттерн deps.
-- **2026-04-28**: Уточняющие правки.
+- **2026-04-25**: Document created (Antigravity)
+- **2026-04-25**: Added a section about the deps pattern.
+- **2026-04-28**: Clarifications.

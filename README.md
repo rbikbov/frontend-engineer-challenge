@@ -1,95 +1,95 @@
 # 🌌 Orbitto Service: Advanced Frontend Challenge
 
-Искренне благодарю вас за время, уделенное изучению этого решения. Данный репозиторий демонстрирует не просто верстку макетов, а комплексный инженерный подход к построению масштабируемой и безопасной фронтенд-архитектуры.
+This repository is more than a layout of the mockups. It shows an end-to-end engineering approach to building a scalable and secure frontend architecture.
 
-**Ссылка на оригинальный README челленджа**: [README_challenge.md](README_challenge.md)
+**Original challenge description**: [README_challenge.md](README_challenge.md)
 
 ---
 
-## 🌐 Рабочее демо (Deployment)
+## 🌐 Live demo (Deployment)
 
-_По ссылке ниже доступна рабочая версия фронтенда, развернутая на платформе Vercel. Для обеспечения упрощенного деплоя, строгой безопасности и обхода браузерных политик (CORS, SameSite и mixed content HTTPS → HTTP) запросы к GraphQL-бэкенду бесшовно проксируются через встроенный BFF-слой Next.js (rewrites в next.config.ts). Время жизни access_token — 1 минута, для быстрого тестирования, refresh_token — 7 дней:_
+_The link below opens a working version of the frontend deployed on Vercel. To keep deployment simple, keep security strict and work around browser policies (CORS, SameSite and HTTPS → HTTP mixed content), requests to the GraphQL backend are transparently proxied through the built-in Next.js BFF layer (rewrites in next.config.ts). The access_token lifetime is 1 minute for quick testing, the refresh_token lifetime is 7 days:_
 
 > [!IMPORTANT]
-> **[Открыть демонстрацию проекта](https://rbikbov-orbitto-main-chi.vercel.app/auth/sign-up)**
+> **[Open the project demo](https://rbikbov-orbitto-main-chi.vercel.app/auth/sign-up)**
 >
-> _Примечание: Для предотвращения индексации временного демо-проекта поисковиками, в `apps/main/public/robots.txt` установлен полный запрет (`Disallow: /`)._
+> _Note: to keep search engines from indexing this temporary demo, `apps/main/public/robots.txt` disallows everything (`Disallow: /`)._
 
 ---
 
-## 🚀 Как запустить проект
+## 🚀 Getting started
 
-**Ссылка на репозиторий с бэкендом**: [rbikbov/engineer-challenge](https://github.com/rbikbov/engineer-challenge)
+**Backend repository**: [rbikbov/engineer-challenge](https://github.com/rbikbov/engineer-challenge)
 
-1. **Установка зависимостей**:
+1. **Install dependencies**:
    ```bash
    pnpm install
    ```
-2. **Настройка окружения**:
-   Скопируйте `.env.example` в корень и приложения:
+2. **Configure the environment**:
+   Copy `.env.example` to the root of the app:
    ```bash
    cp .env.example .env
    ```
-3. **Запуск в режиме разработки**:
+3. **Run in development mode**:
    ```bash
    pnpm dev
    ```
-   _Приложение будет доступно на `localhost:3000` (Main) и `localhost:3001` (Dashboard через прокси)._
+   _The app is available at `localhost:3000` (Main) and `localhost:3001` (Dashboard, via the proxy)._
 
-### Тесты
+### Tests
 
-В проекте реализовано три уровня тестирования для обеспечения надежности критических сценариев.
+The project has three levels of testing to keep the critical flows reliable.
 
-#### Unit-тесты (Логика и Схемы)
+#### Unit tests (logic and schemas)
 
-Проверка валидации данных и бизнес-логики в `libs/shared/api`.
+Data validation and business logic in `libs/shared/api`.
 
-**Что покрыто:**
+**Coverage:**
 
-- `auth.schema.spec.ts` — строгая валидация почты и проверка совпадения паролей при регистрации.
-- `auth-error-mapper.spec.ts` — корректный разбор динамических GraphQL-ошибок (Network, Validation, 5xx).
-- `url.spec.ts` — валидация Redirect-адресов для защиты от атак типа Open Redirect.
+- `auth.schema.spec.ts`: strict email validation and the password match check on sign-up.
+- `auth-error-mapper.spec.ts`: correct parsing of dynamic GraphQL errors (Network, Validation, 5xx).
+- `url.spec.ts`: redirect URL validation to protect against Open Redirect attacks.
 
 ```bash
 npx nx test api
-# или запуск напрямую через vitest
+# or run vitest directly
 npx vitest run -c libs/shared/api/vitest.config.ts
 ```
 
-#### Integration-тесты (UI-компоненты и страницы)
+#### Integration tests (UI components and pages)
 
-Проверка взаимодействия React-компонентов с формами, валидацией и состоянием страниц (JSDOM).
+How React components interact with forms, validation and page state (JSDOM).
 
-**Что покрыто:**
+**Coverage:**
 
-- `sign-in.form.spec.tsx` — рендеринг формы входа, отработка состояний `loading`.
-- `sign-up.form.spec.tsx` — проверка сабмита данных и отображения клиентских ошибок.
-- `password-recovery.form.spec.tsx` — восстановление доступа по email.
-- `password-set.page.spec.tsx` — **Security-логика**: извлечение токена, немедленная очистка URL (защита истории браузера) и переключение состояний Success/Error.
+- `sign-in.form.spec.tsx`: rendering the sign-in form, handling `loading` states.
+- `sign-up.form.spec.tsx`: data submission and display of client-side errors.
+- `password-recovery.form.spec.tsx`: account recovery by email.
+- `password-set.page.spec.tsx`: **security logic**: reading the token, cleaning up the URL immediately (protecting the browser history) and switching between the Success/Error states.
 
 ```bash
 npx nx test main
-# или запуск конкретных тестов
+# or run specific tests
 npx vitest run -c apps/main/vitest.config.ts
 ```
 
-#### E2E-тесты (Браузерные сценарии)
+#### E2E tests (browser scenarios)
 
-Полная проверка путей пользователя через Playwright.
+Full user journeys with Playwright.
 
-**Что покрыто:**
+**Coverage:**
 
-- `auth.spec.ts` — сквозные сценарии авторизации, регистрации, проверка валидационных алертов в Chromium, WebKit и Firefox.
+- `auth.spec.ts`: end-to-end sign-in and sign-up flows and validation messages in Chromium, WebKit and Firefox.
 
-> **Примечание**: E2E тесты намеренно работают с реальным бекендом через BFF. Это гарантирует корректную проверку интеграции: установку HttpOnly кук, обработку реальных контрактов API и работу сети. В production-среде для CI/CD предполагается использование тестовой базы данных или эфемерного окружения для предотвращения мутации данных.
+> **Note**: the E2E tests intentionally run against the real backend through the BFF. This verifies the integration for real: setting HttpOnly cookies, handling the actual API contracts and the network. In production CI/CD, a test database or an ephemeral environment is expected to avoid mutating data.
 
 ```bash
-# Запуск всех E2E тестов (автоматически поднимет сервер на :3000)
+# Run all E2E tests (starts the server on :3000 automatically)
 npx nx e2e main-e2e
 ```
 
 > [!TIP]
-> В логах после тестов может отображаться неверный относительный путь к отчёту (`../../dist/...`). Чтобы открыть последний отчёт из корня проекта, используйте:
+> After the tests, the logs may show a wrong relative path to the report (`../../dist/...`). To open the latest report from the project root, use:
 >
 > ```bash
 > pnpm exec playwright show-report dist/.playwright/apps/main-e2e/playwright-report
@@ -97,215 +97,215 @@ npx nx e2e main-e2e
 
 ---
 
-## 🏗 Архитектура Frontend
+## 🏗 Frontend architecture
 
-### Технологический стек
+### Tech stack
 
-- **Framework**: Next.js 15 (App Router + Pages Router в разных зонах)
+- **Framework**: Next.js 15 (App Router + Pages Router in different zones)
 - **Monorepo**: Nx + PNPM
-- **Styling**: Tailwind CSS v4 (Native CSS-first approach)
+- **Styling**: Tailwind CSS v4 (native CSS-first approach)
 - **State Management**: TanStack Query v5 (React Query)
-- **Contract**: GraphQL (через типизированный SDK)
-- **Architecture**: Feature-Slicing Methodology (FSD)
+- **Contract**: GraphQL (via a typed SDK)
+- **Architecture**: Feature-Sliced Design (FSD)
 
-### Структура проекта
+### Project structure
 
 ```text
 ├── apps/
-│   ├── main/           # Зона 1: Auth flow, Landing (BFF Gatekeeper)
-│   ├── dashboard/      # Зона 2: Внутренняя панель (User protected area)
-│   └── main-e2e/       # Сквозные тесты (Playwright)
+│   ├── main/           # Zone 1: Auth flow, Landing (BFF Gatekeeper)
+│   ├── dashboard/      # Zone 2: Internal dashboard (user protected area)
+│   └── main-e2e/       # End-to-end tests (Playwright)
 ├── libs/
-│   ├── shared/         # Переиспользуемые слои (FSD Style)
-│   │   ├── ui/         # UI-kit и дизайн-система (Tailwind v4)
-│   │   ├── api/        # API-клиенты, SDK и логика аутентификации
-│   │   ├── config/     # Конфигурация окружения (Env)
-│   │   ├── constants/  # Общие константы
-│   │   └── lib/        # Общие хелперы и утилиты
-│   ├── eslint-config/  # Шаринг правил линтинга
-│   └── typescript-config/ # Базовые настройки TS
+│   ├── shared/         # Reusable layers (FSD style)
+│   │   ├── ui/         # UI kit and design system (Tailwind v4)
+│   │   ├── api/        # API clients, SDK and auth logic
+│   │   ├── config/     # Environment configuration (Env)
+│   │   ├── constants/  # Shared constants
+│   │   └── lib/        # Shared helpers and utilities
+│   ├── eslint-config/  # Shared lint rules
+│   └── typescript-config/ # Base TS settings
 ├── docs/adr/           # Architecture Decision Records (ADR)
-└── .agents/            # Логи разработки (Инженерный путь)
+└── .agents/            # Development logs (engineering journey)
 ```
 
-### Архитектурные столпы
+### Architectural pillars
 
-Проект построен на трёх фундаментальных решениях, подробно описанных в **Architecture Decision Records (ADR)**:
+The project rests on three fundamental decisions, described in detail in the **Architecture Decision Records (ADR)**:
 
-1. **[BFF & Secure Auth (ADR-002)](docs/adr/002-secure-auth-strategy.md)**: Полный отказ от хранения токенов в среде доступной клиенту. Внедрён паттерн Backend-for-Frontend с использованием `HttpOnly` кук и пробросом IP клиента (`X-Forwarded-For`) для корректного Rate Limiting. Проксируем только запросы, связанные с токенами, вместо проксирования всех запросов.
-2. **[Multi-Zones Scalability (ADR-001)](docs/adr/001-multi-zones-architecture.md)**: Использование Next.js Multi-Zones для разделения Auth-флоу и Dashboard на независимые приложения. Это позволяет командам работать автономно, сохраняя единый домен и общую дизайн-систему.
-3. **[FSD & Dependency Inversion (ADR-003)](docs/adr/003-fsd-and-dependency-inversion.md)**: Строгое следование Feature-Slicing Methodology с использованием паттерна `deps` для инверсии зависимостей. Это гарантирует отсутствие циклических импортов и лёгкое тестирование компонентов.
+1. **[BFF & Secure Auth (ADR-002)](docs/adr/002-secure-auth-strategy.md)**: tokens are never stored anywhere client-side code can reach. The Backend-for-Frontend pattern is used with `HttpOnly` cookies and forwarding of the client IP (`X-Forwarded-For`) so rate limiting keeps working. Only token-related requests are proxied, not all requests.
+2. **[Multi-Zones Scalability (ADR-001)](docs/adr/001-multi-zones-architecture.md)**: Next.js Multi-Zones split the auth flow and the dashboard into independent apps. Teams can work autonomously while keeping a single domain and a shared design system.
+3. **[FSD & Dependency Inversion (ADR-003)](docs/adr/003-fsd-and-dependency-inversion.md)**: strict Feature-Sliced Design with the `deps` pattern for dependency inversion. This rules out circular imports and makes components easy to test.
 
-### Ключевые инженерные решения
+### Key engineering decisions
 
 #### BFF (Backend-for-Frontend) & Security
 
-Центральное решение проекта — отказ от хранения JWT в `localStorage`.
+The central decision of the project is not storing JWTs in `localStorage`.
 
-- **Механизм**: BFF проксирует только три критичных маршрута: `login`, `refresh` и `logout`. Все остальные запросы (например, `me` и будущие бизнес-запросы) ходят напрямую с клиента к бэкенду — это сознательное решение для разгрузки BFF от проксирования всех будущих запросов. Для этого в бэкенд были внесены правки: он умеет читать access-токен напрямую из кук, что позволяет аутентифицировать прямые запросы без участия BFF.
-- **Безопасность**: Токены хранятся в `HttpOnly, Secure, SameSite: Strict` куках. Браузерный JS не имеет доступа к секретам.
-- **Open Redirect Protection**: Внедрена строгая валидация параметра `callbackUrl`. Редирект разрешен только на внутренние пути приложения или доверенный домен из `NEXT_PUBLIC_APP_URL`, что исключает возможность фишинговых атак через манипуляцию URL.
-- **Инфраструктура**: Проброс `X-Forwarded-For` для сохранения работоспособности Rate Limiting на бэкенде.
+- **Mechanism**: the BFF proxies only three critical routes: `login`, `refresh` and `logout`. All other requests (e.g. `me` and future business requests) go straight from the client to the backend. This is a deliberate choice so the BFF does not have to proxy every future request. To support it, the backend was changed to read the access token directly from cookies, so direct requests are authenticated without the BFF.
+- **Security**: tokens are stored in `HttpOnly, Secure, SameSite: Strict` cookies. Browser JS has no access to secrets.
+- **Open Redirect Protection**: the `callbackUrl` parameter is strictly validated. Redirects are allowed only to internal app paths or to the trusted domain from `NEXT_PUBLIC_APP_URL`, which rules out phishing via URL manipulation.
+- **Infrastructure**: `X-Forwarded-For` is forwarded so rate limiting on the backend keeps working.
 
 #### API Client & IoC (Inversion of Control)
 
-API-клиент построен через фабрику `createAuthApi`, которая внедряет зависимости (логгер, конфиг, обработчик рефреша) в рантайме — вместо глобального состояния. Это исключает утечки между запросами при SSR и упрощает подмену реализации в тестах.
+The API client is built by the `createAuthApi` factory, which injects dependencies (logger, config, refresh handler) at runtime instead of relying on global state. This prevents leaks between requests during SSR and makes it easy to swap the implementation in tests.
 
-- **Concurrency**: Реализована блокировка через `#refreshPromise`: когда один запрос инициирует рефреш токена, все остальные параллельные запросы ожидают его завершения. Это предотвращает как инвалидацию сессии, так и шторм множества одновременных запросов на рефреш.
+- **Concurrency**: a lock via `#refreshPromise`: when one request triggers a token refresh, all other concurrent requests wait for it to finish. This prevents both session invalidation and a storm of simultaneous refresh requests.
 
-#### Выбор фреймворка: Почему Next.js, а не SPA (React/Vue)?
+#### Choosing a framework: why Next.js and not an SPA (React/Vue)?
 
-Рассматривались классические SPA-решения на React/Vue из-за скорости разработки и простоты деплоя. Однако выбор пал на **Next.js** по следующим причинам:
+Classic React/Vue SPAs were considered for their development speed and simple deployment. **Next.js** was chosen for these reasons:
 
-- **Архитектурное разделение**: Макеты логично делятся на публичную часть (промо/BFF) и защищённый дашборд.
-- **Multi-Zones**: Это «нативное» решение позволило объединить два независимых приложения (`main` и `dashboard`) под одним доменным пространством без необходимости сложной настройки Nginx. Упрощает деплой, даёт прозрачность конфигурации прямо в репозитории, а в production порты зависимых приложений (`dashboard`) должны быть закрыты наружу — всё внешнее взаимодействие идёт исключительно через host-приложение (`main`).
-- **BFF (Backend-for-Frontend)**: Необходимость безопасного проксирования авторизации (HttpOnly куки) идеально реализуется через API-роуты Next.js.
+- **Architectural separation**: the mockups naturally split into a public part (promo/BFF) and a protected dashboard.
+- **Multi-Zones**: this "native" solution combines two independent apps (`main` and `dashboard`) under one domain without complex Nginx setup. It simplifies deployment and keeps the configuration visible in the repository. In production, the ports of the dependent apps (`dashboard`) should be closed to the outside, and all external traffic goes only through the host app (`main`).
+- **BFF (Backend-for-Frontend)**: securely proxying auth (HttpOnly cookies) is a natural fit for Next.js API routes.
 
-#### Монорепозиторий: Nx vs Turborepo
+#### Monorepo: Nx vs Turborepo
 
-Выбран **Nx** как более зрелое и гибкое решение «на вырост». Его возможности по строгому управлению графом зависимостей и генерации кода перевесили лёгковесность Turborepo в контексте структуры с несколькими зонами и разделяемыми библиотеками.
+**Nx** was chosen as the more mature and flexible solution with room to grow. Its strict dependency graph management and code generation outweighed Turborepo's lightness for a structure with several zones and shared libraries.
 
-#### Интеграция с Backend и контракты
+#### Backend integration and contracts
 
-- **Выбор Backend**: Был выбран конкретный форк бэкенда с поддержкой GraphQL (из-за схемы, простоты правок и запуска). Это обеспечило **schema-first workflow**: любые изменения в схеме мгновенно отражаются в типах фронтенда через генерацию SDK.
-- **Изменения в Backend**: Бэкенд теперь принимает токены напрямую из кук. Это позволило сделать BFF максимально «глупым»: он проксирует только 3 критичных маршрута (login/refresh/logout) и контекст клиента (IP, User-Agent, а также Cookie — как задел на будущее). Все остальные запросы (например, `/me`) ходят напрямую с фронтенда на бэкенд. Такой подход устраняет «узкое горлышко» в виде BFF, позволяя системе легко масштабироваться до полноценного `apiClient` (иначе использование GraphQL было бы избыточным) при росте числа пользователей. Также реализован честный Logout в Postgres и централизованная проверка сессий на стороне бэкенда.
-- **GraphQL Client**: Вместо тяжеловесного Apollo использован легковесный типизированный клиент, генерируемый по схеме. В связке с **TanStack Query** это даёт полный контроль над состоянием запросов и кэшированием при минимальном размере бандла. SDK намеренно зафиксирован в репозитории (несмотря на `.gitignore`) для обеспечения стабильной сборки в CI без зависимости от бэкенда, а также для прозрачности изменений API при код-ревью.
-- **Unified Error Mapping**: Улучшена и расширена система трансляции ошибок (ADR-004). Ошибки GraphQL маппятся в семантически корректные HTTP-статусы (400, 429, 502), что позволяет фронтенду использовать стандартные механизмы обработки ошибок.
+- **Choice of backend**: a specific backend fork with GraphQL support was chosen (for its schema, and because it is easy to change and run). This enables a **schema-first workflow**: any schema change is immediately reflected in the frontend types through SDK generation.
+- **Backend changes**: the backend now accepts tokens directly from cookies. This keeps the BFF as "dumb" as possible: it proxies only 3 critical routes (login/refresh/logout) and the client context (IP, User-Agent, and Cookie as groundwork for the future). All other requests (e.g. `/me`) go directly from the frontend to the backend. This removes the BFF as a bottleneck and lets the system grow into a full `apiClient` as the user base grows (otherwise GraphQL would be overkill). A proper logout in Postgres and centralized session checks on the backend were also implemented.
+- **GraphQL Client**: instead of heavyweight Apollo, a lightweight typed client generated from the schema is used. Together with **TanStack Query** this gives full control over request state and caching with a minimal bundle size. The SDK is intentionally committed to the repository (despite `.gitignore`) for stable CI builds without depending on the backend, and to make API changes visible in code review.
+- **Unified Error Mapping**: the error translation system was improved and extended (ADR-004). GraphQL errors are mapped to semantically correct HTTP statuses (400, 429, 502), so the frontend can use standard error handling.
 
-#### Архитектура и качество кода
+#### Architecture and code quality
 
-- **FSD & SOLID**: Строгое следование Feature-Slicing Methodology. Принципы SOLID выражены в инверсии зависимостей (DI) через интерфейсы: API-клиент и логгер полностью абстрагированы от реализации, что позволяет заменить GraphQL на REST/gRPC без изменений в UI-слое.
-- **Границы модулей**: Настроены линтеры для контроля внешних публичных API модулей (`index.ts`) и запрета глубоких импортов.
-- **Инвестиции в Tooling**: Много времени было уделено настройке линтеров (FSD, сортировка импортов, Tailwind-классов) и автоматизации рутинных задач (генерация кода, автоформатирование). Эти решения отняли время сейчас, но существенно сэкономят его в будущем, предотвращая конфликты при слиянии и поддерживая единообразие кода.
+- **FSD & SOLID**: strict Feature-Sliced Design. SOLID shows up as dependency inversion (DI) through interfaces: the API client and the logger are fully abstracted from their implementations, so GraphQL can be replaced with REST/gRPC without touching the UI layer.
+- **Module boundaries**: linters enforce the public APIs of modules (`index.ts`) and forbid deep imports.
+- **Investment in tooling**: a lot of time went into setting up linters (FSD, import sorting, Tailwind classes) and automating routine tasks (code generation, auto-formatting). This took time now, but it will save much more later by preventing merge conflicts and keeping the code consistent.
 
-### 📊 Оптимизация и анализ бандла
+### 📊 Bundle optimization and analysis
 
-Для контроля размера и качества сборки подключён инструмент `@next/bundle-analyzer`.
+`@next/bundle-analyzer` is set up to keep an eye on build size and quality.
 
 ```bash
 pnpm run analyze
 ```
 
-Интерактивные отчёты для клиентского и серверного кода будут сгенерированы в папке `.next/analyze/`.
+Interactive reports for client and server code are generated in `.next/analyze/`.
 
-### 🧠 Инженерный путь (Agent Logs)
+### 🧠 Engineering journey (Agent Logs)
 
-Весь процесс разработки задокументирован в папке `.agents/`:
+The whole development process is documented in the `.agents/` folder:
 
 - **[01: Setup Monorepo](.agents/01-setup-monorepo.md)**
 - **[02: Main App & UI Lib](.agents/02-add-main-app-and-ui-lib.md)**
 - **[03: Relocate UI & Consolidate Deps](.agents/03-relocate-ui-and-consolidate-deps.md)**
 - **[04: Setup Git Hooks](.agents/04-setup-git-hooks.md)**
-- **[05: Setup Commitizen](.agents/05-setup-commitizen.md)**
-- **[06: Setup ESLint](.agents/06-setup-eslint.md)**
-- **[07: Setup stylelint](.agents/07-setup-stylelint.md)**
-- **[08: Setup Prettier](.agents/08-setup-prettier.md)**
+- **[05: Modularize Configs](.agents/05-modularize-configs.md)**
+- **[06: Setup Storybook](.agents/06-setup-storybook.md)**
+- **[07: Modernize UI Components](.agents/07-modernize-ui-components.md)**
+- **[08: FSD Architecture Enforcement](.agents/08-fsd-architecture-enforcement.md)**
 - **[09: Monorepo Optimization and Multi-Zones](.agents/09-monorepo-optimization-and-multi-zones.md)**
-- **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)** — реализация безопасной авторизации, внедрение BFF и инверсии зависимостей.
-- **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)** — описание уровней тестирования (Unit, Integration, E2E) и инструментов.
-- **[12: Observability & Logging](.agents/12-observability-and-logging.md)** — архитектура логирования и мониторинга.
-- **[13: Final Refactoring](.agents/13-final-refactoring.md)** — финальный рефакторинг.
-- **[14: Readme Recovery](.agents/14-readme-recovery-after-rebase-and-rewrite.md)** — Восстановление README после rebase и рефакторинг README.
-- **[15: E2E Stabilization](.agents/15-e2e-stabilization.md)** — Стабилизация E2E тестов.
-- **[16: Code Review Fixes](.agents/16-code-review-fixes.md)** — исправление замечаний.
-- **[17: Final Polishing & Stabilization](.agents/17-final-polishing-and-stabilization.md)** — финализация безопасности, рефакторинг импортов и итоговое тестирование.
+- **[10: Secure Auth & Architecture Refinement](.agents/10-secure-auth-and-architecture-refinement.md)**: secure auth, the BFF and dependency inversion.
+- **[11: Testing Strategy & QA](.agents/11-testing-strategy-and-quality-assurance.md)**: testing levels (Unit, Integration, E2E) and tools.
+- **[12: Observability & Logging](.agents/12-observability-and-logging.md)**: logging and monitoring architecture.
+- **[13: Final Refactoring](.agents/13-final-refactoring.md)**: final refactoring.
+- **[14: Readme Recovery](.agents/14-readme-recovery-after-rebase-and-rewrite.md)**: recovering the README after a rebase, and refactoring it.
+- **[15: E2E Stabilization](.agents/15-e2e-stabilization.md)**: stabilizing the E2E tests.
+- **[16: Code Review Fixes](.agents/16-code-review-fixes.md)**: addressing review comments.
+- **[17: Final Polishing & Stabilization](.agents/17-final-polishing-and-stabilization.md)**: final security work, import refactoring and final testing.
 
 ---
 
-## ⚖️ Принятые компромиссы (Trade-offs)
+## ⚖️ Trade-offs
 
-- **Связанность доменов**: Решение с HttpOnly (`sameSite: "strict"`) куками требует, чтобы фронтенд и бэкенд находились на одном домене (или поддоменах) для корректной работы безопасности браузера. Взаимодействие с куками инкапсулировано в BFF-слое. Браузерный JS не имеет доступа к секретам.
-- **Проксирование**: Проксируем только критичные для безопасности запросы (login/logout/refresh), остальные запросы идут к бэкенду напрямую, что снижает нагрузку на BFF, но требует поддержки CORS на стороне бэкенда.
-- **Формат ошибок бэкенда**: Бэкенд возвращает ошибки в виде текстовых строк (например, `"invalid password:..."`). Это вынудило внедрить хрупкий маппинг через регулярные выражения. Для продакшн-решения **необходимо внедрение машиночитаемых кодов ошибок** (Error Codes).
-- **Retry & Recovery**: Для ошибок типа `503 Service Unavailable` внедрена базовая обработка, но требуется полноценная стратегия повторов (Exponential Backoff).
-- **Отправка письма восстановления**: Сейчас огромная дыра в безопасности — бэкенд возвращает токен напрямую в ответе. Требуется доработка на стороне бэкенда для отправки письма на почту пользователя. На фронтенде реализован `window.confirm` с возможностью скопировать ссылку на восстановление пароля только для демонстрации готовности фронтенд-части системы. При этом при загрузке страницы `/auth/password-set?token=...` токен **сразу** сохраняется в стейт компонента через `useState` initializer, а затем `useEffect` вызывает `router.replace` для очистки URL — ещё на той же странице, пока пользователь заполняет форму. Это осознанная мера: чувствительные данные убираются из адресной строки и истории браузера сразу после их прочтения, не дожидаясь сабмита.
-- **Rate-limit retry_after**: Сейчас бэкенд не возвращает конкретное время до окончания лимита, поэтому пользователь видит только «Попробуйте позже» и не понимает, сколько времени ему осталось ждать. Необходимо доработать бэкенд и внедрить таймер обратного отсчёта для лучшего пользовательского опыта.
-- **Главная страница и Dashboard**: Лендинг (`main`) и приложение `dashboard` намеренно сделаны минималистичными — основное время было вложено в auth-флоу, архитектуру и безопасность. Эти страницы присутствуют для демонстрации Multi-Zones и защищённого маршрута, но не претендуют на полноценный UI.
-- **Кеширование статики между зонами**: Использование `assetPrefix` (например, `/dashboard-static`) для корректной маршрутизации в Multi-Zones приводит к тому, что общие зависимости (React, Shared UI) имеют разные URL в разных зонах. Это предотвращает их кэширование браузером при переходе между зонами, даже если хеши файлов идентичны.
+- **Domain coupling**: HttpOnly (`sameSite: "strict"`) cookies require the frontend and backend to live on the same domain (or subdomains) for browser security to work correctly. Cookie handling is encapsulated in the BFF layer. Browser JS has no access to secrets.
+- **Proxying**: only security-critical requests (login/logout/refresh) are proxied, the rest go to the backend directly. This lowers the load on the BFF but requires CORS support on the backend.
+- **Backend error format**: the backend returns errors as plain text strings (e.g. `"invalid password:..."`). This forced a fragile regex-based mapping. A production solution **needs machine-readable error codes**.
+- **Retry & Recovery**: there is basic handling for `503 Service Unavailable` errors, but a full retry strategy (Exponential Backoff) is still needed.
+- **Password recovery email**: this is currently a huge security hole: the backend returns the token directly in the response. The backend has to be extended to send the email to the user. The frontend uses a `window.confirm` that lets you copy the password reset link, purely to show that the frontend part is ready. When the `/auth/password-set?token=...` page loads, the token is **immediately** saved to component state through a `useState` initializer, and then a `useEffect` calls `router.replace` to clean up the URL, still on the same page while the user fills in the form. This is deliberate: sensitive data is removed from the address bar and browser history right after it is read, without waiting for the submit.
+- **Rate-limit retry_after**: the backend does not return how long the limit lasts, so the user only sees "Please try again later" and does not know how long to wait. The backend needs to provide this, and a countdown timer should be added for a better user experience.
+- **Home page and Dashboard**: the landing page (`main`) and the `dashboard` app are intentionally minimal; most of the time went into the auth flow, architecture and security. These pages exist to demonstrate Multi-Zones and a protected route, not to be a full UI.
+- **Static asset caching across zones**: using `assetPrefix` (e.g. `/dashboard-static`) for correct routing in Multi-Zones means shared dependencies (React, Shared UI) have different URLs in different zones. The browser therefore cannot reuse them from cache when moving between zones, even if the file hashes are identical.
 
 ---
 
-## 🚀 Что дальше? (Production Roadmap)
+## 🚀 What's next? (Production Roadmap)
 
-_Отсортировано по критичности для production-перехода._
+_Sorted by how critical each item is for going to production._
 
-### 1. Безопасность Backend (критично)
+### 1. Backend security (critical)
 
-Эти задачи — прямое следствие ограничений текущего бэкенда, зафиксированных в разделе [Trade-offs](#%EF%B8%8F-принятые-компромиссы-trade-offs):
+These items follow directly from the limitations of the current backend listed under [Trade-offs](#%EF%B8%8F-trade-offs):
 
-- **Реальная отправка письма восстановления**: Сейчас бэкенд возвращает reset-токен прямо в теле ответа — это критическая уязвимость. Необходима доработка бэкенда для отправки ссылки на почту пользователя через SMTP.
-- **Rate Limiting с retry_after**: Было бы неплохо, если бы бэкенд возвращал поле `retry_after` (`too many attempts` в graphql ответах и `429` из BFF) с точным временем ожидания — для отображения таймера обратного отсчёта на фронтенде.
-- **Structured Error Codes**: Переход от парсинга строк к машиночитаемым кодам ошибок. Бэкенд должен возвращать коды типа `ERR_AUTH_PASSWORD_TOO_WEAK` с привязкой к конкретным полям (`field path`), что позволит убрать хрупкий regex-маппинг в `auth-error-mapper.ts`.
+- **Actually sending the recovery email**: the backend currently returns the reset token right in the response body, which is a critical vulnerability. The backend has to send the link to the user's email via SMTP.
+- **Rate limiting with retry_after**: it would be good if the backend returned a `retry_after` field (for `too many attempts` in GraphQL responses and `429` from the BFF) with the exact wait time, so the frontend can show a countdown timer.
+- **Structured Error Codes**: move from parsing strings to machine-readable error codes. The backend should return codes like `ERR_AUTH_PASSWORD_TOO_WEAK` tied to specific fields (`field path`), which would remove the fragile regex mapping in `auth-error-mapper.ts`.
 
 ### 2. Session Management
 
-- **Token Rotation**: Добавление проактивного обновления access-токенов по истечении TTL **в дополнение** к реактивному перехвату `401 Unauthorized` — на основе метаданных в отдельных куках, доступных JS и содержащих только время жизни токена (без секретов).
+- **Token Rotation**: add proactive access token refresh when the TTL expires, **in addition to** the reactive handling of `401 Unauthorized`, based on metadata in separate JS-readable cookies that contain only the token lifetime (no secrets).
 
 ### 3. API Client & Backend Contract
 
-- **Global Interceptor**: Вынос логики `refresh` и обработки `401` в единый перехватчик транспорта.
-- **Retry Strategy**: Добавление экспоненциальной задержки (Exponential Backoff) для повторных запросов при ошибках типа 503.
+- **Global Interceptor**: move the `refresh` logic and `401` handling into a single transport interceptor.
+- **Retry Strategy**: add Exponential Backoff for retries on errors such as 503.
 
 ### 4. CI/CD & DevOps
 
-- **Deployment** — настроить CI/CD пайплайн для автоматического билда, линтинга, прогона тестов и деплоя на dev/stage/production.
-- **Docker** — настроить Docker-изацию и Docker Compose для локального запуска (DX) и деплоя сервисов.
-- **Affected Builds** — настройка CI-пайплайна для сборки и прогона тестов только по задетым граф-модулям Nx.
-- **Shared Static Assets (CDN)** — вынос сборки статики всех зон на единый CDN-домен (например, `assets.example.com`). Это позволит браузеру кэшировать общие чанки (React, UI-lib) один раз для всех зон приложения, устраняя текущий компромисс с `assetPrefix`.
+- **Deployment**: set up a CI/CD pipeline to build, lint, run the tests and deploy to dev/stage/production automatically.
+- **Docker**: containerize the services and add Docker Compose for local development (DX) and deployment.
+- **Affected Builds**: configure the CI pipeline to build and test only the Nx graph modules affected by a change.
+- **Shared Static Assets (CDN)**: serve the static assets of all zones from a single CDN domain (e.g. `assets.example.com`). The browser can then cache shared chunks (React, UI lib) once for all zones, which removes the current `assetPrefix` trade-off.
 
 ### 5. Observability & Monitoring
 
-- **Интеграция телеметрии**: Подключение Sentry для трекинга ошибок в реальном времени на уровне BFF и клиентских ошибок.
-- **Performance Vitals**: Сбор Web Vitals на клиенте (`useReportWebVitals`) и замеры latency на уровне API-роутов BFF.
+- **Telemetry**: connect Sentry for real-time tracking of BFF and client errors.
+- **Performance Vitals**: collect Web Vitals on the client (`useReportWebVitals`) and measure latency in the BFF API routes.
 
 ### 6. Testing & Quality
 
-- **Visual Regression**: Внедрение скриншотного тестирования (Playwright Visual Regression) для библиотек дизайн-системы.
+- **Visual Regression**: add screenshot testing (Playwright Visual Regression) for the design system libraries.
 
 ### 7. DX & Type-Safety
 
-- **Strict Env Validation**: Расширить существующую валидацию переменных окружения — добавить покрытие переменных зависимых приложений (`dashboard`) для минимизации рисков несоответствия между зонами.
+- **Strict Env Validation**: extend the existing environment variable validation to cover the dependent apps (`dashboard`) to reduce the risk of mismatches between zones.
 
 ### 8. SEO & Public Release
 
-- **Снятие ограничений индексации**: Перед релизом необходимо обновить `apps/main/public/robots.txt` (сейчас там `Disallow: /`), чтобы проект стал доступен для поисковых систем.
+- **Lift the indexing restrictions**: before release, update `apps/main/public/robots.txt` (it is currently `Disallow: /`) so search engines can index the project.
 
 ---
 
-## 🛠 Контроль качества (Quality Assurance)
+## 🛠 Quality Assurance
 
-Перед выполнением `git push` рекомендуется прогнать эти команды, чтобы убедиться в стабильности проекта и избежать правок "по горячим следам" после падения CI.
+Before running `git push`, it is a good idea to run these commands to make sure the project is stable and to avoid hot fixes after a CI failure.
 
-### 📋 Основной цикл проверки
+### 📋 Main check cycle
 
-1. **Типизация**: Проверка всех приложений и библиотек на ошибки типов. Линтер часто не видит глубокие нестыковки типов между модулями.
+1. **Type checking**: check all apps and libraries for type errors. The linter often misses deep type mismatches between modules.
    ```bash
    pnpm typecheck
    ```
-2. **Тесты**: Проверка логики в `libs/shared/api` и компонентов в приложениях.
+2. **Tests**: check the logic in `libs/shared/api` and the components in the apps.
    ```bash
    pnpm test
    ```
-3. **Сборка**: Убедиться, что Next.js успешно билдит все зоны (проверка Tree-shaking и env-переменных).
+3. **Build**: make sure Next.js builds all zones successfully (checks tree-shaking and env variables).
    ```bash
    pnpm build
    ```
-4. **Сквозные тесты (E2E)**: Проверка основного флоу (Auth/Registration) в реальных браузерах.
+4. **End-to-end tests (E2E)**: check the main flow (Auth/Registration) in real browsers.
    ```bash
    pnpm e2e
    ```
 
-### 💡 Полезные советы по Nx
+### 💡 Nx tips
 
-- **Проверка только измененного**: Если проект разросся, используйте флаг `--affected`:
+- **Check only what changed**: as the project grows, use the `--affected` flag:
   ```bash
   npx nx affected -t test build
   ```
-- **Сброс кеша**: Если Nx ведет себя странно (не видит файлы или таргеты):
+- **Reset the cache**: if Nx behaves oddly (does not see files or targets):
   ```bash
   npx nx reset
   ```
-- **Анализ бандла**: Проверка влияния фичи на размер бандла:
+- **Bundle analysis**: check how a feature affects the bundle size:
   ```bash
   pnpm analyze
   ```

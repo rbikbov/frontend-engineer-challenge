@@ -1,29 +1,29 @@
-# ADR-002: Стратегия безопасной аутентификации (BFF + HttpOnly Cookies)
+# ADR-002: Secure authentication strategy (BFF + HttpOnly Cookies)
 
-**Статус:** Accepted  
-**Дата:** 2026-04-25  
-**Автор:** Antigravity/rbikbov
+**Status:** Accepted  
+**Date:** 2026-04-25  
+**Author:** Antigravity/rbikbov
 
-## 1. Контекст
+## 1. Context
 
-Нам необходимо реализовать систему аутентификации, которая защищена от распространенных атак (XSS, Session Hijacking) и при этом сохраняет возможность корректной работы Rate Limiting на стороне бекенда.
+We need an authentication system that is protected against common attacks (XSS, session hijacking) and still lets rate limiting on the backend work correctly.
 
-**Ограничения:**
+**Constraints:**
 
-- Нельзя хранить JWT токены в `localStorage` или `sessionStorage` (риск кражи через XSS).
-- Бекенд не умеет самостоятельно выставлять безопасные куки (необходимо проксирование).
-- Нужно пробрасывать реальный IP клиента через прокси.
+- JWTs must not be stored in `localStorage` or `sessionStorage` (risk of theft via XSS).
+- The backend cannot set secure cookies on its own (proxying is required).
+- The real client IP has to be forwarded through the proxy.
 
-## 2. Принятое решение
+## 2. Decision
 
-Внедрить паттерн **BFF (Backend-for-Frontend)** через Next.js Route Handlers. Токены хранятся исключительно в `HttpOnly`, `Secure`, `SameSite: Strict` куках. Браузерный JavaScript не имеет доступа к токенам.
+Implement the **BFF (Backend-for-Frontend)** pattern with Next.js Route Handlers. Tokens are stored only in `HttpOnly`, `Secure`, `SameSite: Strict` cookies. Browser JavaScript has no access to the tokens.
 
-## 3. Технические детали и механизмы
+## 3. Technical details and mechanisms
 
-- **Proxy-роуты**: Реализованы `/api/auth/login`, `/api/auth/logout`, `/api/auth/refresh`.
-- **IP Forwarding**: Каждый запрос от BFF к GraphQL бекенду включает заголовок `X-Forwarded-For` с IP-адресом оригинального клиента.
-- **Refresh Logic**: Инкапсулирована внутри `GraphQLAuthApi` с использованием паттерна Inversion of Control. Клиент автоматически приостанавливает запросы при 401 ошибке и вызывает внедренный фронтендом коллбек `onRefreshSession`, который безопасно дергает BFF.
-- **Atomic Logout**: Процесс логаута полностью управляется BFF, что гарантирует синхронное удаление сессии на бекенде и локальных кук (исключая состояния гонки).
+- **Proxy routes**: `/api/auth/login`, `/api/auth/logout`, `/api/auth/refresh`.
+- **IP forwarding**: every request from the BFF to the GraphQL backend includes an `X-Forwarded-For` header with the original client IP.
+- **Refresh logic**: encapsulated in `GraphQLAuthApi` using Inversion of Control. On a 401 error, the client automatically pauses requests and calls the `onRefreshSession` callback injected by the frontend, which safely calls the BFF.
+- **Atomic logout**: logout is fully handled by the BFF, which guarantees that the session on the backend and the local cookies are removed together (no race conditions).
 
 ```mermaid
 sequenceDiagram
@@ -44,39 +44,39 @@ sequenceDiagram
     B->>BFF: POST /api/auth/logout
     BFF->>BE: logout(refreshTokenFromCookie)
     BE-->>BFF: Success / Error
-    Note right of BFF: Если бекенд не доступен, куки все равно очищаются
+    Note right of BFF: Cookies are cleared even if the backend is unavailable
     BFF-->>B: Delete-Cookie: access_token, refresh_token
 ```
 
-## 4. Рассмотренные альтернативы
+## 4. Alternatives considered
 
-### 4.1. Хранение в LocalStorage
+### 4.1. Storing tokens in LocalStorage
 
-- **Плюсы:** Простота реализации, отсутствие серверного прокси.
-- **Минусы:** Критическая уязвимость к XSS. Любой вредоносный скрипт может украсть сессию пользователя.
-- **Решение:** Отклонено как небезопасное.
+- **Pros:** simple to implement, no server-side proxy.
+- **Cons:** critically vulnerable to XSS. Any malicious script can steal the user's session.
+- **Decision:** rejected as insecure.
 
-### 4.2. Прямое общение с бекендом через CORS
+### 4.2. Talking to the backend directly via CORS
 
-- **Плюсы:** Меньше задержка на проксирование.
-- **Минусы:** Бекенд должен уметь работать с куками.
-- **Решение:** Отклонено в пользу архитектурной гибкости BFF.
+- **Pros:** no proxying latency.
+- **Cons:** the backend has to handle cookies itself.
+- **Decision:** rejected in favor of the architectural flexibility of the BFF.
 
-## 5. Последствия и риски
+## 5. Consequences and risks
 
-### Положительные (Pros)
+### Positive (Pros)
 
-- Высокий уровень безопасности (токены недоступны для JS).
-- Удобство для фронтенд-разработчиков (не нужно вручную прикреплять токены к каждому запросу).
-- Полный контроль над сессией на стороне сервера (BFF).
+- High level of security (tokens are not accessible to JS).
+- Convenient for frontend developers (no need to attach tokens to every request manually).
+- Full control over the session on the server side (BFF).
 
-### Отрицательные / Риски (Cons/Risks)
+### Negative / Risks (Cons/Risks)
 
-- Небольшая накладная задержка на проксирование запросов через Next.js.
-- Необходимость поддержки дополнительных API-роутов.
+- A small overhead from proxying requests through Next.js.
+- Additional API routes to maintain.
 
-## 6. История ревизий
+## 6. Revision history
 
-- **2026-04-25**: Создание документа (Antigravity)
-- **2026-04-25**: Добавлена деталь про SameSite: Strict и X-Forwarded-For.
-- **2026-04-28**: Правки неточностей.
+- **2026-04-25**: Document created (Antigravity)
+- **2026-04-25**: Added details about SameSite: Strict and X-Forwarded-For.
+- **2026-04-28**: Fixed inaccuracies.
