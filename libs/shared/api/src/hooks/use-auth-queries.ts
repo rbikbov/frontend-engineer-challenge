@@ -78,7 +78,7 @@ export const useBffLoginMutation = () => {
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          // Пробрасываем объект со статусом для надежной детекции в isNetworkStatusError
+          // Pass an object with a status so isNetworkStatusError can detect it reliably
           throw { ...errorData, status: response.status };
         }
 
@@ -134,14 +134,14 @@ export const useBffLogoutMutation = ({
       }
     },
     onMutate: async () => {
-      // Блокируем интерцептор рефреша ПЕРЕД запросом, но кеш пока не трогаем
+      // Block the refresh interceptor BEFORE the request, but leave the cache alone for now
       api.setLoggingOut?.(true);
     },
     onSuccess: () => {
       onSuccess?.();
     },
     onError: () => {
-      // Если запрос упал, возвращаем возможность рефреша
+      // If the request failed, re-enable refresh
       api.setLoggingOut?.(false);
     },
   });

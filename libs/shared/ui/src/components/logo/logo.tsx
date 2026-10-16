@@ -3,8 +3,8 @@
 import * as React from 'react';
 
 /**
- * Основной логотип бренда.
- * Поддерживает кастомные размеры через пропсы.
+ * Main brand logo.
+ * Supports custom sizes via props.
  */
 
 interface LogoProps extends React.SVGProps<SVGSVGElement> {

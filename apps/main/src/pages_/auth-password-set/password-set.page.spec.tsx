@@ -14,7 +14,7 @@ import { usePasswordSetForm } from '@features/auth';
 
 import { PasswordSetPage } from './password-set.page';
 
-// Мокаем зависимости
+// Mock dependencies
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
   useSearchParams: vi.fn(),
@@ -43,7 +43,7 @@ describe('PasswordSetPage', () => {
       mockSearchParams as unknown as ReturnType<typeof useSearchParams>,
     );
 
-    // Дефолтный стейт хука формы
+    // Default form hook state
     vi.mocked(usePasswordSetForm).mockReturnValue({
       form: {} as unknown as UseFormReturn<PasswordSetSchemaType>,
       onSubmit: vi.fn(),
@@ -56,13 +56,13 @@ describe('PasswordSetPage', () => {
 
     render(<PasswordSetPage />);
 
-    // Проверяем, что токен был взят из URL
+    // Check that the token was read from the URL
     expect(mockSearchParams.get).toHaveBeenCalledWith('token');
 
-    // Проверяем, что URL был очищен
+    // Check that the URL was cleaned up
     expect(mockRouter.replace).toHaveBeenCalledWith(AUTH_LINKS.PASSWORD_SET);
 
-    // Проверяем, что токен проброшен в хук формы
+    // Check that the token was passed to the form hook
     expect(usePasswordSetForm).toHaveBeenCalledWith(
       expect.objectContaining({
         token: 'test-token',
@@ -73,7 +73,7 @@ describe('PasswordSetPage', () => {
   it('should show success view when submission is successful', async () => {
     mockSearchParams.get.mockReturnValue('test-token');
 
-    // Имитируем успешный сабмит
+    // Simulate a successful submit
     let successCallback: () => void = () => {};
     vi.mocked(usePasswordSetForm).mockImplementation((props) => {
       successCallback = props.onSuccess!;
@@ -86,15 +86,15 @@ describe('PasswordSetPage', () => {
 
     render(<PasswordSetPage />);
 
-    // Вызываем колбэк успеха
+    // Call the success callback
     successCallback();
 
-    // Проверяем, что отрендерилась страница успеха
+    // Check that the success page is rendered
     expect(
       await screen.findByText(/your password has been reset/i),
     ).toBeTruthy();
 
-    // Проверяем, что форма и заголовок исчезли
+    // Check that the form and the title are gone
     expect(screen.queryByText(/set a password/i)).toBeNull();
     expect(screen.queryByTestId('password-set-form')).toBeNull();
   });
@@ -102,7 +102,7 @@ describe('PasswordSetPage', () => {
   it('should show error view when fatal error occurs', async () => {
     mockSearchParams.get.mockReturnValue('test-token');
 
-    // Имитируем фатальную ошибку
+    // Simulate a fatal error
     let fatalErrorCallback: (msg: string) => void = () => {};
     vi.mocked(usePasswordSetForm).mockImplementation((props) => {
       fatalErrorCallback = props.onFatalError!;
@@ -115,22 +115,22 @@ describe('PasswordSetPage', () => {
 
     render(<PasswordSetPage />);
 
-    // Вызываем колбэк ошибки
+    // Call the error callback
     fatalErrorCallback('test error');
 
-    // Проверяем, что отрендерилась страница ошибки
+    // Check that the error page is rendered
     expect(
       await screen.findByText(/your password was not reset/i),
     ).toBeTruthy();
 
-    // Проверяем, что форма и заголовок исчезли
+    // Check that the form and the title are gone
     expect(screen.queryByText(/set a password/i)).toBeNull();
     expect(screen.queryByTestId('password-set-form')).toBeNull();
   });
 
   it('should show loading state when token is being extracted (Suspense)', () => {
-    // В этом тесте мы просто проверяем рендер основного контента,
-    // так как Suspense в JSDOM работает прозрачно, если не имитировать ленивую загрузку
+    // This test only checks that the main content renders,
+    // since Suspense is transparent in JSDOM unless lazy loading is simulated
     mockSearchParams.get.mockReturnValue('test-token');
     render(<PasswordSetPage />);
     expect(screen.getByTestId('password-set-form')).toBeTruthy();

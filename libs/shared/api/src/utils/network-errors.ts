@@ -6,7 +6,7 @@ export const isServiceUnavailableError = (error: unknown): boolean => {
     if (status === 502 || status === 503 || status === 504) return true;
   }
 
-  // Проверяем ошибку отсутствия связи
+  // Check for a connectivity error
   if (error && typeof error === 'object') {
     let errorMsg = '';
     if (error instanceof Error) {
@@ -22,9 +22,9 @@ export const isServiceUnavailableError = (error: unknown): boolean => {
       errorMsg.includes('network error') ||
       errorMsg.includes('fetch failed')
     ) {
-      // На сервере (BFF) failed to fetch всегда означает, что бекенд лежит
+      // On the server (BFF), failed to fetch always means the backend is down
       if (!isClient()) return true;
-      // В браузере: если интернет есть, значит лежит бекенд
+      // In the browser: if the user is online, the backend is down
       if (isClient() && window.navigator.onLine) return true;
     }
   }
@@ -33,10 +33,10 @@ export const isServiceUnavailableError = (error: unknown): boolean => {
 };
 
 export const isNetworkStatusError = (_error: unknown): boolean => {
-  // Это ошибка сети пользователя ТОЛЬКО если у него физически нет интернета
+  // It is the user's network error ONLY if they are actually offline
   if (isClient() && !window.navigator.onLine) return true;
 
-  // Все остальные ошибки связи (failed to fetch при наличии интернета)
-  // перехватываются в isServiceUnavailableError
+  // All other connectivity errors (failed to fetch while online)
+  // are handled by isServiceUnavailableError
   return false;
 };

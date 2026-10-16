@@ -36,7 +36,7 @@ export const setSessionCookies = async (
 
   // UI Cookies (accessible to JS)
   cookieStore.set(COOKIE_KEYS.IS_AUTHENTICATED, 'true', {
-    httpOnly: false, // <- для UI
+    httpOnly: false, // <- readable by the UI
     secure,
     sameSite,
     path,

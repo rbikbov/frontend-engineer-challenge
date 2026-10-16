@@ -17,12 +17,12 @@ export default function middleware(request: NextRequest) {
     pathname.startsWith(path),
   );
 
-  // Если юзер авторизован и заходит на auth-страницы, перенаправляем в dashboard
+  // If the user is signed in and opens an auth page, redirect to the dashboard
   if (isAuthPage && hasToken) {
     return NextResponse.redirect(new URL(DASHBOARD_LINKS.ROOT, request.url));
   }
 
-  // Если не авторизован и ломится на закрытую зону
+  // If the user is not signed in and tries to open a protected zone
   if (isDashboardPage && !hasToken) {
     const callbackUrl = encodeURIComponent(pathname);
     return NextResponse.redirect(
@@ -35,10 +35,10 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   /*
-   * Матчит все пути, кроме:
-   * 1. api (роуты бэкенда/BFF)
-   * 2. _next/static (скрипты и стили)
-   * 3. _next/image (картинки Next.js)
+   * Matches all paths except:
+   * 1. api (backend/BFF routes)
+   * 2. _next/static (scripts and styles)
+   * 3. _next/image (Next.js images)
    * 4. favicon.ico
    */
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],

@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { isServer } from '@workspace/lib';
 
 /**
- * Схема для переменных, доступных ТОЛЬКО на сервере.
- * Эти переменные не должны иметь префикса NEXT_PUBLIC_.
+ * Schema for variables available ONLY on the server.
+ * These variables must not have the NEXT_PUBLIC_ prefix.
  */
 const serverSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
@@ -12,8 +12,8 @@ const serverSchema = z.object({
 });
 
 /**
- * Схема для переменных, доступных и на сервере, и на клиенте.
- * Должны иметь префикс NEXT_PUBLIC_.
+ * Schema for variables available on both the server and the client.
+ * They must have the NEXT_PUBLIC_ prefix.
  */
 const clientSchema = z.object({
   NEXT_PUBLIC_AUTH_BACKEND_TYPE: z.enum(['graphql', 'msw']),
@@ -23,8 +23,8 @@ const clientSchema = z.object({
 });
 
 /**
- * Прокси-объект для валидации.
- * Мы используем Record<string, string | undefined> для типизации process.env.
+ * Proxy object for validation.
+ * Record<string, string | undefined> is used to type process.env.
  */
 const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
@@ -35,12 +35,12 @@ const processEnv = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 };
 
-// Валидируем всё вместе
+// Validate everything together
 const mergedSchema = serverSchema.merge(clientSchema);
 
-// Функция для безопасного парсинга с понятными ошибками
+// Safe parsing with readable errors
 const parseEnv = () => {
-  // На клиенте мы валидируем только клиентскую схему
+  // On the client, only the client schema is validated
   const schema = isServer() ? mergedSchema : clientSchema;
 
   const parsed = schema.safeParse(processEnv);
@@ -59,5 +59,5 @@ const parseEnv = () => {
 
 export const envConfig = parseEnv() as EnvConfig;
 
-// Типизация для использования в коде
+// Types for use in code
 export type EnvConfig = z.infer<typeof mergedSchema>;

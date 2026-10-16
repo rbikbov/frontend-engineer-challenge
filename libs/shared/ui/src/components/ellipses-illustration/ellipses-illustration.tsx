@@ -3,9 +3,9 @@
 import * as React from 'react';
 
 /**
- * Премиальная иллюстрация для страниц авторизации и ошибок.
- * Использует сложные SVG-фильтры и градиенты.
- * Для безопасности ID внутри SVG используется React.useId().
+ * Premium illustration for the auth and error pages.
+ * Uses complex SVG filters and gradients.
+ * SVG IDs are generated with React.useId() to avoid collisions.
  */
 
 export const EllipsesIllustration = ({
@@ -14,7 +14,7 @@ export const EllipsesIllustration = ({
 }: React.SVGProps<SVGSVGElement>) => {
   const id = React.useId();
 
-  // Генерируем уникальные ID для всех внутренних элементов SVG
+  // Generate unique IDs for all inner SVG elements
   const filter0 = `filter0-${id}`;
   const filter1 = `filter1-${id}`;
   const filter3 = `filter3-${id}`;

@@ -2,16 +2,16 @@ import React from 'react';
 
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 
-// Атрибуты обычного тега <a>
+// Attributes of a regular <a> tag
 type AnchorProps = React.ComponentPropsWithoutRef<'a'>;
 
-// Пропсы для ссылок внутри зоны
+// Props for links within the zone
 type AppLinkPropsInsideZone = NextLinkProps &
   Omit<AnchorProps, 'href'> & {
     toOtherZone?: false;
   };
 
-// Пропсы для ссылок между зонами
+// Props for links between zones
 type AppLinkPropsOutsideZone = AnchorProps & {
   toOtherZone: true;
 };

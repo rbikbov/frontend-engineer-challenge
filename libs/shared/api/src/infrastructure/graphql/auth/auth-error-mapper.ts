@@ -29,7 +29,7 @@ const dynamicErrorMatchers: DynamicErrorInfo[] = [
       AUTH_ERROR_MESSAGES.PASSWORD_MIN_LENGTH(min),
   },
   {
-    // Ищем "too many attempts" и опционально число секунд (например, "...in 30 seconds")
+    // Match "too many attempts" and, optionally, the number of seconds (e.g. "...in 30 seconds")
     pattern: /too many (?:.+ )?attempts(?:.*in (\d+) seconds)?/i,
     field: ROOT_FIELD,
     message: AUTH_ERROR_MESSAGES.TOO_MANY_ATTEMPTS,
@@ -127,7 +127,7 @@ const parseGraphQLErrors = (error: {
 
         if (matcher.isRateLimit) {
           isRateLimit = true;
-          // Если в регулярке была захвачена группа с числом (секунды)
+          // If the regex captured a group with a number (seconds)
           if (match[1]) {
             retryAfter = parseInt(match[1], 10);
           }
@@ -158,7 +158,7 @@ export const handleGraphQLError = (err: unknown) => {
   if (isServiceUnavailableError(err)) throw new ServiceUnavailableError(err);
   if (isNetworkStatusError(err)) throw new NetworkError(err);
 
-  // Если ошибка содержит статус 429 (от Nginx или WAF), бросаем RateLimitError сразу
+  // If the error has status 429 (from Nginx or a WAF), throw RateLimitError right away
   if (err && typeof err === 'object' && 'status' in err) {
     if ((err as { status: number }).status === 429) {
       throw new RateLimitError(

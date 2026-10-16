@@ -20,11 +20,11 @@ export default function AuthLayout({
             staleTime: Infinity,
             refetchOnWindowFocus: false,
             refetchOnMount: false,
-            retry: 0, // Для авторизации лучше не ретраить автоматически
+            retry: 0, // Auth requests should not be retried automatically
             networkMode: 'always',
           },
           mutations: {
-            retry: 0, // Для авторизации лучше не ретраить автоматически
+            retry: 0, // Auth requests should not be retried automatically
             networkMode: 'always',
           },
         },

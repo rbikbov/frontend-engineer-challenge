@@ -10,7 +10,7 @@ const buttonVariants = cva(
   'focus-visible:ring-brand inline-flex cursor-pointer items-center justify-center border border-transparent text-sm leading-none font-medium whitespace-normal transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:cursor-not-allowed',
   {
     variants: {
-      // variant = только визуальная идентичность (цвет, фон, скругление)
+      // variant = visual identity only (color, background, border radius)
       variant: {
         primary:
           'text-inverse-primary rounded-button-lg bg-brand hover:bg-brand-hover active:bg-brand-active disabled:bg-disabled text-white',
@@ -32,7 +32,7 @@ const buttonVariants = cva(
         linkWrapper:
           'text-foreground hover:text-brand-hover active:text-brand-active disabled:text-disabled border-0',
       },
-      // size = только геометрия (высота, padding)
+      // size = geometry only (height, padding)
       size: {
         default: 'h-12 px-4 py-3',
         text: 'h-auto p-0',

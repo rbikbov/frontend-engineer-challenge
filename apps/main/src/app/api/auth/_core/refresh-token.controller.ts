@@ -34,8 +34,8 @@ export const refreshTokenController = async (request: Request) => {
       stack: (error as Error).stack,
     });
 
-    // Если рефреш отклонен самим бекендом (токен протух/невалиден), зачищаем мертвые куки.
-    // Если же это NetworkError/ServiceUnavailableError (бекенд временно лежит), куки НЕ трогаем!
+    // If the backend itself rejected the refresh (token expired/invalid), clear the dead cookies.
+    // If it is a NetworkError/ServiceUnavailableError (backend is temporarily down), do NOT touch the cookies!
     if (error instanceof ApiError) {
       await clearSessionCookies();
     }

@@ -54,7 +54,7 @@ export class GraphQLAuthApi implements AuthApi {
 
         const result = await executeRequest(options);
 
-        // Клонируем для проверки ошибок в теле GraphQL ответа
+        // Clone to check for errors in the GraphQL response body
         const clonedResult = result.clone();
         let isUnauthorized = false;
 
@@ -63,24 +63,24 @@ export class GraphQLAuthApi implements AuthApi {
           isUnauthorized =
             (body as GraphQLResponse)?.errors?.[0]?.message === 'unauthorized';
         } catch {
-          // Если это не JSON, ориентируемся на статус код
+          // If it is not JSON, rely on the status code
           isUnauthorized = result.status === 401;
         }
 
         const isRetry = (options as FetchOptionsWithRetry)?.__isRetry;
 
         if (isUnauthorized && !isRetry) {
-          // Если мы уже в процессе рефреша — ждем его
+          // If a refresh is already in progress, wait for it
           if (this.#refreshPromise) {
             await this.#refreshPromise;
           } else if (this.#options?.onRefreshSession && !this.#isLoggingOut) {
-            // Иначе — запускаем рефреш через внедренный коллбек,
-            // если только мы не находимся в процессе выхода из системы.
+            // Otherwise start a refresh via the injected callback,
+            // unless we are in the middle of signing out.
             this.#refreshPromise = this.#options.onRefreshSession();
             try {
               const isRefreshed = await this.#refreshPromise;
               if (!isRefreshed) {
-                // Если рефреш не удался — выходим (куки уже зачищены BFF-ом)
+                // If the refresh failed, bail out (the BFF has already cleared the cookies)
                 throw new Error('Session expired');
               }
             } finally {
@@ -90,7 +90,7 @@ export class GraphQLAuthApi implements AuthApi {
             throw new Error('Session expired');
           }
 
-          // Повторяем запрос только ОДИН раз
+          // Retry the request only ONCE
           return executeRequest({
             ...options,
             __isRetry: true,

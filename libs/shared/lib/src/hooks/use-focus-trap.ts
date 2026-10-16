@@ -50,7 +50,7 @@ export function useFocusTrap<T extends HTMLElement>(
     previousFocusRef.current = document.activeElement as HTMLElement;
     window.addEventListener('keydown', handleKeyDown);
 
-    // Автофокус на первом элементе
+    // Autofocus the first element
     const timer = setTimeout(() => {
       if (ref.current) {
         const focusableElements =
@@ -66,9 +66,9 @@ export function useFocusTrap<T extends HTMLElement>(
       window.removeEventListener('keydown', handleKeyDown);
       if (previousFocusRef.current) {
         const elementToFocus = previousFocusRef.current;
-        // Используем setTimeout, чтобы фокус вернулся после завершения текущего цикла событий.
-        // Это предотвращает ситуацию, когда событие (например, Enter), закрывшее модалку,
-        // срабатывает повторно на восстанавливаемом элементе (т.н. "event bleeding").
+        // Use setTimeout so focus is restored after the current event loop tick.
+        // This prevents the event that closed the modal (e.g. Enter)
+        // from firing again on the restored element (so-called "event bleeding").
         setTimeout(() => {
           elementToFocus.focus();
         }, 0);

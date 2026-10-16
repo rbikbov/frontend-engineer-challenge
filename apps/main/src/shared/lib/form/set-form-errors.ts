@@ -10,7 +10,7 @@ export function setFormErrors<T extends FieldValues>(
   fields: Record<string, string>,
 ) {
   Object.entries(fields).forEach(([field, message]) => {
-    // Адаптируем доменный ROOT_FIELD в специфичный для react-hook-form 'root'
+    // Map the domain ROOT_FIELD to react-hook-form's 'root'
     const rhfField = field === ROOT_FIELD ? 'root' : field;
     form.setError(rhfField as Path<T> | 'root', { type: 'server', message });
   });

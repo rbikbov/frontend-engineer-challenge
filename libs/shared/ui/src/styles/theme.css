@@ -2,7 +2,7 @@
 @source '../../**/*.{ts,tsx}';
 
 /* ── Design Tokens ────────────────────────────────
- * Разделяем ЗНАЧЕНИЯ (CSS-переменные) и ТОКЕНЫ (Tailwind).
+ * VALUES (CSS variables) are kept separate from TOKENS (Tailwind).
  * ──────────────────────────────────────────────── */
 
 :root {
@@ -48,7 +48,7 @@
 }
 
 @theme {
-  /* Привязываем Tailwind к CSS-переменным */
+  /* Bind Tailwind to the CSS variables */
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-active: var(--brand-active);

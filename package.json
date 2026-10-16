@@ -1,7 +1,7 @@
 {
   "name": "frontend-engineer-challenge",
   "version": "1.0.0",
-  "description": "Искренне благодарим вас за время и внимание к этому челленджу и надеемся на долгосрочную совместную командную работу",
+  "description": "Auth frontend (sign up, sign in, password recovery) built with Next.js Multi-Zones in an Nx monorepo using Feature-Sliced Design",
   "main": "index.js",
   "scripts": {
     "dev": "nx run-many -t dev",

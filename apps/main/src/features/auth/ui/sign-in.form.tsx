@@ -38,8 +38,8 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
         error={errors.email?.message}
         errorTestId="email-error"
         disabled={loading}
-        // Специально проверяем ошибку обоих полей (email внутри логики самого input),
-        // чтобы при неверных данных подсвечивать оба поля
+        // Deliberately check the errors of both fields (email is handled inside the input itself),
+        // so both fields are highlighted on invalid credentials
         hasError={!!errors.password?.message}
       />
 

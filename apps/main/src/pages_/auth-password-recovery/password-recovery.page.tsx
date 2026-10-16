@@ -11,9 +11,9 @@ import { AuthContentLayout } from '@workspace/ui/layouts/auth';
 
 import { PasswordRecoveryForm, usePasswordRecoveryForm } from '@features/auth';
 
-// [DEV ONLY] Заглушка для демонстрации флоу восстановления пароля.
-// Бэкенд не поддерживает отправку писем, поэтому токен возвращается напрямую в ответе.
-// В production этот блок заменяется реальной отправкой письма через SMTP.
+// [DEV ONLY] Stub to demonstrate the password recovery flow.
+// The backend does not send emails, so the token is returned directly in the response.
+// In production this block is replaced by sending a real email via SMTP.
 const devConfirmationBuilder = async (token: string) => {
   if (token) {
     const link = new URL(AUTH_LINKS.PASSWORD_SET, window.location.origin);

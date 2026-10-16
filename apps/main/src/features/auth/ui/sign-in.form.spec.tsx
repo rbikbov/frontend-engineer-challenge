@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { SignInSchema } from '@workspace/api';
-// Обертка для предоставления контекста формы
+// Wrapper that provides the form context
 import { SignInSchemaType } from '@workspace/api';
 
 import { SignInForm } from './sign-in.form';
@@ -33,7 +33,7 @@ describe('SignInForm Integration', () => {
     const formElement = screen.getByRole('form', { name: /sign-in-form/i });
     fireEvent.submit(formElement);
 
-    // Ожидаем появления ошибок валидации
+    // Wait for validation errors to appear
     try {
       expect(
         await screen.findAllByText(/this field is required/i),

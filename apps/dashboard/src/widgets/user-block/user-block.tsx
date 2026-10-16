@@ -21,7 +21,7 @@ export function UserBlock({ className }: { className?: string }) {
   });
 
   const { data, isLoading, error, refetch, isRefetching } = useMeQuery({
-    // Опции для запроса 'me' если нужны
+    // Options for the 'me' query, if needed
   });
 
   const getConfirmation = useGetConfirmation();

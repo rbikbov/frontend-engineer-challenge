@@ -63,7 +63,7 @@ export const WithSearchIcon: Story = {
   },
 };
 
-// Пример с паролем на кастомных иконках из папки icons/
+// Password example with custom icons from the icons/ folder
 export const PasswordToggle: Story = {
   render: (args) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks

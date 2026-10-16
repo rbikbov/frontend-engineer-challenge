@@ -37,8 +37,8 @@ function PasswordSetContent() {
 
   React.useEffect(() => {
     if (resetData) {
-      // Очищаем URL от токенов после их сохранения в стейт,
-      // чтобы токен не остался в истории браузера
+      // Strip the tokens from the URL once they are saved to state,
+      // so the token does not stay in the browser history
       router.replace(AUTH_LINKS.PASSWORD_SET);
     }
   }, [resetData, router]);

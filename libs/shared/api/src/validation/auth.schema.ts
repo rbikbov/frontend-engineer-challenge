@@ -19,7 +19,7 @@ export const ConfirmPasswordSchema = z
 // Composed schemas
 export const SignInSchema = z.object({
   email: EmailSchema,
-  password: z.string().min(1, AUTH_ERROR_MESSAGES.FIELD_REQUIRED), // Тут используем min(1), т.к. при входе нам не важно, < 8 он или нет, главное чтобы не пустой
+  password: z.string().min(1, AUTH_ERROR_MESSAGES.FIELD_REQUIRED), // min(1) here: on sign-in the length does not matter, it only must not be empty
 });
 
 export type SignInSchemaType = z.infer<typeof SignInSchema>;

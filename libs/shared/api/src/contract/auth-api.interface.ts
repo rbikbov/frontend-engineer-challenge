@@ -6,13 +6,13 @@ import type {
 } from './auth.dto';
 
 /**
- * Интерфейс авторизации.
- * Любая реализация (GraphQL, gRPC, REST) обязана приводить свои специфичные ошибки
- * к единым доменным классам ошибок:
- * - `ApiError` - бизнес-ошибки и ошибки валидации (например, неверный пароль). Содержит маппинг полей.
- * - `RateLimitError` - превышение лимита попыток (429).
- * - `NetworkError` - ошибки на стороне клиента (нет интернета).
- * - `ServiceUnavailableError` - ошибки инфраструктуры (сервер недоступен, 502/503).
+ * Auth interface.
+ * Every implementation (GraphQL, gRPC, REST) must map its own specific errors
+ * to the shared domain error classes:
+ * - `ApiError` - business and validation errors (e.g. wrong password). Contains a field mapping.
+ * - `RateLimitError` - attempt limit exceeded (429).
+ * - `NetworkError` - client-side errors (no internet connection).
+ * - `ServiceUnavailableError` - infrastructure errors (server unavailable, 502/503).
  */
 export interface AuthApi {
   /** @throws {ApiError | RateLimitError | NetworkError | ServiceUnavailableError} */
@@ -37,7 +37,7 @@ export interface AuthApi {
   me(): Promise<User>;
 
   /**
-   * Устанавливает состояние процесса выхода из системы.
+   * Sets the sign-out-in-progress state.
    */
   setLoggingOut(isLoggingOut: boolean): void;
 }

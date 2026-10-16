@@ -4,7 +4,7 @@ test.describe('Authentication Flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/sign-in');
     await page.waitForLoadState('networkidle');
-    // Даем время на гидратацию, особенно важно для WebKit
+    // Give hydration time to finish, especially important for WebKit
     await expect(
       page.getByRole('form', { name: 'sign-in-form' }),
     ).toBeVisible();
@@ -50,7 +50,7 @@ test.describe('Registration Flow', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/auth/sign-up');
     await page.waitForLoadState('networkidle');
-    // Даем время на гидратацию
+    // Give hydration time to finish
     await expect(
       page.getByRole('form', { name: 'sign-up-form' }),
     ).toBeVisible();

@@ -1,8 +1,8 @@
 /*
- * apps/main — глобальные стили приложения.
+ * apps/main: global app styles.
  *
- * Импортируем общую тему из @workspace/ui.
- * Ниже можно переопределить любые токены через свой @theme:
+ * Imports the shared theme from @workspace/ui.
+ * Any token can be overridden below with a local @theme:
  *
  *   @theme {
  *     --color-primary: #8b5cf6;
