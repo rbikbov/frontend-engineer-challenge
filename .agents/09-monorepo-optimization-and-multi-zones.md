@@ -1,43 +1,43 @@
-# Шаг 09: Оптимизация монорепозитория и настройка Multi-zones
+# Step 09: Optimizing the monorepo and setting up Multi-zones
 
-На этом этапе мы провели глубокую оптимизацию структуры воркспейса и обеспечили бесшовную работу нескольких приложений в рамках единой дизайн-системы.
+In this stage we deeply optimized the workspace structure and made several apps work seamlessly within a single design system.
 
-## Что было сделано
+## What was done
 
-### 1. Настройка Next.js Multi-zones
+### 1. Setting up Next.js Multi-zones
 
-Для обеспечения независимого развития приложений `main` (авторизация) и `dashboard` (панель управления), была внедрена стратегия **Next.js Multi-zones**:
+To let the `main` (auth) and `dashboard` (control panel) apps evolve independently, we introduced the **Next.js Multi-zones** strategy:
 
-- В `apps/main/next.config.js` добавлены правила `rewrites`, которые проксируют запросы по пути `/dashboard` на отдельный инстанс приложения.
-- Это позволяет пользователю перемещаться между приложениями без перезагрузки всей страницы, сохраняя при этом изоляцию бандлов.
+- Added `rewrites` rules to `apps/main/next.config.js` that proxy requests on the `/dashboard` path to a separate app instance.
+- This lets the user move between the apps without reloading the whole page while keeping the bundles isolated.
 
-### 2. Оптимизация структуры `libs/`
+### 2. Optimizing the `libs/` structure
 
-Для упрощения путей импорта и улучшения архитектурной чистоты мы провели «частичное выпрямление» структуры библиотек:
+To simplify import paths and improve architectural cleanliness, we partially "flattened" the library structure:
 
-- Глобальные конфигурации (`eslint-config`, `typescript-config`) перенесены из `libs/shared/` непосредственно в корень `libs/`.
-- Библиотека UI осталась в `libs/shared/ui` для логического разделения визуальных компонентов.
-- Это изменение уменьшило вложенность импортов и сделало структуру воркспейса более плоской и понятной.
+- Moved the global configurations (`eslint-config`, `typescript-config`) from `libs/shared/` directly to the root of `libs/`.
+- The UI library stayed in `libs/shared/ui` to keep the visual components logically separate.
+- This reduced import nesting and made the workspace structure flatter and easier to understand.
 
-### 3. Резолвинг стилей Tailwind CSS v4
+### 3. Resolving Tailwind CSS v4 styles
 
-Мы решили проблему отсутствия стилей при импорте компонентов из библиотек в приложения:
+We fixed missing styles when components were imported from libraries into the apps:
 
-- В `libs/shared/ui/src/styles/theme.css` добавлена директива `@source "../../**/*.{ts,tsx}";`, которая заставляет Tailwind сканировать исходный код библиотеки из контекста приложения.
-- Использована нативная поддержка Tailwind CSS v4 в связке с `transpilePackages` в Next.js и оптимизацией `exports` в `package.json`. Это позволило использовать чистые алиасы `@workspace/ui/theme.css` вместо длинных относительных путей в CSS.
+- Added the `@source "../../**/*.{ts,tsx}";` directive to `libs/shared/ui/src/styles/theme.css`, which makes Tailwind scan the library source code from the app's context.
+- Used the native Tailwind CSS v4 support together with `transpilePackages` in Next.js and optimized `exports` in `package.json`. This allowed clean aliases such as `@workspace/ui/theme.css` instead of long relative paths in CSS.
 
-### 4. Дизайн главной страницы
+### 4. Home page design
 
-Обновлен дизайн `apps/main/src/app/page.tsx`. Теперь это современный Hero-блок с использованием:
+Updated the design of `apps/main/src/app/page.tsx`. It is now a modern hero section with:
 
-- Эффектов Glassmorphism (backdrop-blur).
-- Семантических токенов бренда.
-- Модульной структуры, готовой к наполнению контентом.
+- Glassmorphism effects (backdrop-blur).
+- Semantic brand tokens.
+- A modular structure ready to be filled with content.
 
-## Результат
+## Result
 
-Монорепозиторий стал более стабильным и масштабируемым. Архитектурные границы соблюдены, а процесс сборки стилей оптимизирован для работы в распределенной среде.
+The monorepo is now more stable and scalable. The architectural boundaries are respected, and the style build is optimized for a distributed setup.
 
 ---
 
-**Следующий шаг:** Реализация Auth flow (Login/Register) с интеграцией реального Backend API.
+**Next step:** implement the auth flow (Login/Register) against the real backend API.

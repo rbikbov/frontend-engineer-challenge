@@ -1,54 +1,54 @@
 # 12: Observability & Logging Strategy
 
-Для обеспечения прозрачности работы приложения и упрощения отладки в продакшене была внедрена централизованная система логирования.
+A centralized logging system was introduced to make the app's behavior transparent and to simplify debugging in production.
 
-## 1. Архитектура логгера
+## 1. Logger architecture
 
-Логгер реализован в `apps/main/src/shared/lib/logger` и следует принципам **Dependency Inversion**:
+The logger lives in `apps/main/src/shared/lib/logger` and follows the **Dependency Inversion** principle:
 
-- **`contract.ts`**: Описывает интерфейс `Logger`. Весь код приложения зависит только от этого интерфейса.
-- **`console.logger.ts`**: Конкретная реализация для вывода в консоль.
-- **`logger.factory.ts`**: Фабрика, которая создает нужный логгер в зависимости от окружения и типа.
+- **`contract.ts`**: defines the `Logger` interface. All app code depends only on this interface.
+- **`console.logger.ts`**: a concrete implementation that writes to the console.
+- **`logger.factory.ts`**: a factory that creates the right logger depending on the environment and type.
 
-## 2. Уровни внедрения
+## 2. Where logging is applied
 
-Мы внедрили логирование на трех критических уровнях:
+We added logging at three critical levels:
 
-### А. BFF (Server Side)
+### A. BFF (Server Side)
 
-В API роутах Next.js логируются:
+The Next.js API routes log:
 
-- Все попытки входа, обновления токенов и логаута.
-- Ошибки взаимодействия с основным GraphQL бэкендом (с дампом стека ошибок).
-- _Файлы_: `apps/main/src/app/api/auth/*/route.ts`.
+- All sign-in, token refresh and logout attempts.
+- Errors when talking to the main GraphQL backend (with an error stack dump).
+- _Files_: `apps/main/src/app/api/auth/*/route.ts`.
 
-### Б. Model Layer (Client Side Hooks)
+### B. Model Layer (Client Side Hooks)
 
-В React-хуках, управляющих формами, логируются:
+The React hooks that manage the forms log:
 
-- Начало процесса сабмита.
-- Успешная авторизация (важно для аналитики).
-- Ошибки (API Error, Network Error).
-- _Файлы_: `apps/main/src/features/auth/model/use-sign-in-form.ts`.
+- The start of a submit.
+- Successful sign-ins (important for analytics).
+- Errors (API Error, Network Error).
+- _Files_: `apps/main/src/features/auth/model/use-sign-in-form.ts`.
 
-### В. GraphQL Client
+### C. GraphQL Client
 
-Логируются ошибки сети и проблемы с Silent Refresh.
+Network errors and Silent Refresh problems are logged.
 
-## 3. Масштабируемость
+## 3. Scalability
 
-Благодаря использованию паттерна «Фабрика», мы можем легко добавить новые типы логгеров:
+Thanks to the Factory pattern, new logger types can be added easily:
 
-- **SentryLogger**: Для автоматической отправки ошибок в Sentry.
-- **AnalyticsLogger**: Для отправки бизнес-событий в системы типа Google Analytics или Amplitude.
+- **SentryLogger**: sends errors to Sentry automatically.
+- **AnalyticsLogger**: sends business events to systems such as Google Analytics or Amplitude.
 
-## 4. Что наблюдаем в Next.js
+## 4. What we observe in Next.js
 
-1. **Client Errors**: Необработанные исключения в браузере (через `ErrorBoundary` в `app/error.tsx`).
-2. **User Flow**: Воронка авторизации (сколько начали вход, сколько успешно завершили).
+1. **Client Errors**: unhandled exceptions in the browser (via the `ErrorBoundary` in `app/error.tsx`).
+2. **User Flow**: the sign-in funnel (how many users started signing in and how many finished successfully).
 
 ---
 
-## Результат
+## Result
 
-Внедрение логгера заложило фундамент для получения полной картины происходящего «под капотом» системы как на стороне сервера, так и в браузере пользователя, что критически важно для промышленной эксплуатации.
+The logger lays the foundation for a full picture of what happens "under the hood", both on the server and in the user's browser, which is critical for production use.

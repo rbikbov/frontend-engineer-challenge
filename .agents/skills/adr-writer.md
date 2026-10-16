@@ -6,59 +6,59 @@ source: 'https://github.com/kfreiman/engineer-challenge/blob/master/.agents/skil
 
 # ADR Writer
 
-Document architecture decisions with clear context, alternatives, and consequences. Use russian spoken language.
+Document architecture decisions with clear context, alternatives, and consequences. Write in English.
 
 ## ADR Template
 
 ```markdown
-# ADR-[Номер]: [Краткое название решения]
+# ADR-[Number]: [Short decision title]
 
-**Статус:** [Proposed | Accepted | Deprecated | Superseded by ADR-XXX]  
-**Дата:** [ГГГГ-ММ-ДД]  
-**Автор:** [Имя/Ник]
+**Status:** [Proposed | Accepted | Deprecated | Superseded by ADR-XXX]  
+**Date:** [YYYY-MM-DD]  
+**Author:** [Name/Handle]
 
-## 1. Контекст
+## 1. Context
 
-Какую проблему мы решаем? Какие факторы на это влияют (бизнес-цели, технические долги, бюджет)?
-**Ограничения:**
+What problem are we solving? What factors affect it (business goals, tech debt, budget)?
+**Constraints:**
 
-- [Ограничение 1]
-- [Ограничение 2]
+- [Constraint 1]
+- [Constraint 2]
 
-## 2. Принятое решение
+## 2. Decision
 
-Краткая формулировка решения. Основной тезис.
+A short statement of the decision. The main thesis.
 
-## 3. Технические детали и механизмы
+## 3. Technical details and mechanisms
 
-_Свободная секция. Опишите особенности реализации, структуру данных, детали протокола или ключевые функции фреймворка._
+_Free-form section. Describe implementation specifics, data structures, protocol details or key framework features._
 
-- [Здесь могут быть списки, описания API, схемы данных]
-- [Визуализация Mermaid (желательно для сложных взаимодействий)]
+- [Lists, API descriptions, data schemas]
+- [Mermaid visualization (recommended for complex interactions)]
 
-## 4. Рассмотренные альтернативы
+## 4. Alternatives considered
 
-### 4.1. [Вариант 1]
+### 4.1. [Option 1]
 
-- **Плюсы:** ...
-- **Минусы:** ...
-- **Решение:** [Отклонено/Рассмотрено] (краткая причина).
+- **Pros:** ...
+- **Cons:** ...
+- **Decision:** [Rejected/Considered] (short reason).
 
-## 5. Последствия и риски
+## 5. Consequences and risks
 
-### Положительные (Pros)
+### Positive (Pros)
 
-- Как это поможет системе/команде?
+- How does this help the system/team?
 
-### Отрицательные / Риски (Cons/Risks)
+### Negative / Risks (Cons/Risks)
 
-- Какие минусы мы принимаем? Какие есть угрозы?
-- **Митигация:** Как мы будем бороться с рисками?
+- Which downsides do we accept? What are the threats?
+- **Mitigation:** How will we deal with the risks?
 
-## 6. История ревизий (Revision History)
+## 6. Revision History
 
-- **[Дата]**: [Описание правки] ([Автор])
-- **[Дата]**: [Например: Статус изменен на Accepted] ([Автор])
+- **[Date]**: [Description of the change] ([Author])
+- **[Date]**: [E.g.: Status changed to Accepted] ([Author])
 ```
 
 ## ADR Numbering

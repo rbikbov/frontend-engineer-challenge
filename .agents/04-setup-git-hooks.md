@@ -1,34 +1,34 @@
-# Этап 4: Настройка Git-хуков (Husky, commitlint, lint-staged)
+# Stage 4: Setting up Git hooks (Husky, commitlint, lint-staged)
 
-На этом этапе были внедрены инструменты для автоматизации качества кода и проверки сообщений коммитов.
+This stage introduced tools for automating code quality and validating commit messages.
 
-## Выполненные действия:
+## Actions taken:
 
-1.  **Установка зависимостей**:
-    - `husky`: инструмент для управления Git-хуками.
-    - `@commitlint/cli` & `@commitlint/config-conventional`: для валидации сообщений коммитов по стандарту Conventional Commits.
-    - `lint-staged`: для запуска скриптов (включая линтинг и форматирование) только для файлов, находящихся в индексе (staged).
-    - `prettier`: для автоматического форматирования кода.
+1.  **Installing dependencies**:
+    - `husky`: a tool for managing Git hooks.
+    - `@commitlint/cli` & `@commitlint/config-conventional`: validate commit messages against the Conventional Commits standard.
+    - `lint-staged`: runs scripts (including linting and formatting) only on staged files.
+    - `prettier`: automatic code formatting.
 
-2.  **Настройка Husky**:
-    - Хуки инициализированы через `npx husky init`.
-    - Добавлен скрипт `prepare: husky` в `package.json` для автоматической активации хуков после установки зависимостей.
+2.  **Husky setup**:
+    - Initialized the hooks with `npx husky init`.
+    - Added a `prepare: husky` script to `package.json` so the hooks are activated automatically after installing dependencies.
 
-3.  **Настройка Валидации Коммитов**:
-    - Создан файл `commitlint.config.js` с использованием стандартного пресета.
-    - Добавлен хук `commit-msg`, который запускает `commitlint` для проверки текста сообщения.
+3.  **Commit validation setup**:
+    - Created `commitlint.config.js` with the standard preset.
+    - Added a `commit-msg` hook that runs `commitlint` on the message text.
 
-4.  **Настройка Авто-проверки Кода (Lint-Staged)**:
-    - В корневой `package.json` добавлена конфигурация `lint-staged`.
-    - Для `.ts`, `.tsx`, `.js`, `.jsx` файлов настроен автоматический запуск `eslint --fix` и `prettier --write`.
-    - Для `.json`, `.css`, `.md`, `.html` настроен запуск `prettier --write`.
-    - Добавлен хук `pre-commit`, запускающий `lint-staged`.
+4.  **Automatic code checks (Lint-Staged)**:
+    - Added a `lint-staged` configuration to the root `package.json`.
+    - `.ts`, `.tsx`, `.js` and `.jsx` files run `eslint --fix` and `prettier --write` automatically.
+    - `.json`, `.css`, `.md` and `.html` files run `prettier --write`.
+    - Added a `pre-commit` hook that runs `lint-staged`.
 
-5.  **Верификация**:
-    - Проверено, что коммиты с некорректными сообщениями (например, `bad message`) отклоняются.
-    - Проверено, что корректные коммиты (например, `chore: test hooks`) проходят успешно, предварительно выполняя форматирование файлов.
+5.  **Verification**:
+    - Checked that commits with invalid messages (e.g. `bad message`) are rejected.
+    - Checked that valid commits (e.g. `chore: test hooks`) go through after formatting the files.
 
-## Принятые решения:
+## Decisions made:
 
-- **Централизация в корне**: Все инструменты контроля качества настроены в корне монорепозитория для обеспечения единого стандарта во всех приложениях и библиотеках.
-- **Использование Prettier**: Добавлен как обязательный шаг форматирования во всех проектах.
+- **Centralized at the root**: all quality tools are configured at the monorepo root to enforce a single standard across all apps and libraries.
+- **Using Prettier**: added as a mandatory formatting step in all projects.

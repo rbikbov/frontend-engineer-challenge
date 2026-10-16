@@ -1,32 +1,32 @@
-# Этап 1: Инициализация монорепозитория
+# Stage 1: Initializing the monorepo
 
-На этом этапе был настроен базовый каркас проекта для обеспечения масштабируемости и удобства разработки.
+This stage set up the basic project skeleton for scalability and a convenient development workflow.
 
-## Выполненные действия:
+## Actions taken:
 
-1.  **Настройка pnpm воркспейса**:
-    - Создан файл `pnpm-workspace.yaml`.
-    - Определены директории для приложений (`apps/`) и библиотек (`libs/`).
+1.  **pnpm workspace setup**:
+    - Created `pnpm-workspace.yaml`.
+    - Defined directories for apps (`apps/`) and libraries (`libs/`).
 
-2.  **Интеграция Nx**:
-    - Выполнена инициализация Nx с использованием `npx nx@latest init`.
-    - Настроен конфигурационный файл `nx.json` для управления задачами и кешированием.
+2.  **Nx integration**:
+    - Initialized Nx with `npx nx@latest init`.
+    - Configured `nx.json` for task management and caching.
 
-3.  **Структура папок**:
-    - Созданы директории `apps/` и `libs/`.
-    - Добавлены файлы `.gitkeep` для отслеживания пустых папок в Git.
+3.  **Folder structure**:
+    - Created the `apps/` and `libs/` directories.
+    - Added `.gitkeep` files so Git tracks the empty folders.
 
-4.  **Управление зависимостями**:
-    - Удален `package-lock.json` и выполнена установка через `pnpm install` для генерации `pnpm-lock.yaml`.
+4.  **Dependency management**:
+    - Removed `package-lock.json` and ran `pnpm install` to generate `pnpm-lock.yaml`.
 
-5.  **Конфигурация Git**:
-    - Создан файл `.gitignore` с правилами для Node.js, pnpm и Nx.
+5.  **Git configuration**:
+    - Created `.gitignore` with rules for Node.js, pnpm and Nx.
 
-6.  **Документация**:
-    - Обновлен корневой `README.md` с описанием структуры монорепозитория и базовыми командами.
+6.  **Documentation**:
+    - Updated the root `README.md` with a description of the monorepo structure and basic commands.
 
-## Принятые решения:
+## Decisions made:
 
-- **pnpm**: Выбран в качестве менеджера пакетов из-за его скорости и дисковой эффективности.
-- **Nx**: Использован как оркестратор задач для обеспечения кеширования и управления зависимостями между проектами в монорепозитории.
-- **Структура apps/libs**: Стандартный подход Nx, позволяющий четко разделять исполняемый код и переиспользуемую логику/компоненты.
+- **pnpm**: chosen as the package manager for its speed and disk efficiency.
+- **Nx**: used as the task orchestrator for caching and managing dependencies between projects in the monorepo.
+- **apps/libs structure**: the standard Nx approach, which clearly separates runnable code from reusable logic and components.

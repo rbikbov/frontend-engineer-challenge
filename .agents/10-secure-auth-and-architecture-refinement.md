@@ -1,31 +1,31 @@
 # 10: Secure Auth & Architecture Refinement
 
-В этой фазе мы сосредоточились на превращении проекта из «просто работающего» в «безопасный и масштабируемый».
+In this phase we focused on turning the project from "just working" into "secure and scalable".
 
-## Ключевые изменения
+## Key changes
 
-### 1. Безопасность (BFF Pattern)
+### 1. Security (BFF Pattern)
 
-- Реализована безопасная схема хранения токенов в HttpOnly куках. Токены не доступны клиентскому JavaScript, что защищает их от XSS-атак.
-- Внедрен паттерн BFF (Backend-for-Frontend) через Next.js API Routes. BFF используется как прокси **только для критических операций** (Login, Refresh, Logout). Остальные запросы идут напрямую на бэкенд, который теперь поддерживает работу с куками.
-  - _Trade-off_: BFF значительно разгружен, но требуется размещение фронтенда и бэкенда на одном домене (или поддоменах) для корректной работы `SameSite: Strict` кук.
-- Внедрен проброс IP клиента (`X-Forwarded-For`) через BFF для сохранения работоспособности Rate Limiting на бэкенде.
+- Tokens are stored securely in HttpOnly cookies. They are not accessible to client-side JavaScript, which protects them from XSS attacks.
+- Introduced the BFF (Backend-for-Frontend) pattern via Next.js API Routes. The BFF is used as a proxy **only for critical operations** (Login, Refresh, Logout). All other requests go directly to the backend, which now supports cookies.
+  - _Trade-off_: the BFF carries much less load, but the frontend and backend have to live on the same domain (or subdomains) for `SameSite: Strict` cookies to work.
+- The client IP is forwarded through the BFF (`X-Forwarded-For`) so rate limiting on the backend keeps working.
 
-### 2. Улучшение безопасности и стабильности
+### 2. Security and stability improvements
 
-- Реализован механизм автоматического обновления токенов (Silent Refresh) в `GraphQLAuthApi`.
-- Клиент умеет блокировать параллельные запросы во время обновления (Refresh Promise Locking) для предотвращения гонки состояний и лишних вызовов API.
+- Implemented automatic token refresh (Silent Refresh) in `GraphQLAuthApi`.
+- The client blocks concurrent requests during a refresh (Refresh Promise Locking) to prevent race conditions and redundant API calls.
 
-### 3. Инверсия зависимостей (DI)
+### 3. Dependency Inversion (DI)
 
-- Внедрена инверсия зависимостей для UI-компонентов.
-- Компонент `UserCard` (Entity) полностью изолирован от API: кнопки управления (Logout, Refetch) передаются в него как рендер-пропсы через объект `actions` на уровне виджетов.
+- Introduced dependency inversion for UI components.
+- The `UserCard` component (Entity) is fully isolated from the API: the control buttons (Logout, Refetch) are passed in as render props through an `actions` object at the widget level.
 
-### 4. Документирование решений (ADR)
+### 4. Documenting decisions (ADR)
 
-- Внедрена практика ведения Architecture Decision Records.
-- Созданы первые три ADR, описывающие фундаментальные выборы проекта.
+- Introduced the practice of keeping Architecture Decision Records.
+- Created the first three ADRs describing the project's fundamental choices.
 
-## Результат
+## Result
 
-Проект готов к промышленной эксплуатации. Архитектура защищена от XSS, легко масштабируется через Multi-Zones и имеет четко задокументированные границы ответственности.
+The project is ready for production use. The architecture is protected against XSS, scales easily through Multi-Zones and has clearly documented boundaries of responsibility.

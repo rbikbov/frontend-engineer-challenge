@@ -1,35 +1,35 @@
-# Формат работы с ИИ в рамках челленджа
+# How AI was used in this challenge
 
-В данном проекте используется формат **Pair Programming** с использованием ИИ-агента. Процесс выстроен таким образом, чтобы кандидат (User) выполнял роль ведущего инженера и архитектора, лично задавая детальные спецификации и критерии реализации.
+This project uses **pair programming** with an AI agent. The process is set up so that the candidate (User) acts as the lead engineer and architect, personally defining detailed specifications and implementation criteria.
 
-## Роли и ответственность
+## Roles and responsibilities
 
-### Кандидат (Lead Engineer & Architect)
+### Candidate (Lead Engineer & Architect)
 
-- **Управление архитектурой**: Личный выбор технологического стека (Nx, pnpm, Next.js 15, Tailwind v4).
-- **Детальная постановка задач**: Передача конкретных технических инструкций, включая:
-  - **Дизайн-спек**: Предоставление точного CSS-кода из Figma и SVG-ассетов.
-  - **Логика состояний**: Определение точного поведения компонентов (например: «заголовок в инпуте появляется только при фокусе», «disabled-состояние должно иметь строго определенный HEX-код»).
-  - **A11y & UX**: Требования по использованию конкретных библиотек (Radix UI) для обеспечения доступности.
-  - **Архитектурные границы**: Внедрение строгого контроля Public API и иерархии слоев, несмотря на сложности совместимости с ESLint 9 и необходимостью отката eslint-plugin-boundaries до версии 5.4.0.
-- **Ревью и корректировка**: Тотальный контроль над каждой строчкой кода через систему `Implementation Plans`. Агент не приступает к задаче без детального одобрения подхода кандидатом.
-- **Организация ассетов**: Самостоятельная группировка и перенос фавиконок, иконок и логотипов для соответствия стандартам Next.js.
+- **Owning the architecture**: personally choosing the tech stack (Nx, pnpm, Next.js 15, Tailwind v4).
+- **Detailed task definitions**: providing concrete technical instructions, including:
+  - **Design spec**: exact CSS code from Figma and SVG assets.
+  - **State logic**: the exact behavior of components (e.g. "the label in the input appears only on focus", "the disabled state must use a specific HEX code").
+  - **A11y & UX**: requirements to use specific libraries (Radix UI) for accessibility.
+  - **Architectural boundaries**: strict control of the Public API and the layer hierarchy, despite the compatibility issues with ESLint 9 and the need to roll eslint-plugin-boundaries back to version 5.4.0.
+- **Review and correction**: full control over every line of code through `Implementation Plans`. The agent does not start a task until the candidate has approved the approach in detail.
+- **Asset organization**: grouping and moving favicons, icons and logos to match Next.js conventions.
 
-### ИИ-агент (Senior Frontend Developer)
+### AI agent (Senior Frontend Developer)
 
-- **Исполнение по спецификациям**: Написание кода, строго следуя заданным кандидатом параметрам.
-- **Инфраструктурная обвязка**: Настройка окружения (Nx, ESLint, Prettier, Husky) согласно архитектурному видению кандидата.
-- **Документирование**: Ведение технического журнала в папке `.agents`, фиксация принятых решений и создание отчетов `Walkthrough` по итогам каждой задачи.
-- **Оптимизация**: Предложение лучших практик реализации (например, использование `useId` в SVG, Slots Pattern в компонентах) для удовлетворения требований кандидата.
+- **Implementing to spec**: writing code strictly according to the parameters set by the candidate.
+- **Infrastructure setup**: configuring the environment (Nx, ESLint, Prettier, Husky) according to the candidate's architectural vision.
+- **Documentation**: keeping a technical log in the `.agents` folder, recording decisions and writing a `Walkthrough` report after each task.
+- **Optimization**: suggesting best practices (e.g. `useId` in SVGs, the Slots pattern in components) to meet the candidate's requirements.
 
-## Методология разработки
+## Development methodology
 
-Процесс максимально прозрачен и контролируем:
+The process is as transparent and controlled as possible:
 
-1.  **Спецификация**: Кандидат ставит конкретную задачу, подкрепляя её кодом из Figma или дизайн-ассетами.
-2.  **Планирование**: Агент формирует `Implementation Plan`, описывающий пошаговое решение.
-3.  **Approve**: Кандидат вносит правки в план или дает добро на исполнение. Без этого шага код не меняется.
-4.  **Execute & Walkthrough**: Агент выполняет задачу и предоставляет отчет.
-5.  **Commit**: Кандидат дает финальную оценку и команду на фиксацию изменений.
+1.  **Specification**: the candidate sets a concrete task, backed by code from Figma or design assets.
+2.  **Planning**: the agent writes an `Implementation Plan` describing the step-by-step solution.
+3.  **Approve**: the candidate edits the plan or approves it. No code changes without this step.
+4.  **Execute & Walkthrough**: the agent completes the task and provides a report.
+5.  **Commit**: the candidate gives the final assessment and the go-ahead to commit the changes.
 
-Такой подход гарантирует, что ИИ является инструментом в руках инженера, а не самостоятельным автором архитектуры.
+This approach ensures that the AI is a tool in the engineer's hands, not an independent author of the architecture.

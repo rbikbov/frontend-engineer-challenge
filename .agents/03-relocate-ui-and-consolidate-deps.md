@@ -1,29 +1,29 @@
-# Этап 3: Реструктуризация библиотек и оптимизация зависимостей
+# Stage 3: Restructuring the libraries and optimizing dependencies
 
-На этом этапе библиотека UI была перенесена в более структурированную директорию, а управление зависимостями было централизовано на уровне корня монорепозитория.
+In this stage the UI library was moved into a more structured directory, and dependency management was centralized at the monorepo root.
 
-## Выполненные действия:
+## Actions taken:
 
-1.  **Релокация библиотеки**:
-    - Библиотека `ui` перенесена из `libs/ui` в `libs/shared/ui`.
-    - Папка `libs/shared` создана для группировки общих ресурсов.
+1.  **Relocating the library**:
+    - Moved the `ui` library from `libs/ui` to `libs/shared/ui`.
+    - Created the `libs/shared` folder to group shared resources.
 
-2.  **Обновление конфигураций**:
-    - `pnpm-workspace.yaml`: Настроено рекурсивное сканирование папки `libs` (`libs/**`).
-    - `tsconfig.base.json`: Обновлен маппинг пути `@workspace/ui` и добавлены project references.
-    - `apps/main/tsconfig.json`: Обновлены пути и ссылки на проект. Удален `rootDir: "src"` для корректного разрешения внешних библиотек при сборке.
-    - `libs/shared/ui/tsconfig.json`: Обновлены пути наследования (`extends`) из-за изменения вложенности.
+2.  **Updating configurations**:
+    - `pnpm-workspace.yaml`: set up recursive scanning of the `libs` folder (`libs/**`).
+    - `tsconfig.base.json`: updated the `@workspace/ui` path mapping and added project references.
+    - `apps/main/tsconfig.json`: updated paths and project references. Removed `rootDir: "src"` so external libraries resolve correctly during the build.
+    - `libs/shared/ui/tsconfig.json`: updated the `extends` paths because of the new nesting.
 
-3.  **Консолидация зависимостей**:
-    - Зависимости `next`, `react`, `react-dom` удалены из `apps/main/package.json`.
-    - Эти зависимости теперь управляются централизованно в корневом `package.json`, что соответствует стратегии **Single Version Policy**.
+3.  **Consolidating dependencies**:
+    - Removed `next`, `react` and `react-dom` from `apps/main/package.json`.
+    - These dependencies are now managed centrally in the root `package.json`, following the **Single Version Policy**.
 
-4.  **Верификация**:
-    - Выполнена установка через `pnpm install`, подтверждено создание симлинков в воркспейсе.
-    - Успешно пройдена сборка приложения `main` в строгом режиме (с проверкой типов) через `npx next build`.
+4.  **Verification**:
+    - Ran `pnpm install` and confirmed that the workspace symlinks were created.
+    - Built the `main` app in strict mode (with type checking) via `npx next build`.
 
-## Принятые решения:
+## Decisions made:
 
-- **Разделениеlibs/shared**: Решено использовать подпапку `shared` для будущей масштабируемости (возможность добавить `libs/features`, `libs/api` и т.д.).
-- **Удаление rootDir в приложении**: Это стандартный маневр для Next.js в монорепозиториях Nx, позволяющий TypeScript «видеть» исходный код библиотек, находящихся за пределами основного приложения.
-- **Единая версия Next/React**: Упрощает поддержку и подготовку к интеграции Multi-Zones.
+- **The libs/shared split**: a `shared` subfolder was chosen for future scalability (room to add `libs/features`, `libs/api`, etc.).
+- **Removing rootDir in the app**: a standard move for Next.js in Nx monorepos that lets TypeScript "see" the source code of libraries outside the main app.
+- **A single Next/React version**: simplifies maintenance and prepares for the Multi-Zones integration.

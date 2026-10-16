@@ -1,31 +1,31 @@
-# 🧠 Журнал разработки (Agent Logs)
+# 🧠 Development log (Agent Logs)
 
-Добро пожаловать в историю создания Orbitto Service. Здесь зафиксированы все ключевые этапы: от настройки первой конфигурации до внедрения сложных систем безопасности.
+Welcome to the story of how Orbitto Service was built. This folder records every key stage, from setting up the first configuration to implementing complex security systems.
 
-## Хронология
+## Timeline
 
-| Этап   | Тема                                                              | Описание                                                 |
-| :----- | :---------------------------------------------------------------- | :------------------------------------------------------- |
-| **00** | [AI Collaboration](00-ai-collaboration.md)                        | Принципы работы с ИИ-агентом в этом проекте.             |
-| **01** | [Setup Monorepo](01-setup-monorepo.md)                            | Инициализация Nx и базовой структуры.                    |
-| **02** | [Main App & UI Lib](02-add-main-app-and-ui-lib.md)                | Добавление первого приложения и библиотеки компонентов.  |
-| **03** | [Consolidate Deps](03-relocate-ui-and-consolidate-deps.md)        | Оптимизация зависимостей и путей импорта.                |
-| **04** | [Git Hooks](04-setup-git-hooks.md)                                | Настройка Husky и автоматизации качества кода.           |
-| **05** | [Modularize Configs](05-modularize-configs.md)                    | Вынос конфигураций (TS, ESLint) в отдельные пакеты.      |
-| **06** | [Storybook](06-setup-storybook.md)                                | Визуальная песочница для разработки компонентов.         |
-| **07** | [Modernize UI](07-modernize-ui-components.md)                     | Переход на Tailwind v4 и обновление визуала.             |
-| **08** | [FSD Architecture](08-fsd-architecture-enforcement.md)            | Внедрение методологии Feature-Slicing.                   |
-| **09** | [Multi-Zones](09-monorepo-optimization-and-multi-zones.md)        | Масштабирование через объединение Next.js приложений.    |
-| **10** | [Secure Auth](10-secure-auth-and-architecture-refinement.md)      | Внедрение BFF, HttpOnly кук и инверсии зависимостей.     |
-| **11** | [Testing Strategy](11-testing-strategy-and-quality-assurance.md)  | Пирамида тестов: Vitest, JSDOM, Playwright.              |
-| **12** | [Observability](12-observability-and-logging.md)                  | Паттерны логирования и перехват ошибок.                  |
-| **13** | [Final Refactoring](13-final-refactoring.md)                      | Финальный рефакторинг.                                   |
-| **14** | [Readme Recovery](14-readme-recovery-after-rebase-and-rewrite.md) | Восстановление README после rebase и рефакторинг README. |
-| **15** | [E2E Stabilization](15-e2e-stabilization.md)                      | Стабилизация E2E тестов.                                 |
-| **16** | [Code Review Fixes](16-code-review-fixes.md)                      | Исправление ошибок код ревью.                            |
+| Stage  | Topic                                                             | Description                                                     |
+| :----- | :---------------------------------------------------------------- | :-------------------------------------------------------------- |
+| **00** | [AI Collaboration](00-ai-collaboration.md)                        | Principles of working with the AI agent in this project.        |
+| **01** | [Setup Monorepo](01-setup-monorepo.md)                            | Initializing Nx and the base structure.                         |
+| **02** | [Main App & UI Lib](02-add-main-app-and-ui-lib.md)                | Adding the first app and the component library.                 |
+| **03** | [Consolidate Deps](03-relocate-ui-and-consolidate-deps.md)        | Optimizing dependencies and import paths.                       |
+| **04** | [Git Hooks](04-setup-git-hooks.md)                                | Setting up Husky and code quality automation.                   |
+| **05** | [Modularize Configs](05-modularize-configs.md)                    | Moving configs (TS, ESLint) into separate packages.             |
+| **06** | [Storybook](06-setup-storybook.md)                                | A visual sandbox for component development.                     |
+| **07** | [Modernize UI](07-modernize-ui-components.md)                     | Moving to Tailwind v4 and refreshing the visuals.               |
+| **08** | [FSD Architecture](08-fsd-architecture-enforcement.md)            | Introducing Feature-Sliced Design.                              |
+| **09** | [Multi-Zones](09-monorepo-optimization-and-multi-zones.md)        | Scaling by combining Next.js apps.                              |
+| **10** | [Secure Auth](10-secure-auth-and-architecture-refinement.md)      | Introducing the BFF, HttpOnly cookies and dependency inversion. |
+| **11** | [Testing Strategy](11-testing-strategy-and-quality-assurance.md)  | The test pyramid: Vitest, JSDOM, Playwright.                    |
+| **12** | [Observability](12-observability-and-logging.md)                  | Logging patterns and error interception.                        |
+| **13** | [Final Refactoring](13-final-refactoring.md)                      | Final refactoring.                                              |
+| **14** | [Readme Recovery](14-readme-recovery-after-rebase-and-rewrite.md) | Recovering the README after a rebase, and refactoring it.       |
+| **15** | [E2E Stabilization](15-e2e-stabilization.md)                      | Stabilizing the E2E tests.                                      |
+| **16** | [Code Review Fixes](16-code-review-fixes.md)                      | Fixing code review findings.                                    |
 
 ---
 
-## Зачем это нужно?
+## Why does this matter?
 
-Мы верим в прозрачность процесса. Эти логи позволяют увидеть не только финальный результат, но и **процесс принятия решений**, исправление ошибок и архитектурные маневры, которые обычно остаются «за кадром» коммитов.
+We believe in a transparent process. These logs show not only the final result but also the **decision-making process**, the mistakes that were fixed and the architectural maneuvers that usually stay hidden behind the commits.

@@ -1,30 +1,30 @@
 # 17: Unified Error Handling & Final UI Architecture
 
-Этот этап был посвящен формализации обработки ошибок, упрощению бизнес-процессов и финальной полировке архитектуры монорепозитория.
+This stage formalized error handling, simplified the business flows and gave the monorepo architecture its final polish.
 
-## 🛠 Ключевые изменения
+## 🛠 Key changes
 
-### 1. Унифицированная обработка ошибок (ADR-004)
+### 1. Unified error handling (ADR-004)
 
-- **Semantic Mapping**: Реализован формальный маппинг GraphQL-ошибок в семантически корректные ответы (400 Bad Request, 429 Too Many Requests). Это позволило фронтенду единообразно реагировать на проблемы валидации и лимитов.
-- **Retry-After Support**: Внедрен класс `RateLimitError`. Система теперь умеет извлекать заголовок `Retry-After` и транслировать его пользователю, обеспечивая прозрачность при блокировках.
-- **ADR Formalization**: Создан документ `docs/adr/004-unified-error-handling-and-bff-translation.md`, фиксирующий стратегию обработки ошибок для будущих модулей.
+- **Semantic Mapping**: GraphQL errors are formally mapped to semantically correct responses (400 Bad Request, 429 Too Many Requests). This lets the frontend react to validation and rate-limit problems in a uniform way.
+- **Retry-After Support**: added the `RateLimitError` class. The system can now extract the `Retry-After` header and pass it on to the user, so blocks are transparent.
+- **ADR Formalization**: created `docs/adr/004-unified-error-handling-and-bff-translation.md`, which establishes the error handling strategy for future modules.
 
-### 2. Рефакторинг Password Reset Flow
+### 2. Password Reset Flow refactoring
 
-- **Упрощение контракта**: Из процесса смены пароля удален параметр `email`. Идентификация пользователя теперь происходит строго по защищенному `token`, что упростило как UI, так и API-контракт.
+- **Simpler contract**: the `email` parameter was removed from the password change flow. The user is now identified strictly by the secure `token`, which simplified both the UI and the API contract.
 
-### 3. Архитектура UI-библиотеки (Deep Imports)
+### 3. UI library architecture (Deep Imports)
 
-- **Barrel Files Removal**: Из корня `@workspace/ui` удалены все реэкспорты. Это стратегическое решение для обеспечения более явных импортов, чистоты Tree-shaking и предотвращения циклических зависимостей в монорепозитории.
-- **Strict Deep Imports**: Весь проект переведен на импорты из конкретных подпапок (например, `@workspace/ui/components`).
-- **Build Stabilization**: Восстановлен пустой `index.ts` как необходимая точка входа для Vite, что сохранило работоспособность сборки при соблюдении новых правил.
+- **Barrel Files Removal**: all re-exports were removed from the root of `@workspace/ui`. This is a strategic decision for more explicit imports, cleaner tree-shaking and preventing circular dependencies in the monorepo.
+- **Strict Deep Imports**: the whole project now imports from specific subfolders (e.g. `@workspace/ui/components`).
+- **Build Stabilization**: restored an empty `index.ts` as the entry point Vite requires, which keeps the build working under the new rules.
 
-### 4. Финальное QA и Стабилизация
+### 4. Final QA and stabilization
 
-- **Security Integration Tests**: Создан `password-set.page.spec.tsx`. Тесты верифицируют:
-  - Безопасное извлечение токена и его очистку.
-  - Переключение экранов Success/Error.
-  - Отсутствие утечек DOM-узлов (размонтирование формы).
-- **Type Safety**: Весь новый тестовый код написан со строгой типизацией (без `any`), используя `vi.mocked()` и `Partial` для моков.
-- **Verified Logout Strategy**: Реализована стратегия гарантированного выхода для систем с Http-only куками. Метод `setLoggingOut` блокирует интерцептор рефреша в `onMutate` (защита от race condition), а перезагрузка страницы (`window.location.reload()`) происходит только в `onSuccess`. Это гарантирует, что сессия считается завершенной только после подтверждения от сервера, при этом очистка локального состояния происходит естественным образом при перезагрузке страницы.
+- **Security Integration Tests**: created `password-set.page.spec.tsx`. The tests verify:
+  - Safe extraction of the token and its cleanup.
+  - Switching between the Success/Error screens.
+  - No leftover DOM nodes (the form is unmounted).
+- **Type Safety**: all new test code is strictly typed (no `any`), using `vi.mocked()` and `Partial` for mocks.
+- **Verified Logout Strategy**: a guaranteed sign-out strategy for systems with HttpOnly cookies. The `setLoggingOut` method blocks the refresh interceptor in `onMutate` (protection against race conditions), and the page reload (`window.location.reload()`) happens only in `onSuccess`. This ensures the session is considered finished only after the server confirms it, while local state is cleared naturally by the page reload.

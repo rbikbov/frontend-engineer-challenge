@@ -1,23 +1,23 @@
-# 14: Восстановление после rebase и рефакторинг README
+# 14: Recovery after a rebase and README refactoring
 
-В ходе ребейза для восстановления оригинальных коммитов с содержанием челленджа (которые были перетерты из-за требований деплоя vercel о запрете нескольких коллабораторов) были потеряны некоторые разделы README файла. Они были полностью восстановлены, структура README приведена в соответствие с требованиями челленджа, а техническое описание углублено.
+Some README sections were lost during a rebase that restored the original commits with the challenge content (they had been overwritten because Vercel deployment does not allow multiple collaborators). The sections were fully restored, the README structure was aligned with the challenge requirements, and the technical description was expanded.
 
-## 🛠 Ключевые изменения:
+## 🛠 Key changes:
 
-### 1. Реструктуризация README
+### 1. README restructuring
 
-- **Синхронизация с шаблоном**: Основной README теперь строго следует структуре `README_challenge.md`.
-- **Консолидация**: Технические подробности из `README_full.md` перенесены в основной файл, а сам `README_full.md` удален для устранения дублирования.
-- **Roadmap**: Планы по развитию отсортированы по критичности (Безопасность > Backend Contract > CI/CD > Observability). Добавлены конкретные задачи по исправлению SMTP и Rate Limiting.
-- **BFF & Security**: Уточнена логика селективного проксирования (только Auth-запросы) и объяснены правки в бэкенд для работы с куками напрямую.
+- **Synced with the template**: the main README now strictly follows the structure of `README_challenge.md`.
+- **Consolidation**: technical details from `README_full.md` were moved into the main file, and `README_full.md` was deleted to remove duplication.
+- **Roadmap**: development plans are sorted by criticality (Security > Backend Contract > CI/CD > Observability). Added concrete tasks for fixing SMTP and rate limiting.
+- **BFF & Security**: clarified the selective proxying logic (auth requests only) and explained the backend changes for working with cookies directly.
 
-### 2. Безопасность и Архитектура
+### 2. Security and architecture
 
-- **Password Reset Flow**: Задокументирована мера защиты с использованием `router.replace` для очистки чувствительных данных из URL и истории браузера сразу после их сохранения в стейт.
-- **IoC & DI**: Убраны упоминания синглтонов, акцент смещен на фабрики и инверсию зависимостей. Это архитектурное решение продиктовано тем, что API-клиенты теперь используются не только в браузере, но и в BFF-слое (SSR). Использование «клиентских» синглтонов в серверном окружении Next.js привело бы к критической проблеме утечки состояния (токенов, данных) между запросами разных пользователей, что было предотвращено внедрением IoC.
-- **Multi-Zones**: Добавлены рекомендации по изоляции портов зависимых приложений (`dashboard`) в production-среде.
+- **Password Reset Flow**: documented the protective measure that uses `router.replace` to clear sensitive data from the URL and browser history right after it is saved to state.
+- **IoC & DI**: removed mentions of singletons and shifted the focus to factories and dependency inversion. This architectural decision follows from the fact that the API clients are now used not only in the browser but also in the BFF layer (SSR). Using "client" singletons in the Next.js server environment would cause a critical problem: state (tokens, data) leaking between requests from different users. Introducing IoC prevented this.
+- **Multi-Zones**: added recommendations on isolating the ports of the dependent apps (`dashboard`) in production.
 
 ### 3. UI/UX (Dev Experience)
 
-- **`devConfirmationBuilder`**: Тексты в диалоговых окнах восстановления пароля стали более информативными. Теперь они четко объясняют, что письмо не отправлено из-за ограничений бэкенда, и инструктируют пользователя скопировать ссылку для продолжения демо.
-- **Demo Status**: Добавлено честное примечание о том, что `main` и `dashboard` страницы являются демонстрационными, а основной фокус был направлен на архитектуру авторизации.
+- **`devConfirmationBuilder`**: the texts in the password recovery dialogs are more informative. They now clearly explain that the email was not sent because of backend limitations and tell the user to copy the link to continue the demo.
+- **Demo Status**: added an honest note that the `main` and `dashboard` pages are demos and that the main focus was the auth architecture.

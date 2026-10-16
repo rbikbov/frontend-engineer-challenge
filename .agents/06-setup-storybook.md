@@ -1,21 +1,21 @@
-# Этап 6: Интеграция Storybook для раздельной UI-среды
+# Stage 6: Integrating Storybook as a separate UI environment
 
-Для разработки независимых компонентов в библиотеке `@workspace/ui` был настроен Storybook. Это позволяет изолированно разрабатывать и тестировать визуальные составляющие (UI-Kit) до их интеграции в проект Next.js.
+Storybook was set up to develop standalone components in the `@workspace/ui` library. It allows the visual building blocks (UI kit) to be developed and tested in isolation before they are integrated into the Next.js project.
 
-## Выполненные действия:
+## Actions taken:
 
-1. **Добавлена поддержка Storybook**:
-   - Установлен плагин `@nx/storybook` в корень `dev` зависимостей.
-   - Запущен генератор конфигурации Nx для бандлера Vite (`@storybook/react-vite`), чтобы собрать библиотеку с учетом современных и быстрых стандартов сборки.
-2. **Конфигурация проекта `@workspace/ui`**:
-   - Автоматически сгенерированы конфигурационные файлы TypeScript `tsconfig.storybook.json`, которые ссылаются на наши строгие базовые настройки модулей.
-   - Сформирована директория настройки `.storybook` с файлами `main.js` и `preview.js`.
+1. **Added Storybook support**:
+   - Installed the `@nx/storybook` plugin in the root `dev` dependencies.
+   - Ran the Nx configuration generator for the Vite bundler (`@storybook/react-vite`) to build the library with modern, fast tooling.
+2. **Configuring the `@workspace/ui` project**:
+   - Generated the TypeScript config `tsconfig.storybook.json`, which references our strict base module settings.
+   - Created the `.storybook` setup directory with `main.js` and `preview.js`.
 
-3. **Скрипты и Примеры**:
-   - В корневой `package.json` добавлен удобный скрипт `"storybook": "nx storybook @workspace/ui"` для простоты запуска витрины.
-   - Для уже существующего компонента Button была создана минимальная Storybook-история `button.stories.tsx` (включая состояния `Default` и `Disabled`) для демонстрации работоспособности среды разработки.
+3. **Scripts and examples**:
+   - Added a `"storybook": "nx storybook @workspace/ui"` script to the root `package.json` to launch the showcase easily.
+   - Created a minimal story `button.stories.tsx` for the existing Button component (with `Default` and `Disabled` states) to show that the environment works.
 
-## Принятые решения:
+## Decisions made:
 
-- Использован **Vite** в качестве сборщика Storybook, поскольку он в значительной мере быстрее Webpack и используется как сборщик по умолчанию для React-библиотек в Nx.
-- Избегание дублирования типов: конфигурация настроена так, чтобы работать с переиспользуемыми пакетами `tsconfig` и `eslint`.
+- **Vite** is used as the Storybook bundler because it is much faster than Webpack and is the default bundler for React libraries in Nx.
+- Avoiding type duplication: the configuration is set up to work with the reusable `tsconfig` and `eslint` packages.

@@ -1,51 +1,51 @@
 # 11: Testing Strategy & Quality Assurance
 
-Для обеспечения надежности и предотвращения регрессий в критических узлах приложения была внедрена многоуровневая стратегия тестирования.
+A multi-level testing strategy was introduced to keep the critical parts of the app reliable and prevent regressions.
 
-## 1. Пирамида тестирования
+## 1. The testing pyramid
 
-Мы придерживаемся сбалансированного подхода, разделяя ответственность между разными инструментами:
+We follow a balanced approach and split responsibilities between different tools:
 
-### Unit-тесты (Библиотеки и Логика)
+### Unit tests (libraries and logic)
 
-- **Инструментарий**: [Vitest](https://vitest.dev/).
-- **Объект**: Zod-схемы валидации в `libs/shared/api`.
-- **Зачем**: Быстрая проверка всех граничных случаев (валидный email, совпадение паролей, обязательные поля) без поднятия UI.
-- **Путь**: `libs/shared/api/src/validation/*.spec.ts`.
+- **Tooling**: [Vitest](https://vitest.dev/).
+- **Subject**: Zod validation schemas in `libs/shared/api`.
+- **Why**: quickly check all edge cases (valid email, matching passwords, required fields) without rendering any UI.
+- **Path**: `libs/shared/api/src/validation/*.spec.ts`.
 
-### Integration-тесты (UI и Состояние)
+### Integration tests (UI and state)
 
-- **Инструментарий**: Vitest + [JSDOM](https://github.com/jsdom/jsdom) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
-- **Объект**: Формы авторизации (`SignInForm`, `SignUpForm`, `PasswordRecoveryForm`).
-- **Зачем**: Убедиться, что UI-компоненты правильно взаимодействуют с `react-hook-form`, отображают ошибки валидации и корректно вызывают обработчики сабмита.
-- **Путь**: `apps/main/src/features/auth/ui/*.spec.tsx`.
+- **Tooling**: Vitest + [JSDOM](https://github.com/jsdom/jsdom) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+- **Subject**: the auth forms (`SignInForm`, `SignUpForm`, `PasswordRecoveryForm`).
+- **Why**: make sure the UI components interact correctly with `react-hook-form`, show validation errors and call the submit handlers correctly.
+- **Path**: `apps/main/src/features/auth/ui/*.spec.tsx`.
 
-### E2E-тесты (Сквозные сценарии)
+### E2E tests (end-to-end scenarios)
 
-- **Инструментарий**: [Playwright](https://playwright.dev/).
-- **Объект**: Полные флоу авторизации в реальном браузере.
-- **Зачем**: Гарантия того, что все части системы (Frontend, BFF, Backend) работают вместе. Проверка навигации и реального пользовательского опыта.
-- **Путь**: `apps/main-e2e/src/*.spec.ts`.
+- **Tooling**: [Playwright](https://playwright.dev/).
+- **Subject**: complete auth flows in a real browser.
+- **Why**: guarantee that all parts of the system (Frontend, BFF, Backend) work together. Check navigation and the real user experience.
+- **Path**: `apps/main-e2e/src/*.spec.ts`.
 
-## 2. Ключевые решения
+## 2. Key decisions
 
-### Использование Vitest в монорепозитории
+### Vitest in the monorepo
 
-Мы выбрали Vitest за его скорость и нативную поддержку ESM/TypeScript. Для каждой библиотеки и приложения настроены отдельные `vitest.config.ts`, что позволяет изолированно запускать тесты через Nx.
+We chose Vitest for its speed and native ESM/TypeScript support. Each library and app has its own `vitest.config.ts`, so tests can be run in isolation through Nx.
 
-### JSDOM для интеграционных тестов
+### JSDOM for integration tests
 
-Для тестирования React-компонентов в `apps/main` мы настроили среду `jsdom`. Это позволяет имитировать поведение браузера в Node.js, что значительно быстрее запуска полноценного браузера, но дает достаточную уверенность в работоспособности UI-логики.
+To test React components in `apps/main`, we set up the `jsdom` environment. It emulates browser behavior in Node.js, which is much faster than launching a full browser but still gives enough confidence that the UI logic works.
 
-### Семантические селекторы
+### Semantic selectors
 
-В тестах мы отдаем приоритет поиску по ролям (`getByRole`, `findByText`) и доступным именам (`aria-label`). Это одновременно проверяет доступность (A11y) и делает тесты менее хрупкими при изменении верстки.
+In tests we prefer querying by role (`getByRole`, `findByText`) and accessible name (`aria-label`). This checks accessibility (A11y) at the same time and makes the tests less brittle when the markup changes.
 
-## 3. Как запускать
+## 3. How to run
 
-| Уровень              | Команда                       |
+| Level                | Command                       |
 | :------------------- | :---------------------------- |
-| **Все тесты**        | `npx nx run-many -t test,e2e` |
+| **All tests**        | `npx nx run-many -t test,e2e` |
 | **API Unit**         | `npx nx test api`             |
 | **Main Integration** | `npx nx test main`            |
 | **E2E**              | `npx nx e2e main-e2e`         |

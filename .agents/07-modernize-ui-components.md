@@ -1,32 +1,32 @@
-# Этап 7: Модернизация UI-инфраструктуры и создание базовых компонентов
+# Stage 7: Modernizing the UI infrastructure and creating the base components
 
-На этом этапе была проведена полная реструктуризация системы стилей и созданы основные компоненты дизайн-системы, готовые к поддержке темной темы и расширению.
+This stage fully restructured the styling system and created the core design system components, ready for dark mode and further extension.
 
-## Выполненные действия:
+## Actions taken:
 
-1. **Архитектура тем и токенов**:
-   - Система стилей переведена на **Tailwind CSS v4** с использованием семантических CSS-переменных в `theme.css`.
-   - Настроена полноценная поддержка **Dark Mode** через класс `.dark`, позволяющая менять тему всего приложения одной настройкой.
-   - Определены примитивные и семантические токены для цветов, скруглений и типографики.
+1. **Theme and token architecture**:
+   - Moved the styling system to **Tailwind CSS v4** with semantic CSS variables in `theme.css`.
+   - Added full **Dark Mode** support through the `.dark` class, so the whole app's theme can be switched with a single setting.
+   - Defined primitive and semantic tokens for colors, border radii and typography.
 
-2. **Базовые компоненты (`@workspace/ui`)**:
-   - **Button**: Рефакторинг с использованием `cva` (Class Variance Authority). Разделена логика визуальных вариантов (цвета) и геометрических размеров.
-   - **Input**: Создан высокотехнологичный компонент с поддержкой:
-     - **Radix UI Label**: Для максимальной доступности (A11y).
-     - **Polymorphism (`asChild`)**: Позволяет использовать стили инпута, например, для `textarea`.
-     - **Smart Label**: Анимированный заголовок, который появляется только при фокусе или вводе текста.
-     - **Icon Slots**: Слоты `leftElement` и `rightElement` для иконок или интерактивных кнопок (например, скрытие пароля).
-   - **Logo**: Создан компонент официального логотипа с использованием SVG-фильтров и защитой от конфликтов ID в DOM.
+2. **Base components (`@workspace/ui`)**:
+   - **Button**: refactored with `cva` (Class Variance Authority). Visual variants (colors) and geometric sizes are separated.
+   - **Input**: an advanced component with support for:
+     - **Radix UI Label**: for maximum accessibility (A11y).
+     - **Polymorphism (`asChild`)**: lets the input styles be reused, e.g. for a `textarea`.
+     - **Smart Label**: an animated label that appears only on focus or when text is entered.
+     - **Icon Slots**: `leftElement` and `rightElement` slots for icons or interactive buttons (e.g. showing/hiding the password).
+   - **Logo**: the official logo component, using SVG filters and protected against ID collisions in the DOM.
 
-3. **Библиотека иконок**:
-   - Создана структурированная папка `icons/` с кастомными SVG-компонентами.
-   - Все иконки настроены на работу через `currentColor`, что позволяет управлять их стилем через Tailwind-классы.
+3. **Icon library**:
+   - Created a structured `icons/` folder with custom SVG components.
+   - All icons use `currentColor`, so their style can be controlled with Tailwind classes.
 
-4. **Оптимизация брендинга**:
-   - Настроены современные фавиконки (`icon.svg`, `apple-icon.png`) по стандартам Next.js App Router для автоматической генерации метаданных.
+4. **Branding optimization**:
+   - Set up modern favicons (`icon.svg`, `apple-icon.png`) following the Next.js App Router conventions for automatic metadata generation.
 
-## Принятые решения:
+## Decisions made:
 
-- **Композиция вместо пропсов**: Для иконок в инпутах использованы слоты (`leftElement`/`rightElement`), что дает большую гибкость в разработке сложных полей (например, переключатель пароля).
-- **Динамический лейбл**: Используется переход высоты контейнера лейбла (`h-0` -> `h-3`) для вертикального центрирования текста, когда лейбл не виден.
-- **SVG-Filters**: В логотипе использован `React.useId()` для генерации уникальных ID градиентов и фильтров, что предотвращает баги при рендеринге нескольких экземпляров логотипа.
+- **Composition over props**: input icons use slots (`leftElement`/`rightElement`), which gives more flexibility for complex fields (e.g. a password toggle).
+- **Dynamic label**: the label container height transitions (`h-0` -> `h-3`) to keep the text vertically centered when the label is hidden.
+- **SVG filters**: the logo uses `React.useId()` to generate unique gradient and filter IDs, which prevents bugs when several logo instances are rendered.

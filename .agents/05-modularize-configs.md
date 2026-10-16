@@ -1,28 +1,28 @@
-# Этап 5: Модуляризация конфигураций (TypeScript и ESLint)
+# Stage 5: Modularizing configurations (TypeScript and ESLint)
 
-На этом этапе были созданы общие переиспользуемые конфигурации TypeScript и ESLint в виде внутренних пакетов монорепозитория. Это позволяет избежать дублирования кода и соблюдать единые стандарты качества во всем проекте.
+This stage created shared, reusable TypeScript and ESLint configurations as internal monorepo packages. This avoids duplication and keeps quality standards consistent across the project.
 
-## Выполненные действия:
+## Actions taken:
 
-1. **Пакет `@workspace/typescript-config`**:
-   - Создан базовый конфиг `base.json` для общих библиотек.
-   - Специфичная конфигурация для Next.js `nextjs.json` расширяет базовый конфиг.
-   - Корневой `tsconfig.base.json` настроен как прокси-файла для расширения новой базовой конфигурации.
+1. **The `@workspace/typescript-config` package**:
+   - Created a base config `base.json` for shared libraries.
+   - A Next.js-specific config `nextjs.json` extends the base config.
+   - The root `tsconfig.base.json` acts as a proxy file that extends the new base config.
 
-2. **Пакет `@workspace/eslint-config`**:
-   - Создана базовая конфигурация `base.mjs`, содержащая общие правила (например, предупреждения на `console.log`).
-   - Добавлены специфичные правила для Next.js в `nextjs.mjs`.
+2. **The `@workspace/eslint-config` package**:
+   - Created a base config `base.mjs` with common rules (e.g. warnings on `console.log`).
+   - Added Next.js-specific rules in `nextjs.mjs`.
 
-3. **Миграция всех приложений и библиотек**:
-   - `apps/main` (Next.js) теперь использует общие конфиги `nextjs`.
-   - `apps/main-e2e` (Playwright) адаптировано для использования общих настроек `tsconfig`. Возникающие при этом ошибки парсинга графа проекта в Nx устранены путем даунгрейда TypeScript до стабильной ветки `5.9.3` и добавления `ts-node`.
-   - `libs/shared/ui` переведена на наследование `@workspace/typescript-config/base.json`.
+3. **Migrating all apps and libraries**:
+   - `apps/main` (Next.js) now uses the shared `nextjs` configs.
+   - `apps/main-e2e` (Playwright) was adapted to use the shared `tsconfig` settings. The resulting Nx project graph parsing errors were fixed by downgrading TypeScript to the stable `5.9.3` branch and adding `ts-node`.
+   - `libs/shared/ui` now extends `@workspace/typescript-config/base.json`.
 
-4. **Верификация**:
-   - Успешный запуск сборки, линтинга и проверки типов в приложении (`npm run lint`, `tsc --noEmit`).
-   - Успешный старт E2E тестов Playwright и Next.js сервера.
+4. **Verification**:
+   - Build, lint and type checks pass in the app (`npm run lint`, `tsc --noEmit`).
+   - The Playwright E2E tests and the Next.js server start successfully.
 
-## Принятые решения:
+## Decisions made:
 
-- **Архитектура npm-пакетов**: Конфигурации вынесены как полноценные пакеты, подключенные через pnpm workspaces (зависимость `workspace:*`).
-- **Устранение конфликтов Nx Playwright Plugin**: Откат версии TypeScript до стабильных значений 5.x.x и явное определение `ts-node` позволили восстановить корректную работу Nx-парсера.
+- **npm package architecture**: the configurations are full packages linked via pnpm workspaces (a `workspace:*` dependency).
+- **Fixing Nx Playwright Plugin conflicts**: rolling TypeScript back to a stable 5.x.x version and declaring `ts-node` explicitly restored the Nx parser.

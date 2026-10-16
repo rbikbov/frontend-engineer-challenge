@@ -1,66 +1,66 @@
 # 16: Code Review Fixes & Improvements
 
-**Статус:** In Progress  
-**Дата:** 2026-05-02  
-**Автор:** Antigravity
+**Status:** In Progress  
+**Date:** 2026-05-02  
+**Author:** Antigravity
 
-**Контекст:** Данный отчет аккумулирует все исправления, внесенные по результатам Code Review, в хронологическом порядке их реализации.
-
----
-
-## 🛠 Исправления по результатам Code Review
-
-### 1. Стабилизация запуска E2E (Nx + Playwright)
-
-**Проблема:** Команда `pnpm e2e` зависала: Nx ожидал завершения процесса dev-сервера, что блокировало выполнение тестов.  
-**Решение:**
-
-- Внедрен новый таргет `dev-e2e` на базе исполнителя `@nx/next:server`, умеющий сообщать о готовности сервера.
-- Playwright перенастроен на работу с этим таргетом.
-
-### 2. Защита от Open Redirect
-
-**Проблема:** Параметр `callbackUrl` не валидировался, что позволяло проводить фишинговые атаки через внешние редиректы.  
-**Решение:**
-
-- Создана утилита `isSafeUrl` в `@workspace/lib`, разрешающая только внутренние пути или доверенный домен.
-- Внедрена обязательная очистка URL перед редиректом в `signin.page.tsx`.
-
-### 3. Проброс Client IP (X-Forwarded-For)
-
-**Проблема:** Заявленный проброс IP не работал: заголовки терялись при мердже в GraphQL-клиенте, из-за чего бэкенд не видел реальный IP для Rate Limiting.  
-**Решение:**
-
-- Исправлен баг в методе `executeRequest` класса `GraphQLAuthApi`: теперь заголовки `X-Forwarded-For` и `Cookie` корректно прокидываются до бэкенда.
-- Настроена экстракция IP из цепочки прокси в контроллерах BFF.
-
-### 4. Реальный механизм Logout
-
-**Проблема:** Мутация `logout` была заглушкой, сессия оставалась живой в базе данных.  
-**Решение:**
-
-- Бэкенд доработан для физического отзыва (revocation) сессии в Postgres.
-- **Явные контракты**: В мутациях `logout` и `refresh` аргументы (токены) стали обязательными. Это осознанное решение: BFF (как владелец HttpOnly кук) берет на себя ответственность за извлечение секрета и его явную передачу в GraphQL-слой. Это делает взаимодействие прозрачным для отладки и исключает зависимость от «неявного» чтения кук бэкендом.
+**Context:** this report collects all fixes made after the code review, in the chronological order they were implemented.
 
 ---
 
-## 🚀 Архитектурные улучшения (Beyond Requirements)
+## 🛠 Code review fixes
 
-Дополнительные улучшения, расширяющие надежность транспортного уровня:
+### 1. Stabilizing the E2E run (Nx + Playwright)
 
-### 1. Расширенная трансляция ошибок (ADR-004)
+**Problem:** `pnpm e2e` hung: Nx waited for the dev server process to exit, which blocked the tests.  
+**Solution:**
 
-- **Rate Limit Detection**: Внедрен класс `RateLimitError` с поддержкой парсинга времени блокировки (`Retry-After`).
-- **Семантизация статусов**: Все бизнес-ошибки переведены с 401 на корректный **400 Bad Request**.
-- **Безопасность**: Добавлен проброс `User-Agent` для аудита сессий.
+- Added a new `dev-e2e` target based on the `@nx/next:server` executor, which can report when the server is ready.
+- Reconfigured Playwright to use this target.
 
-### 2. Формализация решений
+### 2. Open Redirect protection
 
-- Создан **ADR-004**, фиксирующий стратегию обработки ошибок как стандарт проекта.
+**Problem:** the `callbackUrl` parameter was not validated, which allowed phishing attacks via external redirects.  
+**Solution:**
+
+- Created an `isSafeUrl` utility in `@workspace/lib` that allows only internal paths or the trusted domain.
+- The URL is now always sanitized before redirecting in `signin.page.tsx`.
+
+### 3. Forwarding the client IP (X-Forwarded-For)
+
+**Problem:** the advertised IP forwarding did not work: the headers were lost while merging in the GraphQL client, so the backend did not see the real IP for rate limiting.  
+**Solution:**
+
+- Fixed a bug in the `executeRequest` method of `GraphQLAuthApi`: the `X-Forwarded-For` and `Cookie` headers now reach the backend correctly.
+- Set up IP extraction from the proxy chain in the BFF controllers.
+
+### 4. A real logout mechanism
+
+**Problem:** the `logout` mutation was a stub, and the session stayed alive in the database.  
+**Solution:**
+
+- The backend now actually revokes the session in Postgres.
+- **Explicit contracts**: the arguments (tokens) of the `logout` and `refresh` mutations are now required. This is a deliberate decision: the BFF (as the owner of the HttpOnly cookies) is responsible for extracting the secret and passing it explicitly to the GraphQL layer. This makes the interaction easy to debug and removes the dependency on the backend reading cookies "implicitly".
 
 ---
 
-## 📦 Изменения в коде
+## 🚀 Architectural improvements (Beyond Requirements)
+
+Additional improvements that make the transport layer more reliable:
+
+### 1. Extended error translation (ADR-004)
+
+- **Rate Limit Detection**: added a `RateLimitError` class that can parse the block duration (`Retry-After`).
+- **Semantic statuses**: all business errors were moved from 401 to the correct **400 Bad Request**.
+- **Security**: `User-Agent` is forwarded for session auditing.
+
+### 2. Formalizing decisions
+
+- Created **ADR-004**, which establishes the error handling strategy as a project standard.
+
+---
+
+## 📦 Code changes
 
 - `apps/main/src/features/auth/ui/signin.page.tsx` (Open Redirect fix)
 - `libs/shared/lib/src/utils/url.ts` (isSafeUrl)

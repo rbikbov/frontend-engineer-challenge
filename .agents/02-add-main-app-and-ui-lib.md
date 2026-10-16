@@ -1,32 +1,32 @@
-# Этап 2: Создание приложения Main и библиотеки UI
+# Stage 2: Creating the Main app and the UI library
 
-На этом этапе в монорепозиторий были добавлены первые проекты: исполняемое приложение на Next.js и общая библиотека компонентов.
+This stage added the first projects to the monorepo: a runnable Next.js app and a shared component library.
 
-## Выполненные действия:
+## Actions taken:
 
-1.  **Установка плагинов Nx**:
-    - Добавлены `@nx/next` и `@nx/react` для поддержки соответствующих фреймворков.
-    - Установлены зависимости React 19 и Next.js 15.
+1.  **Installing Nx plugins**:
+    - Added `@nx/next` and `@nx/react` to support the respective frameworks.
+    - Installed React 19 and Next.js 15.
 
-2.  **Создание библиотеки UI (`libs/ui`)**:
-    - Сгенерирована библиотека с использованием `@nx/react:lib`.
-    - Реализован компонент `Button` — простая обертка над HTML-тегом `<button>`.
-    - Настроен экспорт компонента через `index.ts` и маппинг путей `@workspace/ui`.
+2.  **Creating the UI library (`libs/ui`)**:
+    - Generated the library with `@nx/react:lib`.
+    - Implemented a `Button` component, a simple wrapper around the HTML `<button>` tag.
+    - Set up the component export through `index.ts` and the `@workspace/ui` path mapping.
 
-3.  **Создание приложения Main (`apps/main`)**:
-    - Сгенерировано приложение на Next.js 15 (App Router).
-    - Внедрено использование компонента `Button` из библиотеки `@workspace/ui` на главной странице.
+3.  **Creating the Main app (`apps/main`)**:
+    - Generated a Next.js 15 app (App Router).
+    - Used the `Button` component from `@workspace/ui` on the home page.
 
-4.  **Настройка TypeScript и сборки**:
-    - Скорректированы `tsconfig.base.json` и `tsconfig.json` проектов для корректного разрешения путей к библиотекам.
-    - Исправлены ошибки типизации CSS и предупреждения о депрекации `baseUrl`.
-    - Успешно выполнена тестовая сборка приложения (`npx next build`).
+4.  **TypeScript and build setup**:
+    - Adjusted `tsconfig.base.json` and the projects' `tsconfig.json` so library paths resolve correctly.
+    - Fixed CSS typing errors and `baseUrl` deprecation warnings.
+    - Ran a successful test build of the app (`npx next build`).
 
-5.  **Управление зависимостями**:
-    - Библиотека `@workspace/ui` добавлена как workspace-зависимость в `apps/main/package.json`.
+5.  **Dependency management**:
+    - Added `@workspace/ui` as a workspace dependency in `apps/main/package.json`.
 
-## Принятые решения:
+## Decisions made:
 
-- **Next.js 15**: Использован в соответствии с запросом (в логах сборки может отображаться версия 16 из-за особенностей окружения, но в `package.json` зафиксирована 15).
-- **TypeScript Paths**: Настроены явные маппинги в `tsconfig.json` для обеспечения работоспособности сборки вне контекста специфичных раннеров Nx.
-- **Ignore Deprecations**: Временно включено игнорирование депрекации `baseUrl` в TS 6.0 для успешного прохождения проверки типов (требование среды).
+- **Next.js 15**: used as requested (the build logs may show version 16 because of the environment, but `package.json` pins 15).
+- **TypeScript Paths**: explicit mappings in `tsconfig.json` so the build works outside of Nx-specific runners.
+- **Ignore Deprecations**: temporarily ignored the `baseUrl` deprecation in TS 6.0 so type checking passes (an environment requirement).

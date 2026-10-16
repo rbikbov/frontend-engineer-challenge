@@ -1,34 +1,34 @@
-# 13: Финальный рефакторинг и исправление архитектурных коллизий
+# 13: Final refactoring and fixing architectural conflicts
 
-В ходе финальной стабилизации проекта был проведен рефакторинг с целью устранения скрытых багов и обеспечения строгих границ между клиентом и сервером.
+During the final stabilization of the project, a refactoring pass removed hidden bugs and enforced strict boundaries between the client and the server.
 
-## 🛠 Пофайловый разбор Diff:
+## 🛠 Diff breakdown by file:
 
-### 1. Обновление метаданных и UI-презентационного слоя
+### 1. Metadata and UI presentation layer updates
 
-- **Метаданные лейаутов (`apps/main` и `apps/dashboard`)**: Замена автосгенерированных Nx-плейсхолдеров (`Welcome to...`) на профессиональные заголовки Orbitto.
-- **Инпуты и Темизация (`libs/shared/ui`)**: Тюнинг CSS-переменных шрифта и фиксация базовых компонентов.
-- **Формы авторизации (`apps/main/src/features/auth`)**: Очистка хуков от `TODO`, стабилизация UI-биндингов.
+- **Layout metadata (`apps/main` and `apps/dashboard`)**: replaced the auto-generated Nx placeholders (`Welcome to...`) with proper Orbitto titles.
+- **Inputs and theming (`libs/shared/ui`)**: tuned the font CSS variables and finalized the base components.
+- **Auth forms (`apps/main/src/features/auth`)**: removed `TODO`s from the hooks and stabilized the UI bindings.
 
-### 2. Инфраструктура и Документация
+### 2. Infrastructure and documentation
 
-- **`.husky/pre-push`**: Автоматический запуск `typecheck` перед пушем.
-- **`package.json`**: Добавлен коренной скрипт `"typecheck": "nx run-many -t typecheck"`.
-- **`tsconfig.json` / `libs/shared/*/tsconfig.json`**: Настройка путей (`paths`) и Project References для строгой сквозной проверки типов во всем монорепозитории.
-- **`nx.json`**: Описание таски `typecheck` и кеширования в графе Nx.
+- **`.husky/pre-push`**: runs `typecheck` automatically before a push.
+- **`package.json`**: added a root `"typecheck": "nx run-many -t typecheck"` script.
+- **`tsconfig.json` / `libs/shared/*/tsconfig.json`**: configured `paths` and Project References for strict end-to-end type checking across the monorepo.
+- **`nx.json`**: defined the `typecheck` task and its caching in the Nx graph.
 
-### 3. Оптимизация и Анализ бандла
+### 3. Bundle optimization and analysis
 
-- **`apps/main/next.config.js` & `apps/dashboard/next.config.js`**: Внедрение `@next/bundle-analyzer` для контроля чанков на этапе сборки.
-- **`package.json`**: Добавлен сводный скрипт `"analyze"`.
+- **`apps/main/next.config.js` & `apps/dashboard/next.config.js`**: added `@next/bundle-analyzer` to keep an eye on chunks at build time.
+- **`package.json`**: added a combined `"analyze"` script.
 
-### 4. Изоляция BFF и рефакторинг API-клиента
+### 4. BFF isolation and API client refactoring
 
-- **`apps/main/src/pages/` -> `apps/main/src/pages_/`**: Устранение конфликтов роутинга FSD в среде Next.js.
-- **`middleware.ts`**: Настройка `matcher` на игнорирование статики и API.
-- **`apps/main/src/shared/config` -> `lib/shared/config`**: Перенос конфига в общую библиотеку.
-- **`libs/shared/api/*`**: Искоренение паттерна Singleton. Переход на инверсию зависимостей (IoC) и гибкие фабрики API-клиентов.
-- **`libs/shared/api/src/contract/auth.errors.ts`**: Выделение доменных ошибок авторизации в строгий контракт для унифицированного маппинга ошибок на клиенте.
-- **`libs/shared/api/.../auth-error-mapper.spec.ts`**: Покрытие тестами логики преобразования (маппинга) бэкенд-ошибок GraphQL в единые клиентские коды.
-- **`apps/main/src/app/api/auth/_core`**: Рефакторинг и вынесение переиспользуемых частей BFF.
-- **`apps/dashboard` & `apps/main`**: Адаптация хуков выхода (`use-sign-out`) и работы с формами (`use-*-form.ts`) под обновленные API-контракты и логику IoC.
+- **`apps/main/src/pages/` -> `apps/main/src/pages_/`**: resolved FSD routing conflicts in the Next.js environment.
+- **`middleware.ts`**: configured the `matcher` to ignore static files and the API.
+- **`apps/main/src/shared/config` -> `lib/shared/config`**: moved the config into a shared library.
+- **`libs/shared/api/*`**: removed the Singleton pattern. Moved to Inversion of Control (IoC) and flexible API client factories.
+- **`libs/shared/api/src/contract/auth.errors.ts`**: extracted the domain auth errors into a strict contract for unified error mapping on the client.
+- **`libs/shared/api/.../auth-error-mapper.spec.ts`**: covered with tests the logic that maps GraphQL backend errors to unified client codes.
+- **`apps/main/src/app/api/auth/_core`**: refactored and extracted the reusable parts of the BFF.
+- **`apps/dashboard` & `apps/main`**: adapted the sign-out hooks (`use-sign-out`) and form handling (`use-*-form.ts`) to the updated API contracts and the IoC logic.

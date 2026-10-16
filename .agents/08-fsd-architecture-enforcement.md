@@ -1,42 +1,42 @@
-# Принудительное соблюдение архитектуры FSD
+# Enforcing the FSD architecture
 
-В проекте реализована автоматизированная проверка архитектурных границ Feature-Sliced Design. Это гарантирует, что кодовая база останется управляемой и модульной по мере роста.
+The project checks Feature-Sliced Design architectural boundaries automatically. This keeps the codebase manageable and modular as it grows.
 
-## Техническая реализация
+## Technical implementation
 
-- **Инструмент**: `eslint-plugin-boundaries@5.4.0`
-- **Конфигурация**: `libs/shared/eslint-config/fsd.mjs`
-- **Интеграция**: Плагин работает в режиме ESLint 9 (Flat Config), обеспечивая высокую производительность анализа графа импортов.
+- **Tool**: `eslint-plugin-boundaries@5.4.0`
+- **Configuration**: `libs/shared/eslint-config/fsd.mjs`
+- **Integration**: the plugin runs in ESLint 9 mode (Flat Config), which keeps analysis of the import graph fast.
 
-## Правила архитектуры
+## Architecture rules
 
-### 1. Иерархия слоев (Layer Hierarchy)
+### 1. Layer hierarchy
 
-Каждый слой может импортировать только слои, находящиеся **ниже** него по иерархии:
+Each layer may import only the layers **below** it in the hierarchy:
 `App > Pages > Widgets > Features > Entities > Shared`
 
-**Запрещено**:
+**Forbidden**:
 
-- `Shared` не может импортировать ничего «сверху».
-- `Entities` не могут импортировать `Features` или `Pages`.
-- Импорты «вбок» внутри одного слоя (например, `Feature A` -> `Feature B`) запрещены для обеспечения строгой изоляции.
+- `Shared` cannot import anything "from above".
+- `Entities` cannot import `Features` or `Pages`.
+- "Sideways" imports within a layer (e.g. `Feature A` -> `Feature B`) are forbidden to keep strict isolation.
 
-### 2. Точки входа (Public API)
+### 2. Entry points (Public API)
 
-Импорты из модулей разрешены **только через их Public API** (`index.ts`).
+Modules may be imported **only through their Public API** (`index.ts`).
 
-**Запрещено**:
+**Forbidden**:
 
-- Прямые импорты внутренних файлов (например, `import { Button } from '@/shared/ui/button/button'`).
-- **Исключение**: Слои `shared/ui` и `shared/api` позволяют прямые импорты для гибкости, в то время как `shared/constants` и `shared/lib` требуют импорта через индекс.
+- Direct imports of internal files (e.g. `import { Button } from '@/shared/ui/button/button'`).
+- **Exception**: the `shared/ui` and `shared/api` layers allow direct imports for flexibility, while `shared/constants` and `shared/lib` must be imported through the index.
 
-## Работа с линтером
+## Working with the linter
 
-При нарушении границ вы увидите ошибку в IDE или консоли:
+When a boundary is violated, you will see an error in the IDE or the console:
 
-- `Architectural violation: features is not allowed to import app` (Нарушение иерархии)
-- `This module can only be imported via index.ts` (Нарушение Public API)
+- `Architectural violation: features is not allowed to import app` (hierarchy violation)
+- `This module can only be imported via index.ts` (Public API violation)
 
-## Как добавить новый модуль
+## Adding a new module
 
-При создании новой сущности (например, `entities/user`), убедитесь, что в корне папки есть `index.ts`, который экспортирует только необходимые компоненты и типы. Линтер автоматически подхватит новый модуль благодаря паттернам в `fsd.mjs`.
+When creating a new entity (e.g. `entities/user`), make sure the folder root has an `index.ts` that exports only the required components and types. The linter picks up the new module automatically thanks to the patterns in `fsd.mjs`.
