@@ -1,9 +1,9 @@
 import { PasswordRecoverySuccessPage } from '@pages/auth-password-recovery-success';
 
 export const metadata = {
-  title: 'Проверьте почту | Orbitto',
+  title: 'Check your email | Orbitto',
   description:
-    'Инструкции по восстановлению пароля отправлены на ваш адрес электронной почты.',
+    'Password recovery instructions have been sent to your email address.',
 };
 
 export default function PasswordRecoverySuccess() {

@@ -48,7 +48,7 @@ export const createAuthErrorResponse = (error: unknown): NextResponse => {
   }
 
   return NextResponse.json(
-    { message: (error as Error).message || 'Ошибка сервера' },
+    { message: (error as Error).message || 'Server error' },
     { status: 500 },
   );
 };

@@ -35,7 +35,9 @@ describe('SignInForm Integration', () => {
 
     // Ожидаем появления ошибок валидации
     try {
-      expect(await screen.findAllByText(/поле обязательно/i)).toHaveLength(2);
+      expect(
+        await screen.findAllByText(/this field is required/i),
+      ).toHaveLength(2);
     } catch (e) {
       screen.debug();
       throw e;
@@ -48,14 +50,14 @@ describe('SignInForm Integration', () => {
     const onSubmit = vi.fn();
     render(<FormWrapper onSubmit={onSubmit} />);
 
-    fireEvent.change(screen.getByLabelText(/e-mail/i), {
+    fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'test@example.com' },
     });
-    fireEvent.change(screen.getByLabelText(/пароль/i), {
+    fireEvent.change(screen.getByLabelText(/password/i), {
       target: { value: 'password123' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /войти/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith(

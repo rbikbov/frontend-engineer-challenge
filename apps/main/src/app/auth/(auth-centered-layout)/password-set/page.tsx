@@ -3,9 +3,8 @@ import React from 'react';
 import { PasswordSetPage } from '@pages/auth-password-set';
 
 export const metadata = {
-  title: 'Установка нового пароля | Orbitto',
-  description:
-    'Придумайте и установите надежный пароль для вашей учетной записи Orbitto.',
+  title: 'Set a new password | Orbitto',
+  description: 'Choose a strong new password for your Orbitto account.',
 };
 
 export default function PasswordSet() {

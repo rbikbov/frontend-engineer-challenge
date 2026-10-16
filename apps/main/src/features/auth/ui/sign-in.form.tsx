@@ -30,8 +30,8 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Введите e-mail"
-        placeholder="Введите e-mail"
+        label="Email"
+        placeholder="Enter your email"
         type="email"
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
@@ -44,8 +44,8 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
       />
 
       <InputPassword
-        label="Введите пароль"
-        placeholder="Введите пароль"
+        label="Password"
+        placeholder="Enter your password"
         autoComplete="current-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
@@ -69,7 +69,7 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
           type="submit"
           disabled={loading}
         >
-          {loading ? 'Вход...' : 'Войти'}
+          {loading ? 'Signing in...' : 'Sign in'}
         </Button>
       </div>
 
@@ -80,7 +80,9 @@ export const SignInForm = ({ form, onSubmit, loading }: SignInFormProps) => {
           className="w-full"
           asChild
         >
-          <AppLink href={AUTH_LINKS.PASSWORD_RECOVERY}>Забыли пароль?</AppLink>
+          <AppLink href={AUTH_LINKS.PASSWORD_RECOVERY}>
+            Forgot password?
+          </AppLink>
         </Button>
       </div>
     </form>

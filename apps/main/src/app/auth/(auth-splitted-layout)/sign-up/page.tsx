@@ -1,9 +1,9 @@
 import { SignUpPage } from '@pages/auth-sign-up';
 
 export const metadata = {
-  title: 'Регистрация | Orbitto',
+  title: 'Sign up | Orbitto',
   description:
-    'Создайте учетную запись в Orbitto и начните использовать нашу платформу прямо сейчас.',
+    'Create an Orbitto account and start using the platform right away.',
 };
 
 export default function SignUp() {

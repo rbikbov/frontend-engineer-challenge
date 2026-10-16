@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'Orbitto | Главная',
-  description: 'Авторизация и доступ к платформе Orbitto.',
+  title: 'Orbitto | Home',
+  description: 'Sign in and access the Orbitto platform.',
   robots: {
     index: false,
     follow: false,
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={inter.variable}>
+    <html lang="en" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

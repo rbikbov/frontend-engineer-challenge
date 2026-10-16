@@ -44,16 +44,16 @@ export function SignInPage() {
   return (
     <>
       <AuthContentLayout
-        title="Войти в систему"
+        title="Sign in"
         contentClassName="max-w-[400px]"
         footer={
           <p className="text-button text-foreground-secondary">
-            Еще не зарегистрированы?{' '}
+            Don't have an account?{' '}
             <AppLink
               href={AUTH_LINKS.SIGN_UP}
               className="text-brand font-medium hover:underline"
             >
-              Зарегистрироваться
+              Sign up
             </AppLink>
           </p>
         }
@@ -61,7 +61,7 @@ export function SignInPage() {
         <Suspense
           fallback={
             <div className="text-foreground-secondary flex h-[200px] animate-pulse items-center justify-center text-sm">
-              Загрузка формы...
+              Loading form...
             </div>
           }
         >

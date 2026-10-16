@@ -17,10 +17,10 @@ test.describe('Authentication Flow', () => {
     await page.click('button[type="submit"]');
 
     await expect(page.getByTestId('email-error')).toHaveText(
-      'Поле обязательно',
+      'This field is required',
     );
     await expect(page.getByTestId('password-error')).toHaveText(
-      'Поле обязательно',
+      'This field is required',
     );
   });
 
@@ -30,7 +30,7 @@ test.describe('Authentication Flow', () => {
 
     const error = page.getByTestId('email-error');
     await expect(error).toBeVisible();
-    await expect(error).toHaveText('Недопустимый адрес почты');
+    await expect(error).toHaveText('Invalid email address');
   });
 
   test('should show error for non-existent user', async ({ page }) => {
@@ -40,9 +40,9 @@ test.describe('Authentication Flow', () => {
 
     const error = page
       .getByTestId('error-message-root')
-      .or(page.locator('p:has-text("Введены неверные данные")'));
+      .or(page.locator('p:has-text("Invalid email or password")'));
     await expect(error).toBeVisible({ timeout: 10000 });
-    await expect(error).toHaveText('Введены неверные данные');
+    await expect(error).toHaveText('Invalid email or password');
   });
 });
 
@@ -63,13 +63,13 @@ test.describe('Registration Flow', () => {
     await page.click('button[type="submit"]');
 
     await expect(page.getByTestId('email-error')).toHaveText(
-      'Поле обязательно',
+      'This field is required',
     );
     await expect(page.getByTestId('password-error')).toHaveText(
-      'Поле обязательно',
+      'This field is required',
     );
     await expect(page.getByTestId('confirm-password-error')).toHaveText(
-      'Поле обязательно',
+      'This field is required',
     );
   });
 
@@ -81,6 +81,6 @@ test.describe('Registration Flow', () => {
 
     const error = page.getByTestId('confirm-password-error');
     await expect(error).toBeVisible();
-    await expect(error).toHaveText('Пароли не совпадают');
+    await expect(error).toHaveText('Passwords do not match');
   });
 });

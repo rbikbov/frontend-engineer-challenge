@@ -32,7 +32,7 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 const defaultArgs = {
-  children: 'Кнопка',
+  children: 'Button',
 };
 
 export const Primary: Story = {

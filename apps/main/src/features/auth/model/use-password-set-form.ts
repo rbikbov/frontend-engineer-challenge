@@ -68,7 +68,7 @@ export function usePasswordSetForm({
           setFormErrors(form, fields);
 
           if (error instanceof ApiError) {
-            if (error.message.includes('истек')) {
+            if (error.message === AUTH_ERROR_MESSAGES.TOKEN_EXPIRED) {
               onFatalError(error.message);
               return;
             }

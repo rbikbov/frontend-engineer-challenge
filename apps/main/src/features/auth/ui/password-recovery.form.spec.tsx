@@ -37,7 +37,7 @@ describe('PasswordRecoveryForm Integration', () => {
       screen.getByRole('form', { name: /password-recovery-form/i }),
     );
 
-    expect(await screen.findByText(/поле обязательно/i)).toBeTruthy();
+    expect(await screen.findByText(/this field is required/i)).toBeTruthy();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -45,7 +45,7 @@ describe('PasswordRecoveryForm Integration', () => {
     const onSubmit = vi.fn();
     render(<FormWrapper onSubmit={onSubmit} />);
 
-    fireEvent.change(screen.getByLabelText(/e-mail/i), {
+    fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'recover@example.com' },
     });
 

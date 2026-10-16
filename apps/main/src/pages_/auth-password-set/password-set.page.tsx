@@ -57,8 +57,8 @@ function PasswordSetContent() {
     <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
-        title="Задайте пароль"
-        description="Напишите новый пароль, который будете использовать для входа"
+        title="Set a password"
+        description="Enter the new password you will use to sign in"
       >
         <PasswordSetForm form={form} onSubmit={onSubmit} loading={isLoading} />
       </AuthContentLayout>
@@ -71,7 +71,7 @@ export function PasswordSetPage() {
     <Suspense
       fallback={
         <div className="text-foreground-secondary flex h-[200px] animate-pulse items-center justify-center text-sm">
-          Загрузка...
+          Loading...
         </div>
       }
     >

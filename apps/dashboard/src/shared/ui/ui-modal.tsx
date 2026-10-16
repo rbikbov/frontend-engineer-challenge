@@ -80,7 +80,7 @@ export function UiModal({
       >
         <button
           onClick={onClose}
-          aria-label="Закрыть модальное окно"
+          aria-label="Close modal"
           className="rounded-button-sm hover:bg-primary/50 text-primary-inverse absolute top-0 right-0 m-6 flex h-8 w-8 cursor-pointer items-center justify-center transition-colors"
         >
           <CrossIcon />

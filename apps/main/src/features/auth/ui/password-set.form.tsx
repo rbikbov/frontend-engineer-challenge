@@ -24,8 +24,8 @@ export function PasswordSetForm({
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <InputPassword
-        label="Введите пароль"
-        placeholder="Введите пароль"
+        label="New password"
+        placeholder="Enter a new password"
         autoComplete="new-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
@@ -33,8 +33,8 @@ export function PasswordSetForm({
       />
 
       <InputPassword
-        label="Повторите пароль"
-        placeholder="Повторите пароль"
+        label="Confirm password"
+        placeholder="Repeat the new password"
         autoComplete="new-password"
         {...register(FIELD_NAMES.CONFIRM_PASSWORD)}
         error={errors.confirmPassword?.message}
@@ -52,7 +52,7 @@ export function PasswordSetForm({
           type="submit"
           disabled={loading}
         >
-          {loading ? 'Загрузка...' : 'Изменить пароль'}
+          {loading ? 'Loading...' : 'Change password'}
         </Button>
       </div>
     </form>

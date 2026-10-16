@@ -20,17 +20,17 @@ const devConfirmationBuilder = async (token: string) => {
     link.searchParams.append('token', token);
     if (
       confirm(
-        `[DEV] Письмо не отправлено — бэкенд не реализован.\n\nНажмите ОК, чтобы скопировать ссылку на сброс пароля в буфер обмена, затем откройте её в браузере:\n\n${link}`,
+        `[DEV] The email was not sent: the backend does not implement it.\n\nClick OK to copy the password reset link to the clipboard, then open it in your browser:\n\n${link}`,
       )
     ) {
       try {
         await navigator.clipboard.writeText(String(link));
         alert(
-          'Ссылка скопирована! Вставьте её в адресную строку браузера, чтобы задать новый пароль.',
+          'Link copied! Paste it into the browser address bar to set a new password.',
         );
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('Ошибка при копировании в буфер обмена:', error);
+        console.error('Failed to copy to clipboard:', error);
       }
     }
   }
@@ -63,11 +63,11 @@ export function PasswordRecoveryPage() {
               className="inline-block max-w-full wrap-break-word"
             >
               <ChevronLeftIcon className="mr-2 -mb-[2px] inline" />
-              <span className="align-middle">Восстановление пароля</span>
+              <span className="align-middle">Password recovery</span>
             </AppLink>
           </Button>
         }
-        description="Укажите адрес почты на который был зарегистрирован аккаунт"
+        description="Enter the email address your account was registered with"
       >
         <PasswordRecoveryForm
           form={form}

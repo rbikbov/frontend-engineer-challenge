@@ -90,10 +90,12 @@ describe('PasswordSetPage', () => {
     successCallback();
 
     // Проверяем, что отрендерилась страница успеха
-    expect(await screen.findByText(/пароль был восстановлен/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/your password has been reset/i),
+    ).toBeTruthy();
 
     // Проверяем, что форма и заголовок исчезли
-    expect(screen.queryByText(/задайте пароль/i)).toBeNull();
+    expect(screen.queryByText(/set a password/i)).toBeNull();
     expect(screen.queryByTestId('password-set-form')).toBeNull();
   });
 
@@ -117,10 +119,12 @@ describe('PasswordSetPage', () => {
     fatalErrorCallback('test error');
 
     // Проверяем, что отрендерилась страница ошибки
-    expect(await screen.findByText(/пароль не был восстановлен/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/your password was not reset/i),
+    ).toBeTruthy();
 
     // Проверяем, что форма и заголовок исчезли
-    expect(screen.queryByText(/задайте пароль/i)).toBeNull();
+    expect(screen.queryByText(/set a password/i)).toBeNull();
     expect(screen.queryByTestId('password-set-form')).toBeNull();
   });
 

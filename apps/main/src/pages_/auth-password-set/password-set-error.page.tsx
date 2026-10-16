@@ -17,12 +17,12 @@ export function PasswordSetErrorPage({
     <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
-        title="Пароль не был восстановлен"
-        description="По каким-то причинам мы не смогли изменить ваш пароль. Попробуйте ещё раз через некоторое время."
+        title="Your password was not reset"
+        description="For some reason we could not change your password. Please try again later."
       >
         <div className="pt-2">
           <Button variant="secondaryMain" className="w-full" asChild>
-            <AppLink href={AUTH_LINKS.SIGN_IN}>Назад в авторизацию</AppLink>
+            <AppLink href={AUTH_LINKS.SIGN_IN}>Back to sign in</AppLink>
           </Button>
         </div>
         <div className="pt-2">
@@ -31,7 +31,7 @@ export function PasswordSetErrorPage({
             className="w-full"
             onClick={onRetryClick}
           >
-            Попробовать заново
+            Try again
           </Button>
         </div>
       </AuthContentLayout>

@@ -25,8 +25,8 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Введите e-mail"
-        placeholder="Введите e-mail"
+        label="Email"
+        placeholder="Enter your email"
         type="email"
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
@@ -37,8 +37,8 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
       />
 
       <InputPassword
-        label="Введите пароль"
-        placeholder="Введите пароль"
+        label="Password"
+        placeholder="Enter your password"
         autoComplete="new-password"
         {...register(FIELD_NAMES.PASSWORD)}
         error={errors.password?.message}
@@ -48,8 +48,8 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
       />
 
       <InputPassword
-        label="Повторите пароль"
-        placeholder="Повторите пароль"
+        label="Confirm password"
+        placeholder="Repeat your password"
         autoComplete="new-password"
         {...register(FIELD_NAMES.CONFIRM_PASSWORD)}
         error={errors.confirmPassword?.message}
@@ -74,28 +74,28 @@ export const SignUpForm = ({ form, onSubmit, loading }: SignUpFormProps) => {
           type="submit"
           disabled={loading}
         >
-          {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+          {loading ? 'Signing up...' : 'Sign up'}
         </Button>
       </div>
 
       <p className="text-small text-disabled pt-2 pb-4 text-center">
-        Зарегистрировавшись пользователь принимает условия{' '}
+        By signing up, you accept the terms of the{' '}
         <a
           href={LEGAL_LINKS.AGREEMENT}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-primary underline"
         >
-          договора оферты
+          public offer agreement
         </a>{' '}
-        и{' '}
+        and the{' '}
         <a
           href={LEGAL_LINKS.PRIVACY}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-primary underline"
         >
-          политики конфиденциальности
+          privacy policy
         </a>
       </p>
     </form>

@@ -11,12 +11,12 @@ export function PasswordSetSuccessPage() {
     <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
-        title="Пароль был восстановлен"
-        description="Перейдите на страницу авторизации, чтобы войти в систему с новым паролем"
+        title="Your password has been reset"
+        description="Go to the sign-in page to sign in with your new password"
       >
         <div className="pt-2">
           <Button variant="secondaryMain" className="w-full" asChild>
-            <AppLink href={AUTH_LINKS.SIGN_IN}>Назад в авторизацию</AppLink>
+            <AppLink href={AUTH_LINKS.SIGN_IN}>Back to sign in</AppLink>
           </Button>
         </div>
       </AuthContentLayout>

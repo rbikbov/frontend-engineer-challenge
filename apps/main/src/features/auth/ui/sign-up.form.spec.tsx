@@ -31,7 +31,9 @@ describe('SignUpForm Integration', () => {
 
     fireEvent.submit(screen.getByRole('form', { name: /sign-up-form/i }));
 
-    expect(await screen.findAllByText(/поле обязательно/i)).toHaveLength(3);
+    expect(await screen.findAllByText(/this field is required/i)).toHaveLength(
+      3,
+    );
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -39,13 +41,13 @@ describe('SignUpForm Integration', () => {
     const onSubmit = vi.fn();
     render(<FormWrapper onSubmit={onSubmit} />);
 
-    fireEvent.change(screen.getByLabelText(/e-mail/i), {
+    fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'new@example.com' },
     });
-    fireEvent.change(screen.getByLabelText(/^Введите пароль$/i), {
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
       target: { value: 'password123' },
     });
-    fireEvent.change(screen.getByLabelText(/повторите пароль/i), {
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
       target: { value: 'password123' },
     });
 
@@ -67,15 +69,15 @@ describe('SignUpForm Integration', () => {
     const onSubmit = vi.fn();
     render(<FormWrapper onSubmit={onSubmit} />);
 
-    fireEvent.change(screen.getByLabelText(/^Введите пароль$/i), {
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
       target: { value: 'password123' },
     });
-    fireEvent.change(screen.getByLabelText(/повторите пароль/i), {
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
       target: { value: 'mismatch' },
     });
 
     fireEvent.submit(screen.getByRole('form', { name: /sign-up-form/i }));
 
-    expect(await screen.findByText(/пароли не совпадают/i)).toBeTruthy();
+    expect(await screen.findByText(/passwords do not match/i)).toBeTruthy();
   });
 });

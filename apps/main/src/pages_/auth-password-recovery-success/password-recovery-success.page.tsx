@@ -11,12 +11,12 @@ export function PasswordRecoverySuccessPage() {
     <>
       <AuthContentLayout
         contentClassName="max-w-[480px]"
-        title="Проверьте свою почту"
-        description="Мы отправили на почту письмо с ссылкой для восстановления пароля"
+        title="Check your email"
+        description="We have sent you an email with a password reset link"
       >
         <div className="pt-2">
           <Button variant="secondaryMain" className="w-full" asChild>
-            <AppLink href={AUTH_LINKS.SIGN_IN}>Назад в авторизацию</AppLink>
+            <AppLink href={AUTH_LINKS.SIGN_IN}>Back to sign in</AppLink>
           </Button>
         </div>
       </AuthContentLayout>

@@ -51,7 +51,7 @@ export const Error: Story = {
     ...defaultArgs,
     label: 'Title',
     defaultValue: 'Text',
-    error: 'Текст ошибки',
+    error: 'Error message',
   },
 };
 

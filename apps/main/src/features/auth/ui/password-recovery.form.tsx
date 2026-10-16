@@ -29,8 +29,8 @@ export function PasswordRecoveryForm({
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        label="Введите e-mail"
-        placeholder="Введите e-mail"
+        label="Email"
+        placeholder="Enter your email"
         type="email"
         autoComplete="email"
         {...register(FIELD_NAMES.EMAIL)}
@@ -45,7 +45,7 @@ export function PasswordRecoveryForm({
           type="submit"
           disabled={loading}
         >
-          {loading ? 'Загрузка...' : 'Восстановить пароль'}
+          {loading ? 'Loading...' : 'Reset password'}
         </Button>
       </div>
     </form>

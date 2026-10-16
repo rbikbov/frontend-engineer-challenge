@@ -22,16 +22,16 @@ export function SignUpPage() {
   return (
     <>
       <AuthContentLayout
-        title="Регистрация в системе"
+        title="Create an account"
         contentClassName="max-w-[400px]"
         footer={
           <p className="text-button text-foreground-secondary">
-            Уже есть аккаунт?{' '}
+            Already have an account?{' '}
             <AppLink
               href={AUTH_LINKS.SIGN_IN}
               className="text-brand font-medium hover:underline"
             >
-              Войти
+              Sign in
             </AppLink>
           </p>
         }

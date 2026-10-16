@@ -1,9 +1,9 @@
 import { PasswordRecoveryPage } from '@pages/auth-password-recovery';
 
 export const metadata = {
-  title: 'Восстановление пароля | Orbitto',
+  title: 'Password recovery | Orbitto',
   description:
-    'Забыли пароль? Укажите свою почту, и мы поможем вам восстановить доступ к аккаунту Orbitto.',
+    'Forgot your password? Enter your email and we will help you regain access to your Orbitto account.',
 };
 
 export default function PasswordRecovery() {

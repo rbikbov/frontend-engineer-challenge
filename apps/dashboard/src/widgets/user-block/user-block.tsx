@@ -28,10 +28,10 @@ export function UserBlock({ className }: { className?: string }) {
 
   const handleLogout = async () => {
     const confirmation = await getConfirmation({
-      title: 'Выход из профиля',
-      description: 'Вы действительно хотите выйти?',
-      confirmText: 'Выйти',
-      closeText: 'Отмена',
+      title: 'Sign out',
+      description: 'Are you sure you want to sign out?',
+      confirmText: 'Sign out',
+      closeText: 'Cancel',
       disableScroll: true,
       closeOnOutsideClick: false,
     });
@@ -54,7 +54,7 @@ export function UserBlock({ className }: { className?: string }) {
             onClick={() => refetch()}
             disabled={isLoading || isRefetching || isRedirecting}
           >
-            {isRefetching ? 'Обновление...' : 'Обновить'}
+            {isRefetching ? 'Refreshing...' : 'Refresh'}
           </Button>
         ),
         renderLogoutButton: () => (
@@ -63,7 +63,7 @@ export function UserBlock({ className }: { className?: string }) {
             onClick={handleLogout}
             disabled={isSignOutPending || isRedirecting}
           >
-            {isSignOutPending ? 'Выход...' : 'Выйти'}
+            {isSignOutPending ? 'Signing out...' : 'Sign out'}
           </Button>
         ),
       }}
