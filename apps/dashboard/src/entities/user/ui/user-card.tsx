@@ -22,37 +22,56 @@ export function UserCard({
   actions,
 }: UserCardProps) {
   return (
-    <div
+    <section
+      aria-labelledby="user-card-title"
+      aria-busy={isLoading}
       className={cn(
-        'bg-card text-card-foreground rounded-lg border p-4 shadow-sm',
+        'bg-surface border-stroke rounded-button-lg border p-6',
         className,
       )}
     >
-      <h2 className="mb-4 text-xl font-bold">User Profile</h2>
+      <h2 id="user-card-title" className="text-h3 mb-6 font-bold">
+        Profile
+      </h2>
 
-      <div className="mb-6">
+      <div className="mb-8">
         {isLoading ? (
-          <p className="text-disabled">Loading user data...</p>
-        ) : error ? (
-          <p className="text-invalid">Error: {error.message}</p>
-        ) : user ? (
-          <div className="space-y-1">
-            <p className="text-muted-foreground text-sm">
-              ID: <span className="text-foreground font-mono">{user.id}</span>
-            </p>
-            <p className="text-muted-foreground text-sm">
-              Email: <span className="text-foreground">{user.email}</span>
-            </p>
+          <div className="space-y-5">
+            {[0, 1].map((i) => (
+              <div key={i} className="space-y-2">
+                <div className="bg-stroke h-3 w-16 animate-pulse rounded" />
+                <div className="bg-stroke h-5 w-56 animate-pulse rounded" />
+              </div>
+            ))}
           </div>
+        ) : error ? (
+          <p role="alert" className="text-invalid text-large">
+            Could not load the profile: {error.message}
+          </p>
+        ) : user ? (
+          <dl className="space-y-5">
+            <div>
+              <dt className="text-foreground-secondary text-caption mb-2">
+                Email
+              </dt>
+              <dd className="text-large break-all">{user.email}</dd>
+            </div>
+            <div>
+              <dt className="text-foreground-secondary text-caption mb-2">
+                User ID
+              </dt>
+              <dd className="font-mono text-sm break-all">{user.id}</dd>
+            </div>
+          </dl>
         ) : (
-          <p className="text-disabled">No user data available</p>
+          <p className="text-foreground-secondary">No user data available</p>
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-6">
         {actions?.renderRefetchButton?.()}
         {actions?.renderLogoutButton?.()}
       </div>
-    </div>
+    </section>
   );
 }

@@ -20,9 +20,7 @@ export function UserBlock({ className }: { className?: string }) {
     },
   });
 
-  const { data, isLoading, error, refetch, isRefetching } = useMeQuery({
-    // Options for the 'me' query, if needed
-  });
+  const { data, isLoading, error, refetch, isRefetching } = useMeQuery();
 
   const getConfirmation = useGetConfirmation();
 
@@ -50,16 +48,18 @@ export function UserBlock({ className }: { className?: string }) {
       actions={{
         renderRefetchButton: () => (
           <Button
-            variant="tertiarySecondary"
+            variant="tertiaryPrimary"
+            size="text"
             onClick={() => refetch()}
             disabled={isLoading || isRefetching || isRedirecting}
           >
-            {isRefetching ? 'Refreshing...' : 'Refresh'}
+            {isRefetching ? 'Refreshing...' : 'Refresh profile'}
           </Button>
         ),
         renderLogoutButton: () => (
           <Button
-            variant="tertiaryPrimary"
+            variant="tertiarySecondary"
+            size="text"
             onClick={handleLogout}
             disabled={isSignOutPending || isRedirecting}
           >
