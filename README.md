@@ -1,5 +1,7 @@
 # 🌌 Orbitto Service: Advanced Frontend Challenge
 
+[![CI](https://github.com/rbikbov/frontend-engineer-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/rbikbov/frontend-engineer-challenge/actions/workflows/ci.yml)
+
 This repository is more than a layout of the mockups. It shows an end-to-end engineering approach to building a scalable and secure frontend architecture.
 
 **Original challenge description**: [README_challenge.md](README_challenge.md)
@@ -8,7 +10,7 @@ This repository is more than a layout of the mockups. It shows an end-to-end eng
 
 ## 🌐 Live demo (Deployment)
 
-_The link below opens a working version of the frontend deployed on Vercel. To keep deployment simple, keep security strict and work around browser policies (CORS, SameSite and HTTPS → HTTP mixed content), requests to the GraphQL backend are transparently proxied through the built-in Next.js BFF layer (rewrites in next.config.ts). The access_token lifetime is 1 minute for quick testing, the refresh_token lifetime is 7 days:_
+_The link below opens a working version of the frontend deployed on Vercel. The demo is built from a separate deployment configuration: to work around browser policies (CORS, SameSite and HTTPS → HTTP mixed content), it additionally proxies GraphQL requests through Next.js, while the code in this repository sends them straight to the backend as described in [BFF & Security](#bff-backend-for-frontend--security). The access_token lifetime is 1 minute for quick testing, the refresh_token lifetime is 7 days:_
 
 > [!IMPORTANT]
 > **[Open the project demo](https://rbikbov-orbitto-main-chi.vercel.app/auth/sign-up)**
@@ -248,7 +250,7 @@ These items follow directly from the limitations of the current backend listed u
 
 ### 4. CI/CD & DevOps
 
-- **Deployment**: set up a CI/CD pipeline to build, lint, run the tests and deploy to dev/stage/production automatically.
+- **CI/CD**: [CI](.github/workflows/ci.yml) already runs lint, typecheck, unit/integration tests and the build on every push and pull request. Next: run E2E against an ephemeral backend and deploy to dev/stage/production automatically.
 - **Docker**: containerize the services and add Docker Compose for local development (DX) and deployment.
 - **Affected Builds**: configure the CI pipeline to build and test only the Nx graph modules affected by a change.
 - **Shared Static Assets (CDN)**: serve the static assets of all zones from a single CDN domain (e.g. `assets.example.com`). The browser can then cache shared chunks (React, UI lib) once for all zones, which removes the current `assetPrefix` trade-off.
