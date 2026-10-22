@@ -33,14 +33,12 @@ export function useSignUpForm({ onSuccess }: UseSignUpFormProps) {
   });
 
   const onSubmit = (data: SignUpSchemaType) => {
-    logger.info('[Auth] Registration submission started', {
-      email: data.email,
-    });
+    logger.info('[Auth] Registration submission started');
     const { confirmPassword: _, ...registerData } = data;
 
     registerMutation.mutate(registerData, {
       onSuccess: () => {
-        logger.info('[Auth] Registration successful', { email: data.email });
+        logger.info('[Auth] Registration successful');
         onSuccess();
       },
       onError: (error) => {

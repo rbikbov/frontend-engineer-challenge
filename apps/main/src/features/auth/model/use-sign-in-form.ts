@@ -34,10 +34,10 @@ export function useSignInForm({ onSuccess }: UseSignInFormProps) {
   });
 
   const onSubmit = (data: SignInSchemaType) => {
-    logger.info('[Auth] Login submission started', { email: data.email });
+    logger.info('[Auth] Login submission started');
     loginMutation.mutate(data, {
       onSuccess: async () => {
-        logger.info('[Auth] Login successful', { email: data.email });
+        logger.info('[Auth] Login successful');
         await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_ME] });
         onSuccess();
       },

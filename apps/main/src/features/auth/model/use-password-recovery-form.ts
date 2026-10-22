@@ -33,14 +33,14 @@ export function usePasswordRecoveryForm({
   });
 
   const onSubmit = (data: PasswordRecoverySchemaType) => {
-    logger.info('[Auth] Password recovery requested', { email: data.email });
+    logger.info('[Auth] Password recovery requested');
     mutation.mutate(data.email, {
       onSuccess: (
         response: { success: boolean; token?: string; email?: string },
         variables: string,
       ) => {
         const email = variables;
-        logger.info('[Auth] Password recovery request successful', { email });
+        logger.info('[Auth] Password recovery request successful');
         onSuccess({ token: response.token || '', email });
       },
       onError: (error) => {
