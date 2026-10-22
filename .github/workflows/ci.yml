@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # postinstall regenerates the GraphQL SDK from the committed schema, no backend needed
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec nx run-many -t lint typecheck test
+
+      # E2E is not run here: it needs a live backend (see README)
+      - name: Build
+        run: |
+          cp .env.example .env
+          pnpm exec nx run-many -t build
