@@ -16,7 +16,7 @@ const serverSchema = z.object({
  * They must have the NEXT_PUBLIC_ prefix.
  */
 const clientSchema = z.object({
-  NEXT_PUBLIC_AUTH_BACKEND_TYPE: z.enum(['graphql', 'msw']),
+  NEXT_PUBLIC_AUTH_BACKEND_TYPE: z.enum(['graphql']),
   NEXT_PUBLIC_AUTH_BACKEND_URL: z.string().url(),
   NEXT_PUBLIC_ENV: z.enum(['development', 'production']),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),

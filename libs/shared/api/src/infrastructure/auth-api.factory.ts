@@ -1,7 +1,8 @@
 import type { AuthApi } from '../contract/auth-api.interface';
 import { GraphQLAuthApi } from '../infrastructure/graphql/auth/auth-api.graphql';
 
-export type ApiType = 'graphql' | 'msw';
+// New transports (REST, mocks) implement AuthApi and get a case here
+export type ApiType = 'graphql';
 
 export interface AuthApiConfig {
   type: ApiType;
@@ -19,10 +20,6 @@ export function createAuthApi(config: AuthApiConfig): AuthApi {
   switch (config.type) {
     case 'graphql':
       return new GraphQLAuthApi(config.endpoint, config.options);
-    case 'msw':
-      throw new Error(
-        'MSWAuthApi implementation is pending detailed transport setup',
-      );
     default:
       return new GraphQLAuthApi(config.endpoint, config.options);
   }
