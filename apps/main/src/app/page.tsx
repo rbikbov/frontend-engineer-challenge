@@ -74,16 +74,16 @@ export default function Index() {
         <div className="mx-auto mt-24 grid max-w-5xl grid-cols-1 gap-8 text-left sm:grid-cols-3">
           {[
             {
-              adr: 'ADR-002',
-              href: REPOSITORY_LINKS.ADR_SECURE_AUTH,
-              title: 'Sessions behind a BFF',
-              desc: 'Tokens live in HttpOnly cookies. Only login, refresh and logout go through Next.js route handlers.',
-            },
-            {
               adr: 'ADR-001',
               href: REPOSITORY_LINKS.ADR_MULTI_ZONES,
               title: 'Multi-Zones',
               desc: 'Auth and dashboard are separate Next.js apps under one domain, sharing UI, API and config libraries.',
+            },
+            {
+              adr: 'ADR-002',
+              href: REPOSITORY_LINKS.ADR_SECURE_AUTH,
+              title: 'Sessions behind a BFF',
+              desc: 'Tokens live in HttpOnly cookies. Only login, refresh and logout go through Next.js route handlers.',
             },
             {
               adr: 'ADR-003',
