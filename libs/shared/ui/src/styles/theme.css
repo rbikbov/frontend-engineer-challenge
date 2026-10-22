@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @source '../../**/*.{ts,tsx}';
 
+/* Input is focused, filled or autofilled. Done in CSS because autofill and
+ * react-hook-form reset() change the value without a React change event */
+@custom-variant input-active (&:where(.group\/input:has(input:focus, input:not(:placeholder-shown), input:autofill) *));
+
 /* ── Design Tokens ────────────────────────────────
  * VALUES (CSS variables) are kept separate from TOKENS (Tailwind).
  * ──────────────────────────────────────────────── */

@@ -79,9 +79,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     const [focused, setFocused] = React.useState(false);
-    const [hasValue, setHasValue] = React.useState(
-      !!(props.value || props.defaultValue),
-    );
 
     const generatedId = React.useId();
     const inputId = id || generatedId;
@@ -96,18 +93,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onBlur?.(e);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setHasValue((e.target as HTMLInputElement).value.length > 0);
-      onChange?.(e);
-    };
-
     const isError = !!(hasError || error);
-    const showLabel = focused || hasValue;
 
     const Comp = asChild ? Slot : 'input';
 
     return (
-      <div className={cn('flex w-full flex-col gap-2', wrapperClassName)}>
+      <div
+        className={cn(
+          'group/input flex w-full flex-col gap-2',
+          wrapperClassName,
+        )}
+      >
         <div
           className={cn(
             'flex flex-col justify-center',
@@ -122,12 +118,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         >
           {/* Label Container */}
-          <div
-            className={cn(
-              'overflow-hidden transition-all duration-200 ease-in-out',
-              showLabel ? 'h-3 opacity-100' : 'h-0 opacity-0',
-            )}
-          >
+          <div className="input-active:h-3 input-active:opacity-100 h-0 overflow-hidden opacity-0 transition-all duration-200 ease-in-out">
             {label && (
               <Label.Root
                 htmlFor={inputId}
@@ -154,7 +145,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               ref={ref}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={onChange}
               {...props}
             />
 
