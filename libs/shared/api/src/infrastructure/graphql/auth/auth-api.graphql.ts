@@ -22,11 +22,18 @@ type GraphQLError = {
   message: string;
   locations?: { line: number; column: number }[];
   path?: string[];
+  extensions?: { code?: string };
 };
 type GraphQLResponse = {
   errors?: GraphQLError[];
   data?: unknown;
 };
+
+// Prefer the conventional extensions.code; the current backend only sends
+// the 'unauthorized' message, so it stays as a fallback
+const isUnauthorizedError = (error: GraphQLError) =>
+  error.extensions?.code === 'UNAUTHENTICATED' ||
+  error.message?.toLowerCase() === 'unauthorized';
 export class GraphQLAuthApi implements AuthApi {
   readonly endpoint!: string;
   readonly #options?: AuthApiConfig['options'];
@@ -56,37 +63,40 @@ export class GraphQLAuthApi implements AuthApi {
 
         // Clone to check for errors in the GraphQL response body
         const clonedResult = result.clone();
-        let isUnauthorized = false;
+        let isUnauthorized = result.status === 401;
 
         try {
           const body = await clonedResult.json();
-          isUnauthorized =
-            (body as GraphQLResponse)?.errors?.[0]?.message === 'unauthorized';
+          isUnauthorized ||= Boolean(
+            (body as GraphQLResponse)?.errors?.some(isUnauthorizedError),
+          );
         } catch {
-          // If it is not JSON, rely on the status code
-          isUnauthorized = result.status === 401;
+          // Not JSON: the status code check above is all we have
         }
 
         const isRetry = (options as FetchOptionsWithRetry)?.__isRetry;
 
         if (isUnauthorized && !isRetry) {
-          // If a refresh is already in progress, wait for it
+          let isRefreshed: boolean;
+
+          // If a refresh is already in progress, wait for it and use its result
           if (this.#refreshPromise) {
-            await this.#refreshPromise;
+            isRefreshed = await this.#refreshPromise;
           } else if (this.#options?.onRefreshSession && !this.#isLoggingOut) {
             // Otherwise start a refresh via the injected callback,
             // unless we are in the middle of signing out.
             this.#refreshPromise = this.#options.onRefreshSession();
             try {
-              const isRefreshed = await this.#refreshPromise;
-              if (!isRefreshed) {
-                // If the refresh failed, bail out (the BFF has already cleared the cookies)
-                throw new Error('Session expired');
-              }
+              isRefreshed = await this.#refreshPromise;
             } finally {
               this.#refreshPromise = null;
             }
           } else {
+            throw new Error('Session expired');
+          }
+
+          if (!isRefreshed) {
+            // If the refresh failed, bail out (the BFF has already cleared the cookies)
             throw new Error('Session expired');
           }
 
