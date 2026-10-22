@@ -1,14 +1,14 @@
-# 🌌 Orbitto Service: Advanced Frontend Challenge
+# Orbitto Service: Advanced Frontend Challenge
 
 [![CI](https://github.com/rbikbov/frontend-engineer-challenge/actions/workflows/ci.yml/badge.svg)](https://github.com/rbikbov/frontend-engineer-challenge/actions/workflows/ci.yml)
 
-This repository is more than a layout of the mockups. It shows an end-to-end engineering approach to building a scalable and secure frontend architecture.
+Frontend for the ATLS Academy engineering challenge: sign-up, sign-in and password recovery on top of a GraphQL backend, with a BFF for cookie-based sessions, Next.js Multi-Zones and Feature-Sliced Design.
 
 **Original challenge description**: [README_challenge.md](README_challenge.md)
 
 ---
 
-## 🌐 Live demo (Deployment)
+## Live demo (Deployment)
 
 _The link below opens a working version of the frontend deployed on Vercel. The demo is built from a separate deployment configuration: to work around browser policies (CORS, SameSite and HTTPS → HTTP mixed content), it additionally proxies GraphQL requests through Next.js, while the code in this repository sends them straight to the backend as described in [BFF & Security](#bff-backend-for-frontend--security). The access_token lifetime is 1 minute for quick testing, the refresh_token lifetime is 7 days:_
 
@@ -19,7 +19,7 @@ _The link below opens a working version of the frontend deployed on Vercel. The 
 
 ---
 
-## 🚀 Getting started
+## Getting started
 
 **Backend repository**: [rbikbov/engineer-challenge](https://github.com/rbikbov/engineer-challenge)
 
@@ -99,7 +99,7 @@ npx nx e2e main-e2e
 
 ---
 
-## 🏗 Frontend architecture
+## Frontend architecture
 
 ### Tech stack
 
@@ -180,7 +180,7 @@ Classic React/Vue SPAs were considered for their development speed and simple de
 - **Module boundaries**: linters enforce the public APIs of modules (`index.ts`) and forbid deep imports.
 - **Investment in tooling**: a lot of time went into setting up linters (FSD, import sorting, Tailwind classes) and automating routine tasks (code generation, auto-formatting). This took time now, but it will save much more later by preventing merge conflicts and keeping the code consistent.
 
-### 📊 Bundle optimization and analysis
+### Bundle optimization and analysis
 
 `@next/bundle-analyzer` is set up to keep an eye on build size and quality.
 
@@ -190,7 +190,7 @@ pnpm run analyze
 
 Interactive reports for client and server code are generated in `.next/analyze/`.
 
-### 🧠 Engineering journey (Agent Logs)
+### Engineering journey (Agent Logs)
 
 The whole development process is documented in the `.agents/` folder:
 
@@ -214,7 +214,7 @@ The whole development process is documented in the `.agents/` folder:
 
 ---
 
-## ⚖️ Trade-offs
+## Trade-offs
 
 - **Domain coupling**: HttpOnly (`sameSite: "strict"`) cookies require the frontend and backend to live on the same domain (or subdomains) for browser security to work correctly. Cookie handling is encapsulated in the BFF layer. Browser JS has no access to secrets.
 - **Proxying**: only security-critical requests (login/logout/refresh) are proxied, the rest go to the backend directly. This lowers the load on the BFF but requires CORS support on the backend.
@@ -227,13 +227,13 @@ The whole development process is documented in the `.agents/` folder:
 
 ---
 
-## 🚀 What's next? (Production Roadmap)
+## What's next? (Production Roadmap)
 
 _Sorted by how critical each item is for going to production._
 
 ### 1. Backend security (critical)
 
-These items follow directly from the limitations of the current backend listed under [Trade-offs](#%EF%B8%8F-trade-offs):
+These items follow directly from the limitations of the current backend listed under [Trade-offs](#trade-offs):
 
 - **Actually sending the recovery email**: the backend currently returns the reset token right in the response body, which is a critical vulnerability. The backend has to send the link to the user's email via SMTP.
 - **Rate limiting with retry_after**: it would be good if the backend returned a `retry_after` field (for `too many attempts` in GraphQL responses and `429` from the BFF) with the exact wait time, so the frontend can show a countdown timer.
@@ -274,11 +274,11 @@ These items follow directly from the limitations of the current backend listed u
 
 ---
 
-## 🛠 Quality Assurance
+## Quality Assurance
 
 Before running `git push`, it is a good idea to run these commands to make sure the project is stable and to avoid hot fixes after a CI failure.
 
-### 📋 Main check cycle
+### Main check cycle
 
 1. **Type checking**: check all apps and libraries for type errors. The linter often misses deep type mismatches between modules.
    ```bash
@@ -297,7 +297,7 @@ Before running `git push`, it is a good idea to run these commands to make sure 
    pnpm e2e
    ```
 
-### 💡 Nx tips
+### Nx tips
 
 - **Check only what changed**: as the project grows, use the `--affected` flag:
   ```bash
