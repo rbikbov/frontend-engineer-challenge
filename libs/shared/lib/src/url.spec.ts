@@ -41,6 +41,12 @@ describe('isSafeUrl', () => {
     expect(isSafeUrl('http://attacker.com/dashboard')).toBe(false);
   });
 
+  it('should return false for paths browsers normalize to protocol-relative', () => {
+    expect(isSafeUrl('/\\attacker.com')).toBe(false);
+    expect(isSafeUrl('/\t/attacker.com')).toBe(false);
+    expect(isSafeUrl('/\n/attacker.com')).toBe(false);
+  });
+
   it('should return false for invalid URLs', () => {
     expect(isSafeUrl('')).toBe(false);
     expect(isSafeUrl('not-a-url')).toBe(false);
