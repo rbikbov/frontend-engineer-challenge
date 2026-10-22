@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 /**
- * Premium illustration for the auth and error pages.
+ * Decorative illustration for the auth and error pages.
  * Uses complex SVG filters and gradients.
  * SVG IDs are generated with React.useId() to avoid collisions.
  */

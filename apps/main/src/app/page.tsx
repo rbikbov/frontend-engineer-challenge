@@ -6,7 +6,7 @@ import { AppLink, Button, Logo } from '@workspace/ui/components';
 export default function Index() {
   return (
     <div className="bg-background text-foreground selection:bg-brand/20 relative min-h-screen overflow-hidden">
-      {/* Background Blobs (Premium Aesthetic) */}
+      {/* Background Blobs */}
       <div className="bg-brand/10 pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full blur-[120px]" />
       <div className="bg-brand/5 pointer-events-none absolute top-1/2 -right-48 h-[500px] w-[500px] rounded-full blur-[160px]" />
 
@@ -36,8 +36,8 @@ export default function Index() {
           </h1>
 
           <p className="text-foreground-secondary mx-auto mb-12 max-w-2xl text-xl leading-relaxed sm:text-2xl">
-            High-performance engineering challenge solution with strict
-            architectural boundaries and state-of-the-art aesthetics.
+            Sign-up, sign-in and password recovery on top of a GraphQL backend,
+            with cookie-based sessions behind a BFF.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -65,15 +65,15 @@ export default function Index() {
           {[
             {
               title: 'FSD Standards',
-              desc: 'Strict layer isolation enforced by ESLint to keep the codebase maintainable.',
+              desc: 'Layer boundaries and public APIs of slices are enforced by ESLint.',
             },
             {
               title: 'Tailwind v4',
-              desc: 'The latest styling engine for lightning-fast UI development and clean CSS.',
+              desc: 'Design tokens as CSS variables, shared by both zones through the UI library.',
             },
             {
-              title: 'Monorepo',
-              desc: 'Powered by Nx for efficient package sharing and optimized build pipelines.',
+              title: 'Nx Monorepo',
+              desc: 'Two Next.js zones sharing the UI, API and config libraries.',
             },
           ].map((feature, i) => (
             <div
@@ -95,9 +95,7 @@ export default function Index() {
       {/* Simplified Footer */}
       <footer className="border-stroke relative z-10 border-t py-10 text-center">
         <p className="text-foreground-secondary text-sm opacity-60">
-          &copy; 2026 Orbitto Service Engineering Challenge.
-          <br className="sm:hidden" />
-          Designed with ❤️ and strict FSD principles.
+          &copy; 2026 Orbitto Service. ATLS Academy frontend challenge.
         </p>
       </footer>
     </div>
