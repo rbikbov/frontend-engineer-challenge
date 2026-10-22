@@ -23,6 +23,8 @@ export const Logo = ({ width = 200, height = 40, ...props }: LogoProps) => {
       height={height}
       viewBox="0 0 200 40"
       fill="none"
+      // The Figma glow extends far beyond the viewBox; without this it is clipped to a visible box
+      overflow="visible"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
