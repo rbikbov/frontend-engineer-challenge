@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { Button } from '@workspace/ui/components';
+
 import { logger } from '@shared/lib/logger';
 
 export default function ErrorBoundary({
@@ -12,7 +14,6 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to our central logger
     logger.error('[App] Unhandled client error', {
       message: error.message,
       stack: error.stack,
@@ -22,16 +23,13 @@ export default function ErrorBoundary({
 
   return (
     <div className="flex min-h-[400px] w-full flex-col items-center justify-center gap-4 p-8 text-center">
-      <h2 className="text-2xl font-bold">Something went wrong!</h2>
-      <p className="text-muted-foreground">
+      <h2 className="text-h2 font-bold">Something went wrong</h2>
+      <p className="text-foreground-secondary text-large">
         An unexpected client-side error occurred.
       </p>
-      <button
-        onClick={() => reset()}
-        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors"
-      >
+      <Button type="button" onClick={() => reset()}>
         Try again
-      </button>
+      </Button>
     </div>
   );
 }
