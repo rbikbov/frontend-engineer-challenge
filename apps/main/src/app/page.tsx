@@ -1,6 +1,11 @@
 'use client';
 
-import { AUTH_LINKS, DASHBOARD_LINKS, ROOT_LINK } from '@workspace/constants';
+import {
+  AUTH_LINKS,
+  DASHBOARD_LINKS,
+  REPOSITORY_LINKS,
+  ROOT_LINK,
+} from '@workspace/constants';
 import { AppLink, Button, Logo } from '@workspace/ui/components';
 
 export default function Index() {
@@ -20,13 +25,9 @@ export default function Index() {
       {/* Hero Content */}
       <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-20 pb-32 text-center">
         <section className="border-stroke bg-surface/40 shadow-brand/5 mx-auto max-w-4xl rounded-[40px] border p-8 shadow-2xl sm:p-16">
-          <div className="bg-brand/10 border-brand/20 text-brand mb-8 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold tracking-wider uppercase">
-            <span className="relative flex h-2 w-2">
-              <span className="bg-brand absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-              <span className="bg-brand relative inline-flex h-2 w-2 rounded-full"></span>
-            </span>
-            Next.js 15 + FSD Architecture
-          </div>
+          <p className="text-foreground-secondary mb-8 text-xs font-bold tracking-wider uppercase">
+            ATLS Academy &middot; Frontend challenge
+          </p>
 
           <h1 className="mb-8 text-5xl leading-[1.1] font-extrabold tracking-tight sm:text-7xl">
             Orbitto{' '}
@@ -53,49 +54,78 @@ export default function Index() {
               className="h-14 w-full px-10 text-lg sm:w-auto"
               asChild
             >
-              <AppLink toOtherZone href={DASHBOARD_LINKS.ROOT}>
-                View Dashboard
-              </AppLink>
+              <AppLink href={AUTH_LINKS.SIGN_UP}>Create account</AppLink>
             </Button>
           </div>
+
+          <p className="text-foreground-secondary mt-8 text-sm">
+            Already signed in?{' '}
+            <AppLink
+              toOtherZone
+              href={DASHBOARD_LINKS.ROOT}
+              className="text-brand hover:text-brand-hover font-medium"
+            >
+              Open the dashboard
+            </AppLink>
+          </p>
         </section>
 
-        {/* Feature Cards Sneak-Peek */}
+        {/* Key decisions, each backed by an ADR */}
         <div className="mx-auto mt-24 grid max-w-5xl grid-cols-1 gap-8 text-left sm:grid-cols-3">
           {[
             {
-              title: 'FSD Standards',
-              desc: 'Layer boundaries and public APIs of slices are enforced by ESLint.',
+              adr: 'ADR-002',
+              href: REPOSITORY_LINKS.ADR_SECURE_AUTH,
+              title: 'Sessions behind a BFF',
+              desc: 'Tokens live in HttpOnly cookies. Only login, refresh and logout go through Next.js route handlers.',
             },
             {
-              title: 'Tailwind v4',
-              desc: 'Design tokens as CSS variables, shared by both zones through the UI library.',
+              adr: 'ADR-001',
+              href: REPOSITORY_LINKS.ADR_MULTI_ZONES,
+              title: 'Multi-Zones',
+              desc: 'Auth and dashboard are separate Next.js apps under one domain, sharing UI, API and config libraries.',
             },
             {
-              title: 'Nx Monorepo',
-              desc: 'Two Next.js zones sharing the UI, API and config libraries.',
+              adr: 'ADR-003',
+              href: REPOSITORY_LINKS.ADR_FSD,
+              title: 'FSD and dependency inversion',
+              desc: 'ESLint enforces layer boundaries. The API client is injected through an interface.',
             },
-          ].map((feature, i) => (
-            <div
-              key={i}
-              className="group bg-surface border-stroke rounded-button-lg hover:border-brand/30 border p-6 transition-all"
+          ].map((decision) => (
+            <a
+              key={decision.adr}
+              href={decision.href}
+              target="_blank"
+              rel="noreferrer"
+              className="group bg-surface border-stroke rounded-button-lg hover:border-brand/30 border p-6 transition-colors"
             >
-              <div className="bg-brand/10 text-brand group-hover:bg-brand mb-4 flex h-10 w-10 items-center justify-center rounded font-bold transition-colors group-hover:text-white">
-                {i + 1}
-              </div>
-              <h3 className="mb-2 font-bold">{feature.title}</h3>
-              <p className="text-foreground-secondary text-sm leading-relaxed">
-                {feature.desc}
+              <p className="text-brand mb-4 font-mono text-xs font-bold">
+                {decision.adr}
               </p>
-            </div>
+              <h3 className="mb-2 font-bold">{decision.title}</h3>
+              <p className="text-foreground-secondary mb-4 text-sm leading-relaxed">
+                {decision.desc}
+              </p>
+              <span className="text-foreground-secondary group-hover:text-brand text-sm transition-colors">
+                Read the decision &rsaquo;
+              </span>
+            </a>
           ))}
         </div>
       </main>
 
-      {/* Simplified Footer */}
+      {/* Footer */}
       <footer className="border-stroke relative z-10 border-t py-10 text-center">
         <p className="text-foreground-secondary text-sm opacity-60">
-          &copy; 2026 Orbitto Service. ATLS Academy frontend challenge.
+          &copy; 2026 Orbitto Service &middot;{' '}
+          <a
+            href={REPOSITORY_LINKS.ROOT}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-brand underline-offset-4 hover:underline"
+          >
+            Source on GitHub
+          </a>
         </p>
       </footer>
     </div>
